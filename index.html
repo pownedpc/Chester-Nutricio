@@ -457,7 +457,7 @@ async function calcKcal(){
   btn.disabled=true;btn.innerHTML='<div class="spinner"></div>';
   res.innerHTML='<div style="color:var(--muted);font-size:13px;margin-top:10px"><span class="loading-dots">Calculant</span></div>';
   try{
-    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':'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','anthropic-version':'2023-06-01'},body:JSON.stringify({
       model:'claude-sonnet-4-20250514',max_tokens:800,
       system:`Ets un expert en nutrició. L'usuari (home 55 anys, objectiu 1600 kcal/dia) descriu un àpat. Respon NOMÉS en JSON sense backticks ni text addicional: {"total_kcal":number,"proteina_g":number,"greix_g":number,"hidrats_g":number,"detall":"aliments amb kcal","valoracio":"OK|ACCEPTABLE|EXCESSIU","comentari":"1 frase directa en català"}`,
       messages:[{role:'user',content:`Calcula calories: ${input}`}]
@@ -498,7 +498,7 @@ async function saveDiary(){
   const btn=document.getElementById('diary-btn');btn.disabled=true;btn.innerHTML='<div class="spinner"></div>';
   let ev='';
   try{
-    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':'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','anthropic-version':'2023-06-01'},body:JSON.stringify({
       model:'claude-sonnet-4-20250514',max_tokens:300,
       system:`Ets assistent de nutrició per a Chester (home 55a, objectiu perdre pes, màxim 1600 kcal/dia, sense ultraprocesats ni sucre). Dona valoració breu (2-3 frases) en català del que ha menjat. Directe, sense romanços. Indica si és bon dia, on hi ha marge de millora, i 1 acció concreta si cal.`,
       messages:[{role:'user',content:`Valoració del dia: ${content}`}]
@@ -571,7 +571,7 @@ async function sendMessage(){
   const btn=document.getElementById('send-btn');btn.disabled=true;btn.innerHTML='<div class="spinner"></div>';
   const wrap=addMsg('assistant','<span class="loading-dots">Pensant</span>');
   try{
-    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:SYS,messages:chatHistory})});
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':'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','anthropic-version':'2023-06-01'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:SYS,messages:chatHistory})});
     const data=await r.json();const text=data.content?.map(b=>b.text||'').join('')||'Error.';
     chatHistory.push({role:'assistant',content:text});
     wrap.querySelector('.msg').innerHTML=`<div class="sender">NUTRI·CHESTER</div>${text.replace(/\n/g,'<br>')}`;
