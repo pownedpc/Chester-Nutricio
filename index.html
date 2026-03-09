@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nutrició · Chester</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+  :root {
+    --bg:#0f1117;--surface:#181c27;--surface2:#1e2435;--border:#2a3045;
+    --accent:#4ade80;--accent2:#38bdf8;--warn:#f59e0b;--danger:#f87171;--purple:#a78bfa;
+    --text:#e2e8f0;--muted:#64748b;--mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
+  header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;}
+  .logo{font-family:var(--mono);font-size:13px;color:var(--accent);letter-spacing:.15em;}
+  .logo span{color:var(--muted);}
+  header .tagline{font-size:11px;color:var(--muted);margin-left:auto;}
+  .tabs{display:flex;background:var(--surface);border-bottom:1px solid var(--border);padding:0 8px;overflow-x:auto;scrollbar-width:none;}
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{padding:10px 13px;font-size:11px;font-family:var(--mono);cursor:pointer;border:none;background:none;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap;transition:all .15s;letter-spacing:.04em;}
+  .tab:hover{color:var(--text);}
+  .tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+  main{flex:1;max-width:860px;width:100%;margin:0 auto;padding:18px 14px;}
+  .section{display:none;}.section.active{display:block;}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:12px;}
+  .card-title{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:.2em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+  .card-title::after{content:'';flex:1;height:1px;background:var(--border);}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+  @media(max-width:520px){.grid-2,.grid-3{grid-template-columns:1fr;}}
+  .stat-box{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;}
+  .stat-num{font-family:var(--mono);font-size:24px;font-weight:600;color:var(--accent);}
+  .stat-label{font-size:11px;color:var(--muted);margin-top:2px;}
+  .meal-block{border-left:3px solid var(--accent);padding:9px 13px;margin-bottom:8px;background:var(--surface2);border-radius:0 6px 6px 0;}
+  .meal-label{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:.08em;margin-bottom:3px;}
+  .meal-title{font-size:13px;font-weight:500;margin-bottom:2px;}
+  .meal-desc{font-size:12px;color:var(--muted);line-height:1.5;}
+  .meal-kcal{font-family:var(--mono);font-size:11px;color:var(--accent2);margin-top:4px;}
+  .rule{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;}
+  .rule:last-child{border-bottom:none;}
+  .rule-icon{font-size:14px;flex-shrink:0;margin-top:1px;}
+  .rule-text{line-height:1.5;}
+  .rule-text strong{color:var(--text);font-weight:600;}
+  .rule-text span{color:var(--muted);font-size:12px;}
+  .tag{display:inline-block;font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:3px;margin:2px;}
+  .tag-ok{background:rgba(74,222,128,.15);color:var(--accent);border:1px solid rgba(74,222,128,.3);}
+  .tag-warn{background:rgba(245,158,11,.15);color:var(--warn);border:1px solid rgba(245,158,11,.3);}
+  .tag-info{background:rgba(56,189,248,.15);color:var(--accent2);border:1px solid rgba(56,189,248,.3);}
+  .food-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;}
+  .food-row:last-child{border-bottom:none;}
+  .food-name{font-weight:500;}
+  .food-detail{color:var(--muted);font-size:11px;font-family:var(--mono);}
+  .scenario{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:13px;margin-bottom:10px;}
+  .scenario-title{font-family:var(--mono);font-size:11px;color:var(--accent2);margin-bottom:6px;letter-spacing:.06em;}
+  .scenario-items{font-size:13px;color:var(--muted);line-height:1.8;}
+  .scenario-badge{display:inline-block;background:rgba(56,189,248,.15);color:var(--accent2);border:1px solid rgba(56,189,248,.25);font-family:var(--mono);font-size:10px;padding:2px 6px;border-radius:3px;margin-bottom:5px;}
+  .check-item{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:6px;background:var(--surface2);margin-bottom:5px;font-size:13px;cursor:pointer;transition:background .1s;user-select:none;}
+  .check-item:hover{background:var(--border);}
+  .check-box{width:17px;height:17px;border:2px solid var(--border);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;}
+  .check-item.checked .check-box{background:var(--accent);border-color:var(--accent);color:#0f1117;}
+  .check-item.checked .check-label{color:var(--muted);text-decoration:line-through;}
+  .progress-bar{height:6px;background:var(--surface2);border-radius:3px;overflow:hidden;margin-top:5px;}
+  .progress-fill{height:100%;border-radius:3px;background:var(--accent);transition:width .4s ease;}
+  .chat-container{display:flex;flex-direction:column;gap:10px;max-height:400px;overflow-y:auto;padding:4px 0 12px;scroll-behavior:smooth;}
+  .msg{max-width:88%;padding:10px 13px;border-radius:8px;font-size:13px;line-height:1.6;}
+  .msg-user{align-self:flex-end;background:var(--surface2);border:1px solid var(--border);}
+  .msg-assistant{align-self:flex-start;background:rgba(74,222,128,.07);border:1px solid rgba(74,222,128,.2);}
+  .msg .sender{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:.08em;margin-bottom:4px;}
+  .msg-user .sender{color:var(--muted);text-align:right;}
+  .chat-input-row{display:flex;gap:8px;margin-top:8px;}
+  textarea,input[type=text],input[type=number],input[type=date]{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:9px 11px;color:var(--text);font-family:var(--sans);font-size:13px;outline:none;transition:border-color .15s;width:100%;}
+  textarea{resize:none;}
+  textarea:focus,input:focus{border-color:var(--accent);}
+  textarea::placeholder,input::placeholder{color:var(--muted);}
+  .btn{padding:9px 16px;border:none;border-radius:6px;font-family:var(--mono);font-size:11px;letter-spacing:.04em;cursor:pointer;transition:all .15s;}
+  .btn-primary{background:var(--accent);color:#0f1117;font-weight:600;}
+  .btn-primary:hover{background:#22c55e;}
+  .btn-primary:disabled{background:var(--border);color:var(--muted);cursor:not-allowed;}
+  .btn-secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border);}
+  .btn-secondary:hover{border-color:var(--accent);color:var(--accent);}
+  .btn-danger{background:rgba(248,113,113,.1);color:var(--danger);border:1px solid rgba(248,113,113,.25);}
+  .btn-danger:hover{background:rgba(248,113,113,.2);}
+  .spinner{display:inline-block;width:13px;height:13px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  select{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:8px 11px;border-radius:6px;font-family:var(--sans);font-size:13px;outline:none;cursor:pointer;}
+  select:focus{border-color:var(--accent);}
+  .weight-entry{display:flex;align-items:center;justify-content:space-between;padding:8px 11px;background:var(--surface2);border-radius:6px;margin-bottom:5px;font-size:13px;}
+  .weight-date{font-family:var(--mono);font-size:10px;color:var(--muted);}
+  .weight-val{font-family:var(--mono);font-size:15px;font-weight:600;color:var(--accent);}
+  .diff-neg{color:var(--accent);font-family:var(--mono);font-size:11px;}
+  .diff-pos{color:var(--danger);font-family:var(--mono);font-size:11px;}
+  .diff-zero{color:var(--muted);font-family:var(--mono);font-size:11px;}
+  .kcal-result{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;margin-top:10px;}
+  .kcal-big{font-family:var(--mono);font-size:30px;font-weight:600;color:var(--accent);}
+  .kcal-breakdown{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.8;}
+  .kcal-verdict{font-size:13px;margin-top:8px;padding:7px 11px;border-radius:6px;}
+  .verdict-ok{background:rgba(74,222,128,.1);color:var(--accent);border:1px solid rgba(74,222,128,.2);}
+  .verdict-warn{background:rgba(245,158,11,.1);color:var(--warn);border:1px solid rgba(245,158,11,.2);}
+  .verdict-bad{background:rgba(248,113,113,.1);color:var(--danger);border:1px solid rgba(248,113,113,.2);}
+  .diary-entry{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:8px;}
+  .diary-date{font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:5px;}
+  .diary-content{font-size:13px;line-height:1.6;}
+  .diary-eval{font-size:12px;color:var(--accent2);margin-top:7px;padding-top:7px;border-top:1px solid var(--border);font-style:italic;}
+  .input-label{font-family:var(--mono);font-size:10px;color:var(--muted);display:block;margin-bottom:4px;letter-spacing:.08em;}
+  .error-msg{color:var(--danger);font-size:12px;font-family:var(--mono);padding:7px;border:1px solid rgba(248,113,113,.3);border-radius:4px;background:rgba(248,113,113,.05);margin-top:7px;}
+  .loading-dots::after{content:'';animation:dots 1.2s steps(4,end) infinite;}
+  @keyframes dots{0%,100%{content:'';}25%{content:'.';}50%{content:'..';}75%{content:'...'}}
+  ::-webkit-scrollbar{width:4px;}
+  ::-webkit-scrollbar-track{background:var(--bg);}
+  ::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">NUTRI<span>://</span>CHESTER</div>
+  <div class="tagline">control metabòlic · sense bullshit</div>
+</header>
+<div class="tabs">
+  <button class="tab active" onclick="showTab('dieta',this)">DIETA</button>
+  <button class="tab" onclick="showTab('menus',this)">MENÚS</button>
+  <button class="tab" onclick="showTab('fora',this)">FORA CASA</button>
+  <button class="tab" onclick="showTab('aliments',this)">ALIMENTS</button>
+  <button class="tab" onclick="showTab('pes',this)">PES ⚖️</button>
+  <button class="tab" onclick="showTab('calories',this)">CALORIES 🔢</button>
+  <button class="tab" onclick="showTab('diari',this)">DIARI 📓</button>
+  <button class="tab" onclick="showTab('check',this)">CHECK ✅</button>
+  <button class="tab" onclick="showTab('consulta',this)">IA 🤖</button>
+</div>
+<main>
+
+<!-- DIETA -->
+<div class="section active" id="tab-dieta">
+  <div class="grid-3" style="margin-bottom:12px">
+    <div class="stat-box"><div class="stat-num">~1600</div><div class="stat-label">kcal/dia objectiu</div></div>
+    <div class="stat-box"><div class="stat-num">-500</div><div class="stat-label">dèficit kcal/dia</div></div>
+    <div class="stat-box"><div class="stat-num">10–15</div><div class="stat-label">kg objectiu</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Regles de base</div>
+    <div class="rule"><div class="rule-icon">🚫</div><div class="rule-text"><strong>Alcohol</strong> — preferentment zero.<br><span>Puntual en context social. No com a hàbit.</span></div></div>
+    <div class="rule"><div class="rule-icon">🚫</div><div class="rule-text"><strong>Ultraprocesats</strong> — eliminats.<br><span>Zero embotits industrials, snacks, precuinats.</span></div></div>
+    <div class="rule"><div class="rule-icon">🚫</div><div class="rule-text"><strong>Sucres afegits i refrescos</strong> — eliminats.<br><span>Inclou sucs embotellats, iogurts dolços, cereals.</span></div></div>
+    <div class="rule"><div class="rule-icon">✅</div><div class="rule-text"><strong>Base: proteïna + verdura + greix bo</strong><br><span>Atún, pollastre, peix, ous, aguacate, oli d'oliva.</span></div></div>
+    <div class="rule"><div class="rule-icon">✅</div><div class="rule-text"><strong>Fruita moderada</strong><br><span>2 peces/dia màxim. Preferir maduixes, pera, kiwi.</span></div></div>
+    <div class="rule"><div class="rule-icon">⚡</div><div class="rule-text"><strong>Pa amb criteri</strong><br><span>Pa integral o centeno, ocasional. Mig entrepà és suficient.</span></div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Estructura del dia</div>
+    <div class="meal-block"><div class="meal-label">ESMORZAR · 07:00–09:00</div><div class="meal-title">Mig entrepà de tonyina + cafè</div><div class="meal-desc">Pa integral o centeno. Tonyina al natural escorreguda. Cafè sense sucre.</div><div class="meal-kcal">~300–350 kcal</div></div>
+    <div class="meal-block" style="border-color:var(--accent2)"><div class="meal-label" style="color:var(--accent2)">DINAR · 13:00–14:30</div><div class="meal-title">Àpat principal</div><div class="meal-desc">Proteïna (150–180g) + verdura abundant + oli d'oliva.</div><div class="meal-kcal" style="color:var(--accent2)">~500–600 kcal</div></div>
+    <div class="meal-block" style="border-color:var(--warn)"><div class="meal-label" style="color:var(--warn)">BERENAR · OPCIONAL</div><div class="meal-title">Fruita o nous</div><div class="meal-desc">1 peça de fruita o grapat de nous (15–20g). Si no tens gana, salta'l.</div><div class="meal-kcal" style="color:var(--warn)">~100–150 kcal</div></div>
+    <div class="meal-block" style="border-color:var(--purple)"><div class="meal-label" style="color:var(--purple)">SOPAR · 20:00–21:00</div><div class="meal-title">Àpat lleuger</div><div class="meal-desc">Peix o ous + verdura cuinada. Evitar hidrats al vespre.</div><div class="meal-kcal" style="color:var(--purple)">~400–450 kcal</div></div>
+  </div>
+</div>
+
+<!-- MENÚS -->
+<div class="section" id="tab-menus">
+  <div class="card">
+    <div class="card-title">Setmana tipus</div>
+    <div style="margin-bottom:12px"><select id="day-select" onchange="showDay(this.value)"><option value="dl">Dilluns</option><option value="dm">Dimarts</option><option value="dc">Dimecres</option><option value="dj">Dijous</option><option value="dv">Divendres</option><option value="ds">Dissabte</option><option value="dg">Diumenge</option></select></div>
+    <div id="day-content"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Plats ràpids ≤15 min</div>
+    <div class="food-row"><span class="food-name">Truita de 3 ous + espinacs</span><span class="food-detail">~250 kcal · 20g prot</span></div>
+    <div class="food-row"><span class="food-name">Tonyina + tomàquet + oli</span><span class="food-detail">~200 kcal · 25g prot</span></div>
+    <div class="food-row"><span class="food-name">Salmó a la planxa + llimona</span><span class="food-detail">~280 kcal · 30g prot</span></div>
+    <div class="food-row"><span class="food-name">Pit de pollastre + all + julivert</span><span class="food-detail">~220 kcal · 35g prot</span></div>
+    <div class="food-row"><span class="food-name">Crema de bròquil + ou ferrat</span><span class="food-detail">~300 kcal · 18g prot</span></div>
+    <div class="food-row"><span class="food-name">Iogurt grec + nous</span><span class="food-detail">~180 kcal · 12g prot</span></div>
+  </div>
+</div>
+
+<!-- FORA DE CASA -->
+<div class="section" id="tab-fora">
+  <div class="card">
+    <div class="card-title">Bar / Cafeteria</div>
+    <div class="scenario"><div class="scenario-badge">ESMORZAR</div><div class="scenario-title">Opcions bones</div><div class="scenario-items">✅ Entrepà de tonyina (pa integral si n'hi ha)<br>✅ Ou dur / truita francesa<br>✅ Cafè amb llet (sense sucre)<br>✅ Iogurt natural sense sucre</div></div>
+    <div class="scenario"><div class="scenario-badge" style="background:rgba(248,113,113,.15);color:var(--danger);border-color:rgba(248,113,113,.3)">EVITAR</div><div class="scenario-title">Trampes habituals</div><div class="scenario-items">🚫 Croissants, brioixeria, napolitanes<br>🚫 Sucs de taronja<br>🚫 Pa blanc amb mantequilla<br>🚫 Begudes carbonatades</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Restaurant / Menú del dia</div>
+    <div class="scenario"><div class="scenario-badge">ESTRATÈGIA</div><div class="scenario-title">Com triar bé</div><div class="scenario-items">✅ <strong>Primer:</strong> amanida, sopa clara, verdures, espàrrecs<br>✅ <strong>Segon:</strong> peix a la planxa, pollastre, carn sense salsa<br>✅ <strong>Postres:</strong> fruita fresca, iogurt natural<br>⚡ <strong>Pa:</strong> limitar a 1 peça<br>⚡ <strong>Beguda:</strong> aigua. Si social → 1 cervesa petita màxim</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Àpat familiar / social</div>
+    <div class="scenario"><div class="scenario-badge">TÀCTICA</div><div class="scenario-title">Sense patir-la ni fer-te notar</div><div class="scenario-items">✅ Menja proteïna i verdura primer<br>✅ Porcions petites dels plats forts<br>✅ 1 copa de vi si és inevitable<br>✅ Beu molta aigua durant el menjar<br>⚡ Un dia puntual no trenca res<br>🚫 No compensis amb dejú extrem l'endemà</div></div>
+  </div>
+</div>
+
+<!-- ALIMENTS -->
+<div class="section" id="tab-aliments">
+  <div class="card">
+    <div class="card-title">Proteïnes</div>
+    <div class="food-row"><span class="food-name">Tonyina / Bonito al natural</span><div><span class="tag tag-ok">ALT PROT</span><span class="tag tag-ok">BAIX GREIX</span></div></div>
+    <div class="food-row"><span class="food-name">Pit de pollastre</span><div><span class="tag tag-ok">ALT PROT</span><span class="tag tag-ok">VERSÀTIL</span></div></div>
+    <div class="food-row"><span class="food-name">Salmó fresc / fumat</span><div><span class="tag tag-ok">OMEGA-3</span><span class="tag tag-ok">SACIANT</span></div></div>
+    <div class="food-row"><span class="food-name">Lluç / Rap</span><div><span class="tag tag-ok">BAIX GREIX</span></div></div>
+    <div class="food-row"><span class="food-name">Ous</span><div><span class="tag tag-ok">COMPLET</span><span class="tag tag-ok">RÀPID</span></div></div>
+    <div class="food-row"><span class="food-name">Iogurt grec natural</span><div><span class="tag tag-ok">PROT</span><span class="tag tag-info">INTESTÍ</span></div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Verdures (sense límit)</div>
+    <div class="food-row"><span class="food-name">Bròquil / Coliflor</span><div><span class="tag tag-ok">ANTIINFLAMATORI</span></div></div>
+    <div class="food-row"><span class="food-name">Espàrrecs verds</span><div><span class="tag tag-ok">FIBRA</span></div></div>
+    <div class="food-row"><span class="food-name">Espinacs / Rúcula</span><div><span class="tag tag-ok">FERRO</span></div></div>
+    <div class="food-row"><span class="food-name">Tomàquet fresc</span><div><span class="tag tag-ok">LICOPÈ</span></div></div>
+    <div class="food-row"><span class="food-name">Carbassó / Albergínia</span><div><span class="tag tag-ok">MUY BAIX KCAL</span></div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Greixos bons (mesura)</div>
+    <div class="food-row"><span class="food-name">Oli d'oliva verge extra</span><span class="food-detail">màx. 3–4 cullerades/dia</span></div>
+    <div class="food-row"><span class="food-name">Aguacate</span><span class="food-detail">½ unitat/dia</span></div>
+    <div class="food-row"><span class="food-name">Nous</span><span class="food-detail">grapat (20–25g)</span></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Vigilar</div>
+    <div class="food-row"><span class="food-name">Pa integral/centeno</span><div><span class="tag tag-warn">OCASIONAL</span><span class="food-detail">1 ració/dia màx</span></div></div>
+    <div class="food-row"><span class="food-name">Fruita</span><div><span class="tag tag-warn">MODERAR</span><span class="food-detail">2 peces/dia màx</span></div></div>
+    <div class="food-row"><span class="food-name">Llegums</span><div><span class="tag tag-warn">MESURA</span><span class="food-detail">2–3 cops/setmana</span></div></div>
+  </div>
+</div>
+
+<!-- PES -->
+<div class="section" id="tab-pes">
+  <div class="card">
+    <div class="card-title">Afegir pes</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+      <div style="flex:1;min-width:120px"><label class="input-label">DATA</label><input type="date" id="weight-date"></div>
+      <div style="flex:1;min-width:90px"><label class="input-label">PES (kg)</label><input type="number" id="weight-val" placeholder="82.5" step="0.1" min="40" max="250"></div>
+      <div style="display:flex;align-items:flex-end"><button class="btn btn-primary" onclick="addWeight()">AFEGIR</button></div>
+    </div>
+    <canvas id="weight-chart" style="width:100%;height:160px"></canvas>
+  </div>
+  <div class="card">
+    <div class="card-title">Historial</div>
+    <div id="weight-list"></div>
+    <div style="margin-top:10px"><button class="btn btn-danger" style="font-size:10px;padding:5px 10px" onclick="clearWeights()">ESBORRAR TOT</button></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Progrés</div>
+    <div id="weight-stats"></div>
+  </div>
+</div>
+
+<!-- CALORIES -->
+<div class="section" id="tab-calories">
+  <div class="card">
+    <div class="card-title">Calculadora de calories</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:12px;font-family:var(--mono);">Descriu un àpat. La IA calcula les kcal estimades.</div>
+    <label class="input-label">QUÈ HAS MENJAT?</label>
+    <textarea id="kcal-input" rows="3" placeholder="Ex: Pit de pollastre 150g planxa + bròquil bullit + 1 cullerada oli"></textarea>
+    <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-primary" id="kcal-btn" onclick="calcKcal()">CALCULAR</button>
+      <button class="btn btn-secondary" onclick="addKcalToDiary()">+ AL DIARI</button>
+    </div>
+    <div id="kcal-result"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Resum del dia</div>
+    <div id="daily-summary"><div style="color:var(--muted);font-size:13px;">Calcula àpats per veure el resum.</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Referència ràpida</div>
+    <div class="food-row"><span class="food-name">Pit pollastre 150g planxa</span><span class="food-detail">~165 kcal · 35g prot</span></div>
+    <div class="food-row"><span class="food-name">Tonyina al natural 1 llauna (80g)</span><span class="food-detail">~95 kcal · 21g prot</span></div>
+    <div class="food-row"><span class="food-name">Ou sencer (L)</span><span class="food-detail">~80 kcal · 7g prot</span></div>
+    <div class="food-row"><span class="food-name">Salmó 150g planxa</span><span class="food-detail">~270 kcal · 30g prot</span></div>
+    <div class="food-row"><span class="food-name">Bròquil 200g bullit</span><span class="food-detail">~55 kcal · 5g fibra</span></div>
+    <div class="food-row"><span class="food-name">Iogurt grec natural 125g</span><span class="food-detail">~110 kcal · 10g prot</span></div>
+    <div class="food-row"><span class="food-name">Aguacate ½ (75g)</span><span class="food-detail">~120 kcal · 11g greix bo</span></div>
+    <div class="food-row"><span class="food-name">Pa centeno 1 llesca (35g)</span><span class="food-detail">~80 kcal</span></div>
+    <div class="food-row"><span class="food-name">Oli d'oliva 1 cullerada (10ml)</span><span class="food-detail">~90 kcal</span></div>
+    <div class="food-row"><span class="food-name">Nous 25g</span><span class="food-detail">~165 kcal</span></div>
+  </div>
+</div>
+
+<!-- DIARI -->
+<div class="section" id="tab-diari">
+  <div class="card">
+    <div class="card-title">Diari de menjar</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:12px;font-family:var(--mono);">Apunta el que has menjat avui. La IA farà una valoració breu.</div>
+    <div style="margin-bottom:8px"><label class="input-label">DATA</label><input type="date" id="diary-date" style="width:auto"></div>
+    <div style="margin-bottom:10px">
+      <label class="input-label">QUÈ HAS MENJAT AVUI?</label>
+      <textarea id="diary-input" rows="4" placeholder="Esmorzar: mig entrepà tonyina + cafè&#10;Dinar: pollastre planxa + bròquil + oli&#10;Sopar: 2 ous + espàrrecs"></textarea>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-primary" id="diary-btn" onclick="saveDiary()">GUARDAR + VALORAR</button>
+      <button class="btn btn-secondary" onclick="saveDiaryNoEval()">GUARDAR SENSE IA</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Entrades anteriors</div>
+    <div id="diary-list"></div>
+    <div style="margin-top:10px"><button class="btn btn-danger" style="font-size:10px;padding:5px 10px" onclick="clearDiary()">ESBORRAR TOT</button></div>
+  </div>
+</div>
+
+<!-- CHECK -->
+<div class="section" id="tab-check">
+  <div class="card">
+    <div class="card-title">Check diari</div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:10px" id="check-date-label"></div>
+    <div id="checklist"></div>
+    <div style="margin-top:10px;display:flex;gap:8px;align-items:center">
+      <button class="btn btn-secondary" onclick="resetChecklist()">RESET DIA</button>
+      <div id="check-score" style="display:flex;align-items:center;gap:8px;flex:1"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Historial setmanal</div>
+    <div id="week-log"></div>
+  </div>
+</div>
+
+<!-- CONSULTA IA -->
+<div class="section" id="tab-consulta">
+  <div class="card">
+    <div class="card-title">Assistent de nutrició</div>
+    <div class="chat-container" id="chat-messages">
+      <div class="msg msg-assistant">
+        <div class="sender">NUTRI·CHESTER</div>
+        Hola Chester. Pregunta'm el que vulguis: un plat que has menjat, com gestionar un àpat familiar, si un aliment et convé, o qualsevol dubte pràctic.<br><br>Respostes directes, sense romanços.
+      </div>
+    </div>
+    <div class="chat-input-row">
+      <textarea id="chat-input" placeholder="Ex: He menjat arròs al migdia. Compenso al sopar?" rows="2" onkeydown="handleKey(event)"></textarea>
+      <button class="btn btn-primary" id="send-btn" onclick="sendMessage()">▶</button>
+    </div>
+    <div style="font-size:10px;color:var(--muted);margin-top:5px;font-family:var(--mono);">Enter per enviar · Shift+Enter nova línia</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Preguntes ràpides</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">
+      <button class="btn btn-secondary" style="font-size:10px;padding:5px 9px" onclick="quickQ('Puc menjar formatge?')">Formatge?</button>
+      <button class="btn btn-secondary" style="font-size:10px;padding:5px 9px" onclick="quickQ('Quina fruita és millor per aprimar?')">Millor fruita?</button>
+      <button class="btn btn-secondary" style="font-size:10px;padding:5px 9px" onclick="quickQ('Tinc gana a les 11h, què menjo?')">Gana mitja mañana</button>
+      <button class="btn btn-secondary" style="font-size:10px;padding:5px 9px" onclick="quickQ('He sopat fort fora de casa, què faig demà?')">He sopat fort</button>
+      <button class="btn btn-secondary" style="font-size:10px;padding:5px 9px" onclick="quickQ('Quanta proteïna haig de menjar al dia?')">Quanta proteïna?</button>
+      <button class="btn btn-secondary" style="font-size:10px;padding:5px 9px" onclick="quickQ('Em veig estancat amb el pes, què faig?')">Estic estancat</button>
+      <button class="btn btn-secondary" style="font-size:10px;padding:5px 9px" onclick="quickQ('Puc beure cafè amb llet sencer?')">Cafè amb llet?</button>
+      <button class="btn btn-secondary" style="font-size:10px;padding:5px 9px" onclick="quickQ('La dieta keto m\'aniria bé per al meu cas?')">Keto?</button>
+    </div>
+  </div>
+</div>
+
+</main>
+<script>
+// ── UTILS ──────────────────────────────────────────
+function today(){return new Date().toISOString().split('T')[0];}
+function fmt(d){if(!d)return'';const[y,m,day]=d.split('-');return`${day}/${m}/${y}`;}
+
+// ── TABS ───────────────────────────────────────────
+function showTab(name,el){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  if(el)el.classList.add('active');
+  if(name==='pes')renderWeights();
+  if(name==='check')renderChecklist();
+  if(name==='diari')renderDiary();
+}
+
+// ── MENUS ──────────────────────────────────────────
+const menus={
+  dl:{e:"Mig entrepà de tonyina (pa centeno) + cafè",d:"Pit de pollastre a la planxa + bròquil bullit + oli",b:"1 iogurt grec natural",s:"2 ous ferrats + espàrrecs a la planxa",k:"~1550"},
+  dm:{e:"Cafè amb llet + 1 ou dur",d:"Lluç al forn + amanida verda",b:"Grapat de nous (20g)",s:"Truita de 3 ous amb espinacs",k:"~1520"},
+  dc:{e:"Mig entrepà de tonyina + cafè",d:"Salmó a la planxa + coliflor al vapor",b:"1 pera o 1 kiwi",s:"Crema de carbassó + 2 ous durs",k:"~1480"},
+  dj:{e:"Iogurt grec + cafè",d:"Pollastre al forn + espàrrecs + all",b:"Aguacate ½ + llimona",s:"Peix blanc a la planxa + amanida espinacs",k:"~1600"},
+  dv:{e:"Mig entrepà de tonyina + cafè",d:"Rap o lluerna al forn + verdures de temporada",b:"1 iogurt grec",s:"Truita francesa + enciam + tomàquet",k:"~1500"},
+  ds:{e:"Ous remenats (2) + cafè amb llet",d:"Àpat familiar — proteïna + verdura primer, porció moderada si hi ha arròs",b:"Fruita si tens gana",s:"Lleuger: iogurt grec + nous",k:"~1600–1800"},
+  dg:{e:"Cafè + fruita + iogurt",d:"Peix fresc a la planxa o arròs amb peix (porció moderada)",b:"Opcional — 1 peça fruita",s:"Sopa + ou dur o pollastre fred",k:"~1550"}
+};
+function showDay(day){
+  const m=menus[day];
+  document.getElementById('day-content').innerHTML=`
+    <div class="meal-block"><div class="meal-label">ESMORZAR</div><div class="meal-title">${m.e}</div></div>
+    <div class="meal-block" style="border-color:var(--accent2)"><div class="meal-label" style="color:var(--accent2)">DINAR</div><div class="meal-title">${m.d}</div></div>
+    <div class="meal-block" style="border-color:var(--warn)"><div class="meal-label" style="color:var(--warn)">BERENAR</div><div class="meal-title">${m.b}</div></div>
+    <div class="meal-block" style="border-color:var(--purple)"><div class="meal-label" style="color:var(--purple)">SOPAR</div><div class="meal-title">${m.s}</div></div>
+    <div style="font-family:var(--mono);font-size:11px;color:var(--accent);padding-top:8px">TOTAL: ${m.k} kcal</div>`;
+}
+showDay('dl');
+
+// ── WEIGHT ─────────────────────────────────────────
+function getWts(){try{return JSON.parse(localStorage.getItem('ch_wts')||'[]');}catch{return[];}}
+function saveWts(a){localStorage.setItem('ch_wts',JSON.stringify(a));}
+function addWeight(){
+  const d=document.getElementById('weight-date').value||today();
+  const v=parseFloat(document.getElementById('weight-val').value);
+  if(!v||v<40||v>250)return;
+  const a=getWts();const idx=a.findIndex(e=>e.d===d);
+  if(idx>=0)a[idx].v=v;else a.push({d,v});
+  a.sort((a,b)=>a.d.localeCompare(b.d));saveWts(a);
+  document.getElementById('weight-val').value='';renderWeights();
+}
+function delWt(d){saveWts(getWts().filter(e=>e.d!==d));renderWeights();}
+function clearWeights(){if(confirm('Esborrar historial de pes?')){localStorage.removeItem('ch_wts');renderWeights();}}
+
+function renderWeights(){
+  document.getElementById('weight-date').value=today();
+  const a=getWts();
+  const list=document.getElementById('weight-list');
+  const stats=document.getElementById('weight-stats');
+  if(!a.length){
+    list.innerHTML='<div style="color:var(--muted);font-size:13px;">Encara no hi ha entrades.</div>';
+    stats.innerHTML='<div style="color:var(--muted);font-size:13px;">Afegeix entrades per veure el progrés.</div>';
+    drawChart([]);return;
+  }
+  const rev=[...a].reverse();
+  list.innerHTML=rev.map((e,i)=>{
+    const prev=rev[i+1];let dh='';
+    if(prev){const df=e.v-prev.v;const s=df>0?'+':'';const c=df<0?'diff-neg':df>0?'diff-pos':'diff-zero';dh=`<span class="${c}">${s}${df.toFixed(1)}</span>`;}
+    return`<div class="weight-entry"><div><div class="weight-date">${fmt(e.d)}</div></div><div style="display:flex;align-items:center;gap:10px">${dh}<div class="weight-val">${e.v} kg</div><button class="btn btn-danger" style="font-size:9px;padding:3px 7px" onclick="delWt('${e.d}')">✕</button></div></div>`;
+  }).join('');
+  const first=a[0].v,last=a[a.length-1].v,total=(last-first).toFixed(1);
+  const sign=total>0?'+':'';const col=total<0?'var(--accent)':'var(--danger)';
+  const lost=Math.max(0,first-last);const pct=Math.min(100,Math.round(lost/12.5*100));
+  stats.innerHTML=`
+    <div class="grid-3" style="margin-bottom:10px">
+      <div class="stat-box"><div class="stat-num" style="font-size:20px">${first}</div><div class="stat-label">pes inicial (kg)</div></div>
+      <div class="stat-box"><div class="stat-num" style="font-size:20px;color:${col}">${sign}${total}</div><div class="stat-label">canvi total (kg)</div></div>
+      <div class="stat-box"><div class="stat-num" style="font-size:20px">${last}</div><div class="stat-label">pes actual (kg)</div></div>
+    </div>
+    <div style="font-size:11px;color:var(--muted);font-family:var(--mono);margin-bottom:5px">PROGRÉS OBJECTIU (12.5 kg)</div>
+    <div class="progress-bar" style="height:8px"><div class="progress-fill" style="width:${pct}%;background:${pct>=80?'var(--accent)':pct>=40?'var(--warn)':'var(--accent2)'}"></div></div>
+    <div style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:4px">${pct}% · ${lost.toFixed(1)} kg perduts</div>`;
+  drawChart(a);
+}
+
+function drawChart(arr){
+  const canvas=document.getElementById('weight-chart');if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const W=canvas.offsetWidth||300,H=160;
+  canvas.width=W;canvas.height=H;ctx.clearRect(0,0,W,H);
+  if(arr.length<2){ctx.fillStyle='#2a3045';ctx.font='12px IBM Plex Mono,monospace';ctx.textAlign='center';ctx.fillText('Afegeix més entrades per veure la gràfica',W/2,H/2);return;}
+  const vals=arr.map(e=>e.v);const mn=Math.min(...vals)-1;const mx=Math.max(...vals)+1;
+  const pad={top:14,bottom:26,left:34,right:10};const gW=W-pad.left-pad.right;const gH=H-pad.top-pad.bottom;
+  const px=i=>pad.left+(i/(arr.length-1))*gW;const py=v=>pad.top+gH-((v-mn)/(mx-mn))*gH;
+  ctx.strokeStyle='#2a3045';ctx.lineWidth=1;
+  for(let i=0;i<=4;i++){const y=pad.top+(i/4)*gH;ctx.beginPath();ctx.moveTo(pad.left,y);ctx.lineTo(W-pad.right,y);ctx.stroke();const v=mx-(i/4)*(mx-mn);ctx.fillStyle='#64748b';ctx.font='9px IBM Plex Mono,monospace';ctx.textAlign='right';ctx.fillText(v.toFixed(1),pad.left-3,y+3);}
+  ctx.beginPath();ctx.moveTo(px(0),py(vals[0]));arr.forEach((e,i)=>{if(i>0)ctx.lineTo(px(i),py(e.v));});ctx.lineTo(px(arr.length-1),H-pad.bottom);ctx.lineTo(px(0),H-pad.bottom);ctx.closePath();ctx.fillStyle='rgba(74,222,128,.08)';ctx.fill();
+  ctx.beginPath();ctx.strokeStyle='#4ade80';ctx.lineWidth=2;arr.forEach((e,i)=>{if(i===0)ctx.moveTo(px(i),py(e.v));else ctx.lineTo(px(i),py(e.v));});ctx.stroke();
+  arr.forEach((e,i)=>{ctx.beginPath();ctx.arc(px(i),py(e.v),4,0,Math.PI*2);ctx.fillStyle='#4ade80';ctx.fill();ctx.strokeStyle='#0f1117';ctx.lineWidth=2;ctx.stroke();});
+  ctx.fillStyle='#64748b';ctx.font='9px IBM Plex Mono,monospace';ctx.textAlign='center';
+  [0,Math.floor(arr.length/2),arr.length-1].forEach(i=>{if(arr[i])ctx.fillText(fmt(arr[i].d),px(i),H-6);});
+}
+
+// ── CALORIES ───────────────────────────────────────
+let dailyKcal=[];
+async function calcKcal(){
+  const input=document.getElementById('kcal-input').value.trim();if(!input)return;
+  const btn=document.getElementById('kcal-btn');const res=document.getElementById('kcal-result');
+  btn.disabled=true;btn.innerHTML='<div class="spinner"></div>';
+  res.innerHTML='<div style="color:var(--muted);font-size:13px;margin-top:10px"><span class="loading-dots">Calculant</span></div>';
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+      model:'claude-sonnet-4-20250514',max_tokens:800,
+      system:`Ets un expert en nutrició. L'usuari (home 55 anys, objectiu 1600 kcal/dia) descriu un àpat. Respon NOMÉS en JSON sense backticks ni text addicional: {"total_kcal":number,"proteina_g":number,"greix_g":number,"hidrats_g":number,"detall":"aliments amb kcal","valoracio":"OK|ACCEPTABLE|EXCESSIU","comentari":"1 frase directa en català"}`,
+      messages:[{role:'user',content:`Calcula calories: ${input}`}]
+    })});
+    const data=await r.json();const raw=data.content?.map(b=>b.text||'').join('')||'';
+    const parsed=JSON.parse(raw.replace(/```json|```/g,'').trim());
+    dailyKcal.push({desc:input,kcal:parsed.total_kcal,prot:parsed.proteina_g});renderDailySummary();
+    const vc=parsed.valoracio==='OK'?'verdict-ok':parsed.valoracio==='ACCEPTABLE'?'verdict-warn':'verdict-bad';
+    res.innerHTML=`<div class="kcal-result"><div class="kcal-big">${parsed.total_kcal} kcal</div><div class="kcal-breakdown">${parsed.detall}<br>Proteïna: ${parsed.proteina_g}g · Greixos: ${parsed.greix_g}g · Hidrats: ${parsed.hidrats_g}g</div><div class="kcal-verdict ${vc}">${parsed.valoracio} — ${parsed.comentari}</div></div>`;
+  }catch{res.innerHTML='<div class="error-msg">Error calculant. Torna-ho a intentar.</div>';}
+  btn.disabled=false;btn.textContent='CALCULAR';
+}
+function addKcalToDiary(){
+  const v=document.getElementById('kcal-input').value;
+  const ex=document.getElementById('diary-input').value;
+  document.getElementById('diary-input').value=ex?ex+'\n'+v:v;
+  showTab('diari',document.querySelectorAll('.tab')[6]);
+}
+function renderDailySummary(){
+  const el=document.getElementById('daily-summary');
+  if(!dailyKcal.length){el.innerHTML='<div style="color:var(--muted);font-size:13px;">Calcula àpats per veure el resum.</div>';return;}
+  const total=dailyKcal.reduce((s,e)=>s+e.kcal,0);const prot=dailyKcal.reduce((s,e)=>s+(e.prot||0),0);
+  const pct=Math.min(100,Math.round(total/1600*100));const col=total<=1600?'var(--accent)':total<=1900?'var(--warn)':'var(--danger)';
+  el.innerHTML=`<div style="margin-bottom:8px">${dailyKcal.map(e=>`<div class="food-row"><span style="font-size:12px">${e.desc.substring(0,45)}...</span><span class="food-detail">${e.kcal} kcal</span></div>`).join('')}</div>
+    <div style="font-family:var(--mono);font-size:26px;font-weight:600;color:${col}">${total} kcal</div>
+    <div style="font-size:12px;color:var(--muted);margin-top:3px">Proteïna total: ~${Math.round(prot)}g</div>
+    <div class="progress-bar" style="margin-top:7px;height:7px"><div class="progress-fill" style="width:${pct}%;background:${col}"></div></div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:4px">${pct}% del límit (1600 kcal)</div>
+    <div style="margin-top:8px"><button class="btn btn-secondary" style="font-size:10px;padding:5px 10px" onclick="dailyKcal=[];renderDailySummary()">RESET DIA</button></div>`;
+}
+
+// ── DIARY ──────────────────────────────────────────
+function getDiary(){try{return JSON.parse(localStorage.getItem('ch_diary')||'[]');}catch{return[];}}
+function saveDiaryStore(a){localStorage.setItem('ch_diary',JSON.stringify(a));}
+async function saveDiary(){
+  const d=document.getElementById('diary-date').value||today();
+  const content=document.getElementById('diary-input').value.trim();if(!content)return;
+  const btn=document.getElementById('diary-btn');btn.disabled=true;btn.innerHTML='<div class="spinner"></div>';
+  let ev='';
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+      model:'claude-sonnet-4-20250514',max_tokens:300,
+      system:`Ets assistent de nutrició per a Chester (home 55a, objectiu perdre pes, màxim 1600 kcal/dia, sense ultraprocesats ni sucre). Dona valoració breu (2-3 frases) en català del que ha menjat. Directe, sense romanços. Indica si és bon dia, on hi ha marge de millora, i 1 acció concreta si cal.`,
+      messages:[{role:'user',content:`Valoració del dia: ${content}`}]
+    })});
+    const data=await r.json();ev=data.content?.map(b=>b.text||'').join('')||'';
+  }catch{}
+  const a=getDiary();const idx=a.findIndex(e=>e.d===d);const entry={d,content,ev};
+  if(idx>=0)a[idx]=entry;else a.unshift(entry);
+  saveDiaryStore(a);document.getElementById('diary-input').value='';
+  btn.disabled=false;btn.textContent='GUARDAR + VALORAR';renderDiary();
+}
+function saveDiaryNoEval(){
+  const d=document.getElementById('diary-date').value||today();
+  const content=document.getElementById('diary-input').value.trim();if(!content)return;
+  const a=getDiary();const idx=a.findIndex(e=>e.d===d);const entry={d,content,ev:''};
+  if(idx>=0)a[idx]=entry;else a.unshift(entry);
+  saveDiaryStore(a);document.getElementById('diary-input').value='';renderDiary();
+}
+function delDiary(d){saveDiaryStore(getDiary().filter(e=>e.d!==d));renderDiary();}
+function clearDiary(){if(confirm('Esborrar tot el diari?')){localStorage.removeItem('ch_diary');renderDiary();}}
+function renderDiary(){
+  document.getElementById('diary-date').value=today();
+  const a=getDiary();const el=document.getElementById('diary-list');
+  if(!a.length){el.innerHTML='<div style="color:var(--muted);font-size:13px;">Encara no hi ha entrades.</div>';return;}
+  el.innerHTML=a.map(e=>`<div class="diary-entry">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div class="diary-date">${fmt(e.d)}</div>
+      <button class="btn btn-danger" style="font-size:9px;padding:3px 6px" onclick="delDiary('${e.d}')">✕</button>
+    </div>
+    <div class="diary-content">${e.content.replace(/\n/g,'<br>')}</div>
+    ${e.ev?`<div class="diary-eval">${e.ev.replace(/\n/g,'<br>')}</div>`:''}
+  </div>`).join('');
+}
+
+// ── CHECKLIST ──────────────────────────────────────
+const checkItems=["Cap ultraprocesado avui","Cap sucre afegit","Cap refresc","Proteïna als 3 àpats principals","Verdura al dinar","Verdura al sopar","Menys de 2 peces de fruita","Alcohol: zero o puntual social","Pa: zero o 1 ració màxim","Begut suficient aigua (>1.5L)"];
+function getTodayKey(){return'ch_chk_'+today();}
+function getChecks(){try{const d=JSON.parse(localStorage.getItem(getTodayKey())||'null');if(!d)return new Array(checkItems.length).fill(false);return d.map(Boolean);}catch{return new Array(checkItems.length).fill(false);}}
+function saveChecks(a){localStorage.setItem(getTodayKey(),JSON.stringify(a));}
+function renderChecklist(){
+  const checks=getChecks();const pad=[...checks,...new Array(Math.max(0,checkItems.length-checks.length)).fill(false)];
+  document.getElementById('check-date-label').textContent='DIA: '+fmt(today());
+  document.getElementById('checklist').innerHTML=checkItems.map((item,i)=>`<div class="check-item ${pad[i]?'checked':''}" onclick="toggleCheck(${i})"><div class="check-box">${pad[i]?'✓':''}</div><span class="check-label">${item}</span></div>`).join('');
+  const count=pad.filter(Boolean).length;const pct=Math.round(count/checkItems.length*100);
+  const col=pct>=80?'var(--accent)':pct>=50?'var(--warn)':'var(--danger)';
+  document.getElementById('check-score').innerHTML=`<div class="progress-bar" style="flex:1;max-width:120px"><div class="progress-fill" style="width:${pct}%;background:${col}"></div></div><span style="font-family:var(--mono);font-size:12px;color:${col}">${count}/10</span>`;
+  renderWeekLog();
+}
+function toggleCheck(i){const c=getChecks();const pad=[...c,...new Array(Math.max(0,checkItems.length-c.length)).fill(false)];pad[i]=!pad[i];saveChecks(pad);renderChecklist();}
+function resetChecklist(){saveChecks(new Array(checkItems.length).fill(false));renderChecklist();}
+function renderWeekLog(){
+  const el=document.getElementById('week-log');const entries=[];
+  for(let i=6;i>=0;i--){
+    const d=new Date();d.setDate(d.getDate()-i);const key='ch_chk_'+d.toISOString().split('T')[0];
+    try{const data=JSON.parse(localStorage.getItem(key)||'null');if(data){const count=data.filter(Boolean).length;const pct=Math.round(count/checkItems.length*100);const col=pct>=80?'var(--accent)':pct>=50?'var(--warn)':'var(--danger)';entries.push({date:fmt(d.toISOString().split('T')[0]),count,pct,col});}}catch{}
+  }
+  if(!entries.length){el.innerHTML='<div style="color:var(--muted);font-size:13px;">Completa el check diari per veure l\'historial.</div>';return;}
+  el.innerHTML=entries.map(e=>`<div style="display:flex;align-items:center;gap:10px;padding:7px 10px;background:var(--surface2);border-radius:6px;margin-bottom:5px;font-size:13px"><div style="font-family:var(--mono);font-size:10px;color:var(--muted);min-width:65px">${e.date}</div><div class="progress-bar" style="flex:1;height:5px"><div class="progress-fill" style="width:${e.pct}%;background:${e.col}"></div></div><div style="font-family:var(--mono);font-size:11px;color:${e.col};min-width:35px;text-align:right">${e.count}/10</div></div>`).join('');
+}
+
+// ── AI CHAT ────────────────────────────────────────
+const SYS=`Ets un assistent expert en nutrició pràctica per a pèrdua de pes. Parles SEMPRE en català.
+Chester és un home de 55 anys que necessita perdre 10-15 kg per reduir càrrega sobre el turmell (operació + infecció prèvia). Mobilitat reduïda temporalment.
+Dieta base: zero ultraprocesats, zero sucres afegits, zero refrescos. Alcohol preferentment zero. Base: proteïna (tonyina, pollastre, peix, ous) + verdures + fruita moderada + oli d'oliva. Esmorzar habitual: mig entrepà de tonyina + cafè. Objectiu: ~1600 kcal/dia.
+Respon sempre: directe, concís, realista, sense motivació buida, to tranquil i honest.`;
+let chatHistory=[];
+async function sendMessage(){
+  const input=document.getElementById('chat-input');const msg=input.value.trim();if(!msg)return;
+  addMsg('user',msg);input.value='';chatHistory.push({role:'user',content:msg});
+  const btn=document.getElementById('send-btn');btn.disabled=true;btn.innerHTML='<div class="spinner"></div>';
+  const wrap=addMsg('assistant','<span class="loading-dots">Pensant</span>');
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:SYS,messages:chatHistory})});
+    const data=await r.json();const text=data.content?.map(b=>b.text||'').join('')||'Error.';
+    chatHistory.push({role:'assistant',content:text});
+    wrap.querySelector('.msg').innerHTML=`<div class="sender">NUTRI·CHESTER</div>${text.replace(/\n/g,'<br>')}`;
+  }catch{wrap.querySelector('.msg').innerHTML=`<div class="sender">ERROR</div><div class="error-msg">No s'ha pogut connectar.</div>`;}
+  btn.disabled=false;btn.textContent='▶';
+}
+function addMsg(role,content){
+  const container=document.getElementById('chat-messages');const wrap=document.createElement('div');
+  const el=document.createElement('div');el.className=`msg msg-${role}`;
+  el.innerHTML=role==='user'?`<div class="sender">CHESTER</div>${content}`:content;
+  wrap.appendChild(el);container.appendChild(wrap);container.scrollTop=container.scrollHeight;return wrap;
+}
+function quickQ(q){
+  document.querySelectorAll('.tab').forEach((t,i)=>{if(i===8)t.click();});
+  setTimeout(()=>{document.getElementById('chat-input').value=q;sendMessage();},50);
+}
+function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();}}
+
+// ── INIT ───────────────────────────────────────────
+document.getElementById('diary-date').value=today();
+document.getElementById('weight-date').value=today();
+renderChecklist();
+</script>
+</body>
+</html>
