@@ -1,0 +1,15 @@
+name = "chester-nutricio-proxy"
+main = "worker.js"
+compatibility_date = "2026-01-01"
+
+# Ajusta l'origen al domini real on serveixis index.html
+# (per defecte, GitHub Pages d'aquest repo).
+[vars]
+ALLOWED_ORIGIN = "https://pownedpc.github.io"
+ALLOWED_MODELS = "claude-sonnet-5,claude-haiku-4-5-20251001"
+MAX_TOKENS_CAP = "1024"
+
+# Secrets (NO van aquí, es carreguen amb `wrangler secret put`):
+#   ANTHROPIC_API_KEY   -> la teva API key nova de Anthropic
+#   APP_SHARED_SECRET   -> (opcional) una frase qualsevol, també
+#                          configurada dins de l'app a la pestanya IA
