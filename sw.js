@@ -4,7 +4,7 @@
 // primer la caché si existia, cosa que deixava l'app "congelada" en la
 // primera versió instal·lada — per això es bumpeja el nom de la caché aquí,
 // perquè els navegadors amb la versió vella la descartin en actualitzar-se.
-const CACHE = 'chester-nutricio-v2';
+const CACHE = 'chester-nutricio-v3';
 const SHELL = ['./', './index.html', './manifest.json', './icons/icon-192.png', './icons/icon-512.png'];
 
 self.addEventListener('install', e => {
@@ -25,8 +25,11 @@ self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET' || url.origin !== location.origin) return;
   // Network-first: sempre intenta la xarxa (versió fresca) i només cau a la
   // caché si no hi ha connexió. Així cap redisseny futur es queda "atrapat".
+  // cache:'no-store' és clau — sense això, "fetch a la xarxa" encara podia
+  // servir-se des de la memòria cau HTTP normal del navegador en lloc
+  // d'anar de veritat al servidor, deixant l'app "congelada" igualment.
   e.respondWith(
-    fetch(e.request).then(res => {
+    fetch(e.request, { cache: 'no-store' }).then(res => {
       // Clonar ARA, de forma síncrona — si s'espera a dins del .then() de
       // caches.open(), el body de "res" ja pot haver-se consumit quan la
       // pàgina el llegeix, i clone() peta amb "body is already used".
