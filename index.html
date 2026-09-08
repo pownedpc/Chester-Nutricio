@@ -183,12 +183,10 @@
   <nav class="navlist">
     <button class="navitem active" data-tab="dieta" onclick="showTab('dieta',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="6.3"/><circle cx="9" cy="9" r="2.6"/></svg><span>Dieta</span></button>
     <button class="navitem" data-tab="menus" onclick="showTab('menus',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4" width="13" height="11" rx="1.6"/><line x1="2.5" y1="7.7" x2="15.5" y2="7.7"/><line x1="6" y1="2.3" x2="6" y2="5.3"/><line x1="12" y1="2.3" x2="12" y2="5.3"/></svg><span>Menús</span></button>
-    <button class="navitem" data-tab="fora" onclick="showTab('fora',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7.3" r="3.6"/><polygon points="5.6,9.6 12.4,9.6 9,15.8"/></svg><span>Fora de casa</span></button>
     <button class="navitem" data-tab="aliments" onclick="showTab('aliments',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="9" cy="9" rx="6.2" ry="3.3" transform="rotate(-35 9 9)"/><line x1="4.7" y1="13" x2="9" y2="9"/></svg><span>Aliments</span></button>
     <button class="navitem" data-tab="pes" onclick="showTab('pes',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.6" y="2.6" width="12.8" height="12.8" rx="2.6"/><circle cx="9" cy="9" r="3.3"/><line x1="9" y1="9" x2="10.8" y2="6.9"/></svg><span>Pes</span></button>
     <button class="navitem" data-tab="calories" onclick="showTab('calories',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polygon points="9,2 11,6.2 9.6,7.7 12.2,10.3 9,16 5.8,10.3 8.4,7.7 7,6.2"/></svg><span>Calories</span></button>
     <button class="navitem" data-tab="diari" onclick="showTab('diari',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.2" y="2.4" width="11.6" height="13.2" rx="1.6"/><line x1="3.2" y1="6" x2="14.8" y2="6"/><line x1="6" y1="9.6" x2="12" y2="9.6"/><line x1="6" y1="12.4" x2="10" y2="12.4"/></svg><span>Diari</span></button>
-    <button class="navitem" data-tab="check" onclick="showTab('check',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="6.3"/><polyline points="5.6,9 8,11.4 12.6,6.4"/></svg><span>Check</span></button>
     <button class="navitem" data-tab="consulta" onclick="showTab('consulta',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polygon points="9,2 10.4,7.6 16,9 10.4,10.4 9,16 7.6,10.4 2,9 7.6,7.6"/></svg><span>IA</span></button>
     <button class="navitem" data-tab="perfil" onclick="showTab('perfil',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="6.2" r="2.7"/><path d="M3.3,15.5c0-3.3,2.5-5,5.7-5s5.7,1.7,5.7,5"/></svg><span>Perfil</span></button>
   </nav>
@@ -234,14 +232,14 @@
     </div>
     <div class="dash-side">
       <div class="card">
-        <div class="card-title">Check d'avui</div>
-        <div id="dieta-check-mini"></div>
-        <button class="btn btn-secondary" style="margin-top:14px;width:100%" onclick="goTab('check')">Anar al check diari</button>
-      </div>
-      <div class="card">
         <div class="card-title">Pròxim pas</div>
         <div style="font-size:14px;color:var(--muted);line-height:1.6">Si tens un dubte concret sobre un àpat o un aliment, pregunta-ho directament a l'assistent — respon curt i directe, sense romanços.</div>
         <button class="btn btn-secondary" style="margin-top:14px;width:100%" onclick="goTab('consulta')">Preguntar a la IA</button>
+      </div>
+      <div class="card">
+        <div class="card-title">Consulta un aliment</div>
+        <div style="font-size:14px;color:var(--muted);line-height:1.6">Vols saber si un aliment concret et convé? La IA et diu categoria, kcal i si el pots menjar tranquil.</div>
+        <button class="btn btn-secondary" style="margin-top:14px;width:100%" onclick="goTab('aliments')">Consultar un aliment</button>
       </div>
     </div>
   </div>
@@ -265,76 +263,27 @@
   </div>
 </div>
 
-<!-- FORA DE CASA -->
-<div class="section" id="tab-fora">
-  <div class="card">
-    <div class="card-title">Bar / Cafeteria</div>
-    <div class="scenario"><div class="scenario-badge">ESMORZAR</div><div class="scenario-title">Opcions bones</div><div class="scn-list">
-      <div class="scn-row ok"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,9.5 7.3,13 14,5.5"/></svg><span>Entrepà de tonyina (pa integral si n'hi ha)</span></div>
-      <div class="scn-row ok"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,9.5 7.3,13 14,5.5"/></svg><span>Ou dur / truita francesa</span></div>
-      <div class="scn-row ok"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,9.5 7.3,13 14,5.5"/></svg><span>Cafè amb llet (sense sucre)</span></div>
-      <div class="scn-row ok"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,9.5 7.3,13 14,5.5"/></svg><span>Iogurt natural sense sucre</span></div>
-    </div></div>
-    <div class="scenario"><div class="scenario-badge" style="background:var(--danger-soft);color:var(--danger);border-color:rgba(162,86,76,.3)">EVITAR</div><div class="scenario-title">Trampes habituals</div><div class="scn-list">
-      <div class="scn-row no"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="5" y1="5" x2="13" y2="13"/><line x1="13" y1="5" x2="5" y2="13"/></svg><span>Croissants, brioixeria, napolitanes</span></div>
-      <div class="scn-row no"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="5" y1="5" x2="13" y2="13"/><line x1="13" y1="5" x2="5" y2="13"/></svg><span>Sucs de taronja</span></div>
-      <div class="scn-row no"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="5" y1="5" x2="13" y2="13"/><line x1="13" y1="5" x2="5" y2="13"/></svg><span>Pa blanc amb mantequilla</span></div>
-      <div class="scn-row no"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="5" y1="5" x2="13" y2="13"/><line x1="13" y1="5" x2="5" y2="13"/></svg><span>Begudes carbonatades</span></div>
-    </div></div>
-  </div>
-  <div class="card">
-    <div class="card-title">Restaurant / Menú del dia</div>
-    <div class="scenario"><div class="scenario-badge">ESTRATÈGIA</div><div class="scenario-title">Com triar bé</div><div class="scn-list">
-      <div class="scn-row ok"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,9.5 7.3,13 14,5.5"/></svg><span><strong>Primer:</strong> amanida, sopa clara, verdures, espàrrecs</span></div>
-      <div class="scn-row ok"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,9.5 7.3,13 14,5.5"/></svg><span><strong>Segon:</strong> peix a la planxa, pollastre, carn sense salsa</span></div>
-      <div class="scn-row ok"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,9.5 7.3,13 14,5.5"/></svg><span><strong>Postres:</strong> fruita fresca, iogurt natural</span></div>
-      <div class="scn-row caution"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="10,2 4,10.5 8.3,10.5 7,16 14,7 9.5,7 10,2"/></svg><span><strong>Pa:</strong> limitar a 1 peça</span></div>
-      <div class="scn-row caution"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="10,2 4,10.5 8.3,10.5 7,16 14,7 9.5,7 10,2"/></svg><span><strong>Beguda:</strong> aigua. Si social → 1 cervesa petita màxim</span></div>
-    </div></div>
-  </div>
-  <div class="card">
-    <div class="card-title">Àpat familiar / social</div>
-    <div class="scenario"><div class="scenario-badge">TÀCTICA</div><div class="scenario-title">Sense patir-la ni fer-te notar</div><div class="scn-list">
-      <div class="scn-row ok"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,9.5 7.3,13 14,5.5"/></svg><span>Menja proteïna i verdura primer</span></div>
-      <div class="scn-row ok"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,9.5 7.3,13 14,5.5"/></svg><span>Porcions petites dels plats forts</span></div>
-      <div class="scn-row ok"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,9.5 7.3,13 14,5.5"/></svg><span>1 copa de vi si és inevitable</span></div>
-      <div class="scn-row ok"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,9.5 7.3,13 14,5.5"/></svg><span>Beu molta aigua durant el menjar</span></div>
-      <div class="scn-row caution"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="10,2 4,10.5 8.3,10.5 7,16 14,7 9.5,7 10,2"/></svg><span>Un dia puntual no trenca res</span></div>
-      <div class="scn-row no"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="5" y1="5" x2="13" y2="13"/><line x1="13" y1="5" x2="5" y2="13"/></svg><span>No compensis amb dejú extrem l'endemà</span></div>
-    </div></div>
-  </div>
-</div>
-
 <!-- ALIMENTS -->
 <div class="section" id="tab-aliments">
   <div class="card">
-    <div class="card-title">Proteïnes</div>
-    <div class="food-row"><span class="food-name">Tonyina / Bonito al natural</span><div><span class="tag tag-ok">ALT PROT</span><span class="tag tag-ok">BAIX GREIX</span></div></div>
-    <div class="food-row"><span class="food-name">Pit de pollastre</span><div><span class="tag tag-ok">ALT PROT</span><span class="tag tag-ok">VERSÀTIL</span></div></div>
-    <div class="food-row"><span class="food-name">Salmó fresc / fumat</span><div><span class="tag tag-ok">OMEGA-3</span><span class="tag tag-ok">SACIANT</span></div></div>
-    <div class="food-row"><span class="food-name">Lluç / Rap</span><div><span class="tag tag-ok">BAIX GREIX</span></div></div>
-    <div class="food-row"><span class="food-name">Ous</span><div><span class="tag tag-ok">COMPLET</span><span class="tag tag-ok">RÀPID</span></div></div>
-    <div class="food-row"><span class="food-name">Iogurt grec natural</span><div><span class="tag tag-ok">PROT</span><span class="tag tag-info">INTESTÍ</span></div></div>
+    <div class="card-title">Consulta un aliment</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:12px">Escriu el nom d'un aliment. La IA et diu si et convé, categoria, kcal aproximades i un comentari directe segons el teu perfil.</div>
+    <label class="input-label">QUIN ALIMENT VOLS CONSULTAR?</label>
+    <input type="text" id="food-input" placeholder="Ex: alvocat, iogurt grec, pa de pessic..." onkeydown="if(event.key==='Enter')lookupFood()">
+    <div style="margin-top:10px"><button class="btn btn-primary" id="food-btn" onclick="lookupFood()">Consultar</button></div>
+    <div id="food-result"></div>
   </div>
   <div class="card">
-    <div class="card-title">Verdures (sense límit)</div>
-    <div class="food-row"><span class="food-name">Bròquil / Coliflor</span><div><span class="tag tag-ok">ANTIINFLAMATORI</span></div></div>
-    <div class="food-row"><span class="food-name">Espàrrecs verds</span><div><span class="tag tag-ok">FIBRA</span></div></div>
-    <div class="food-row"><span class="food-name">Espinacs / Rúcula</span><div><span class="tag tag-ok">FERRO</span></div></div>
-    <div class="food-row"><span class="food-name">Tomàquet fresc</span><div><span class="tag tag-ok">LICOPÈ</span></div></div>
-    <div class="food-row"><span class="food-name">Carbassó / Albergínia</span><div><span class="tag tag-ok">MUY BAIX KCAL</span></div></div>
-  </div>
-  <div class="card">
-    <div class="card-title">Greixos bons (mesura)</div>
-    <div class="food-row"><span class="food-name">Oli d'oliva verge extra</span><span class="food-detail">màx. 3–4 cullerades/dia</span></div>
-    <div class="food-row"><span class="food-name">Aguacate</span><span class="food-detail">½ unitat/dia</span></div>
-    <div class="food-row"><span class="food-name">Nous</span><span class="food-detail">grapat (20–25g)</span></div>
-  </div>
-  <div class="card">
-    <div class="card-title">Vigilar</div>
-    <div class="food-row"><span class="food-name">Pa integral/centeno</span><div><span class="tag tag-warn">OCASIONAL</span><span class="food-detail">1 ració/dia màx</span></div></div>
-    <div class="food-row"><span class="food-name">Fruita</span><div><span class="tag tag-warn">MODERAR</span><span class="food-detail">2 peces/dia màx</span></div></div>
-    <div class="food-row"><span class="food-name">Llegums</span><div><span class="tag tag-warn">MESURA</span><span class="food-detail">2–3 cops/setmana</span></div></div>
+    <div class="card-title">Exemples ràpids</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">
+      <button class="btn btn-secondary" style="font-size:12px;padding:7px 12px" onclick="quickFood('Tonyina al natural')">Tonyina al natural</button>
+      <button class="btn btn-secondary" style="font-size:12px;padding:7px 12px" onclick="quickFood('Alvocat')">Alvocat</button>
+      <button class="btn btn-secondary" style="font-size:12px;padding:7px 12px" onclick="quickFood('Pa integral')">Pa integral</button>
+      <button class="btn btn-secondary" style="font-size:12px;padding:7px 12px" onclick="quickFood('Iogurt grec natural')">Iogurt grec natural</button>
+      <button class="btn btn-secondary" style="font-size:12px;padding:7px 12px" onclick="quickFood('Llegums')">Llegums</button>
+      <button class="btn btn-secondary" style="font-size:12px;padding:7px 12px" onclick="quickFood('Fruita seca')">Fruita seca</button>
+      <button class="btn btn-secondary" style="font-size:12px;padding:7px 12px" onclick="quickFood('Formatge curat')">Formatge curat</button>
+    </div>
   </div>
 </div>
 
@@ -411,23 +360,6 @@
     <div class="card-title">Entrades anteriors</div>
     <div id="diary-list"></div>
     <div style="margin-top:10px"><button class="btn btn-danger" style="font-size:10px;padding:5px 10px" onclick="clearDiary()">Esborrar tot</button></div>
-  </div>
-</div>
-
-<!-- CHECK -->
-<div class="section" id="tab-check">
-  <div class="card">
-    <div class="card-title">Check diari</div>
-    <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:10px" id="check-date-label"></div>
-    <div id="checklist"></div>
-    <div style="margin-top:10px;display:flex;gap:8px;align-items:center">
-      <button class="btn btn-secondary" onclick="resetChecklist()">Reset dia</button>
-      <div id="check-score" style="display:flex;align-items:center;gap:8px;flex:1"></div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-title">Historial setmanal</div>
-    <div id="week-log"></div>
   </div>
 </div>
 
@@ -676,11 +608,9 @@ function showTab(name,el){
   document.getElementById('tab-'+name).classList.add('active');
   if(el)el.classList.add('active');
   if(name==='pes')renderWeights();
-  if(name==='check')renderChecklist();
   if(name==='diari')renderDiary();
   if(name==='calories')renderDailySummary();
   if(name==='consulta')renderAIConfig();
-  if(name==='dieta')renderDietaCheckMini();
   if(name==='perfil')renderProfileForm();
   closeDrawer();
 }
@@ -862,42 +792,24 @@ function renderDiary(){
   </div>`).join('');
 }
 
-// ── CHECKLIST ──────────────────────────────────────
-const checkItems=["Cap ultraprocesado avui","Cap sucre afegit","Cap refresc","Proteïna als 3 àpats principals","Verdura al dinar","Verdura al sopar","Menys de 2 peces de fruita","Alcohol: zero o puntual social","Pa: zero o 1 ració màxim","Begut suficient aigua (>1.5L)"];
-function getTodayKey(){return'ch_chk_'+today();}
-function getChecks(){try{const d=JSON.parse(localStorage.getItem(getTodayKey())||'null');if(!d)return new Array(checkItems.length).fill(false);return d.map(Boolean);}catch{return new Array(checkItems.length).fill(false);}}
-function saveChecks(a){localStorage.setItem(getTodayKey(),JSON.stringify(a));}
-function renderChecklist(){
-  const checks=getChecks();const pad=[...checks,...new Array(Math.max(0,checkItems.length-checks.length)).fill(false)];
-  document.getElementById('check-date-label').textContent='DIA: '+fmt(today());
-  const checkSvg='<svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,9.5 7.3,13 14,5.5"/></svg>';
-  document.getElementById('checklist').innerHTML=checkItems.map((item,i)=>`<div class="check-item ${pad[i]?'checked':''}" onclick="toggleCheck(${i})"><div class="check-box">${pad[i]?checkSvg:''}</div><span class="check-label">${item}</span></div>`).join('');
-  const count=pad.filter(Boolean).length;const pct=Math.round(count/checkItems.length*100);
-  const col=pct>=80?'var(--accent)':pct>=50?'var(--warn)':'var(--danger)';
-  document.getElementById('check-score').innerHTML=`<div class="progress-bar" style="flex:1;max-width:120px"><div class="progress-fill" style="width:${pct}%;background:${col}"></div></div><span style="font-family:var(--mono);font-size:12px;color:${col}">${count}/10</span>`;
-  renderWeekLog();
+// ── ALIMENTS (consulta individual via IA) ───────────
+async function lookupFood(){
+  const input=document.getElementById('food-input').value.trim();if(!input)return;
+  const btn=document.getElementById('food-btn');const res=document.getElementById('food-result');
+  btn.disabled=true;btn.innerHTML='<div class="spinner"></div>';
+  res.innerHTML='<div style="color:var(--muted);font-size:13px;margin-top:10px"><span class="loading-dots">Consultant</span></div>';
+  try{
+    const raw=await callAI(
+      `Ets un nutricionista expert. ${profileContext()} L'usuari vol saber si un aliment concret li convé. Respon NOMÉS en JSON sense backticks ni text addicional: {"nom":"...","categoria":"...","recomanacio":"OK|MODERAT|EVITAR","kcal_100g":"~xxx kcal/100g","detall":"macros o característiques principals en poques paraules","comentari":"1-2 frases directes sobre si li convé segons el seu perfil i objectiu"}`,
+      [{role:'user',content:`Aliment: ${input}`}],700
+    );
+    const parsed=JSON.parse(raw.replace(/```json|```/g,'').trim());
+    const vc=parsed.recomanacio==='OK'?'verdict-ok':parsed.recomanacio==='MODERAT'?'verdict-warn':'verdict-bad';
+    res.innerHTML=`<div class="kcal-result"><div class="kcal-big" style="font-size:22px">${parsed.nom||input}</div><div class="kcal-breakdown">${parsed.categoria?'Categoria: '+parsed.categoria+'<br>':''}${parsed.kcal_100g?parsed.kcal_100g+'<br>':''}${parsed.detall||''}</div><div class="kcal-verdict ${vc}">${parsed.recomanacio||''} — ${parsed.comentari||''}</div></div>`;
+  }catch(e){res.innerHTML=e.message==='NO_CONFIG'?'<div class="error-msg">Configura el Worker IA a la pestanya IA abans de fer servir això.</div>':'<div class="error-msg">Error consultant. Torna-ho a intentar.</div>';}
+  btn.disabled=false;btn.textContent='Consultar';
 }
-function toggleCheck(i){const c=getChecks();const pad=[...c,...new Array(Math.max(0,checkItems.length-c.length)).fill(false)];pad[i]=!pad[i];saveChecks(pad);renderChecklist();renderDietaCheckMini();}
-function resetChecklist(){saveChecks(new Array(checkItems.length).fill(false));renderChecklist();renderDietaCheckMini();}
-// Mini-resum del check diari mostrat al dashboard de Dieta (només lectura,
-// no duplica els checkboxes interactius — per marcar-los, botó a la pestanya Check).
-function renderDietaCheckMini(){
-  const el=document.getElementById('dieta-check-mini');if(!el)return;
-  const checks=getChecks();const pad=[...checks,...new Array(Math.max(0,checkItems.length-checks.length)).fill(false)];
-  const count=pad.filter(Boolean).length;const pct=Math.round(count/checkItems.length*100);
-  const col=pct>=80?'var(--accent)':pct>=50?'var(--warn)':'var(--danger)';
-  const rows=checkItems.map((item,i)=>`<div class="check-mini-row ${pad[i]?'done':''}"><div class="check-mini-dot"></div><span>${item}</span></div>`).join('');
-  el.innerHTML=`<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px"><div class="progress-bar" style="flex:1"><div class="progress-fill" style="width:${pct}%;background:${col}"></div></div><span style="font-size:12px;font-weight:600;color:${col}">${count}/${checkItems.length}</span></div>${rows}`;
-}
-function renderWeekLog(){
-  const el=document.getElementById('week-log');const entries=[];
-  for(let i=6;i>=0;i--){
-    const d=new Date();d.setDate(d.getDate()-i);const key='ch_chk_'+d.toISOString().split('T')[0];
-    try{const data=JSON.parse(localStorage.getItem(key)||'null');if(data){const count=data.filter(Boolean).length;const pct=Math.round(count/checkItems.length*100);const col=pct>=80?'var(--accent)':pct>=50?'var(--warn)':'var(--danger)';entries.push({date:fmt(d.toISOString().split('T')[0]),count,pct,col});}}catch{}
-  }
-  if(!entries.length){el.innerHTML='<div style="color:var(--muted);font-size:13px;">Completa el check diari per veure l\'historial.</div>';return;}
-  el.innerHTML=entries.map(e=>`<div style="display:flex;align-items:center;gap:10px;padding:7px 10px;background:var(--surface2);border-radius:6px;margin-bottom:5px;font-size:13px"><div style="font-family:var(--mono);font-size:10px;color:var(--muted);min-width:65px">${e.date}</div><div class="progress-bar" style="flex:1;height:5px"><div class="progress-fill" style="width:${e.pct}%;background:${e.col}"></div></div><div style="font-family:var(--mono);font-size:11px;color:${e.col};min-width:35px;text-align:right">${e.count}/10</div></div>`).join('');
-}
+function quickFood(name){document.getElementById('food-input').value=name;lookupFood();}
 
 // ── AI CHAT ────────────────────────────────────────
 function buildSys(){
@@ -937,10 +849,8 @@ function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMe
 // ── INIT ───────────────────────────────────────────
 document.getElementById('diary-date').value=today();
 document.getElementById('weight-date').value=today();
-renderChecklist();
 renderAIConfig();
 renderDailySummary();
-renderDietaCheckMini();
 renderDietaHero();
 renderPlan();
 if('serviceWorker' in navigator){
