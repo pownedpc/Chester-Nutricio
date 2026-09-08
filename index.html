@@ -4,117 +4,146 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NutrIA</title>
-<meta name="theme-color" content="#faf3e8">
+<meta name="theme-color" content="#f7f5ee">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" href="icons/favicon.png">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Work+Sans:wght@400;500;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600;700&display=swap');
   :root {
-    --bg:#faf3e8;--surface:#fffdf8;--surface2:#f3e7d6;--border:#e6d5be;
-    --accent:#5e7a46;--accent-soft:rgba(94,122,70,.13);
-    --accent2:#c1683e;--accent2-soft:rgba(193,104,62,.13);
-    --warn:#c98a2e;--warn-soft:rgba(201,138,46,.15);
-    --danger:#b85450;--danger-soft:rgba(184,84,80,.13);
-    --purple:#8f6a96;--purple-soft:rgba(143,106,150,.13);
-    --text:#3e332b;--muted:#8c7b6b;
+    --bg:#f7f5ee;--surface:#ffffff;--surface2:#efeadd;--border:#e3dcc8;
+    --accent:#48582f;--accent-soft:rgba(72,88,47,.08);
+    --accent2:#b67c5a;--accent2-soft:rgba(182,124,90,.11);
+    --warn:#ab8544;--warn-soft:rgba(171,133,68,.12);
+    --danger:#a2564c;--danger-soft:rgba(162,86,76,.1);
+    --purple:#7d6c82;--purple-soft:rgba(125,108,130,.1);
+    --text:#2b241d;--muted:#8a7d6a;--muted2:#b6a992;
     --sans:'Work Sans',sans-serif;--serif:'Fraunces',serif;--mono:var(--sans);
+    --shadow-sm:0 1px 2px rgba(43,36,29,.05);
+    --shadow-md:0 4px 18px rgba(43,36,29,.07);
   }
   *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased;}
-  header{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 18px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;}
-  .logo{display:flex;align-items:center;gap:8px;font-family:var(--serif);font-size:19px;font-weight:600;color:var(--text);}
-  .logo span{color:var(--accent);}
-  header .tagline{font-size:12px;color:var(--muted);margin-left:auto;font-style:italic;}
-  .tabs{display:flex;flex-wrap:wrap;gap:6px;background:var(--surface);border-bottom:1px solid var(--border);padding:10px 12px;}
-  .tab{display:inline-flex;align-items:center;gap:6px;padding:9px 14px;font-size:13px;font-family:var(--sans);font-weight:500;cursor:pointer;border:1px solid var(--border);background:var(--bg);color:var(--muted);border-radius:20px;white-space:nowrap;transition:all .15s;}
-  .tab svg{width:16px;height:16px;flex-shrink:0;}
-  .tab:hover{color:var(--text);border-color:var(--accent);}
-  .tab.active{color:#fff;background:var(--accent);border-color:var(--accent);}
-  main{flex:1;max-width:860px;width:100%;margin:0 auto;padding:20px 14px;}
+  body{font-family:var(--sans);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;}
+  .shell{display:flex;min-height:100vh;}
+  .sidenav{width:238px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);padding:26px 14px 18px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;}
+  .brand{display:flex;align-items:center;gap:10px;padding:0 8px;margin-bottom:28px;}
+  .brand-icon{width:34px;height:34px;border-radius:10px;background:var(--accent2-soft);display:flex;align-items:center;justify-content:center;color:var(--accent2);flex-shrink:0;}
+  .brand-icon svg{width:19px;height:19px;}
+  .brand-text{font-family:var(--serif);font-size:19px;font-weight:500;color:var(--text);letter-spacing:-.01em;}
+  .brand-text span{color:var(--accent);}
+  .navlist{display:flex;flex-direction:column;gap:1px;flex:1;}
+  .navitem{display:flex;align-items:center;gap:11px;padding:9px 12px;border:none;background:none;border-left:2.5px solid transparent;border-radius:0 8px 8px 0;color:var(--muted);font-family:var(--sans);font-size:13.5px;font-weight:500;text-align:left;cursor:pointer;transition:all .15s;width:100%;}
+  .navitem svg{width:17px;height:17px;flex-shrink:0;color:var(--muted);transition:color .15s;}
+  .navitem:hover{background:var(--surface2);color:var(--text);}
+  .navitem.active{background:var(--accent-soft);color:var(--accent);border-left-color:var(--accent);font-weight:600;}
+  .navitem.active svg{color:var(--accent);}
+  .sidenav .tagline{font-size:11px;color:var(--muted2);font-style:italic;padding:14px 12px 2px;margin-top:6px;border-top:1px solid var(--border);}
+  .content-wrap{flex:1;min-width:0;}
+  main{max-width:960px;margin:0 auto;padding:38px 42px 60px;}
+  @media(max-width:860px){
+    .shell{flex-direction:column;}
+    .sidenav{width:100%;height:auto;position:sticky;top:0;flex-direction:row;align-items:center;padding:9px 12px;overflow-x:auto;border-right:none;border-bottom:1px solid var(--border);z-index:100;gap:2px;}
+    .brand{margin-bottom:0;margin-right:4px;padding:0 4px;flex-shrink:0;}
+    .brand-text{font-size:16px;}
+    .navlist{flex-direction:row;flex:1;overflow-x:auto;gap:2px;}
+    .navitem{width:auto;flex-shrink:0;white-space:nowrap;padding:8px 10px;border-left:none;border-bottom:2.5px solid transparent;border-radius:8px 8px 0 0;}
+    .navitem.active{border-left-color:transparent;border-bottom-color:var(--accent);}
+    .sidenav .tagline{display:none;}
+    main{padding:20px 16px 40px;}
+  }
   .section{display:none;}.section.active{display:block;}
-  .card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:0 1px 3px rgba(62,51,43,.05);}
-  .card-title{font-family:var(--sans);font-size:14px;font-weight:600;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
-  .card-title::after{content:'';flex:1;height:1px;background:var(--border);}
-  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-  .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
-  @media(max-width:520px){.grid-2,.grid-3{grid-template-columns:1fr;}}
-  .stat-box{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;}
-  .stat-num{font-family:var(--serif);font-size:26px;font-weight:600;color:var(--accent);}
-  .stat-label{font-size:12px;color:var(--muted);margin-top:3px;}
-  .meal-block{border-left:3px solid var(--accent);padding:11px 14px;margin-bottom:9px;background:var(--surface2);border-radius:0 10px 10px 0;}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px 20px;margin-bottom:16px;box-shadow:var(--shadow-sm);}
+  .card-title{font-family:var(--serif);font-size:17px;font-weight:500;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px;letter-spacing:-.005em;}
+  .card-title::after{content:'';flex:1;height:1px;background:var(--border);margin-left:4px;}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+  @media(max-width:600px){.grid-2,.grid-3{grid-template-columns:1fr;}}
+  .stat-box{background:var(--surface);border:1px solid var(--border);border-top:2.5px solid var(--accent);border-radius:10px;padding:18px 16px;box-shadow:var(--shadow-sm);text-align:center;}
+  .stat-num{font-family:var(--serif);font-size:28px;font-weight:500;color:var(--text);letter-spacing:-.01em;}
+  .stat-label{font-size:11.5px;color:var(--muted);margin-top:4px;letter-spacing:.01em;}
+  .meal-block{border-left:2.5px solid var(--accent);padding:12px 15px;margin-bottom:10px;background:var(--surface2);border-radius:0 8px 8px 0;}
   .meal-label{font-size:11px;font-weight:600;color:var(--accent);letter-spacing:.06em;margin-bottom:3px;}
   .meal-title{font-size:14px;font-weight:500;margin-bottom:2px;}
   .meal-desc{font-size:13px;color:var(--muted);line-height:1.5;}
   .meal-kcal{font-size:12px;font-weight:500;color:var(--accent2);margin-top:5px;}
-  .rule{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px;}
+  .rule{display:flex;align-items:flex-start;gap:13px;padding:12px 0;border-bottom:1px solid var(--border);font-size:14px;}
   .rule:last-child{border-bottom:none;}
-  .rule-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
-  .rule-text{line-height:1.5;}
+  .rule-icon{width:26px;height:26px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;}
+  .rule-icon svg{width:14px;height:14px;}
+  .rule-icon.ok{background:var(--accent-soft);color:var(--accent);}
+  .rule-icon.no{background:var(--danger-soft);color:var(--danger);}
+  .rule-icon.caution{background:var(--warn-soft);color:var(--warn);}
+  .rule-text{line-height:1.5;padding-top:2px;}
   .rule-text strong{color:var(--text);font-weight:600;}
   .rule-text span{color:var(--muted);font-size:12px;}
-  .tag{display:inline-block;font-size:11px;font-weight:500;padding:3px 8px;border-radius:20px;margin:2px;}
-  .tag-ok{background:var(--accent-soft);color:var(--accent);border:1px solid rgba(94,122,70,.3);}
-  .tag-warn{background:var(--warn-soft);color:var(--warn);border:1px solid rgba(201,138,46,.3);}
-  .tag-info{background:var(--accent2-soft);color:var(--accent2);border:1px solid rgba(193,104,62,.3);}
+  .tag{display:inline-block;font-size:10.5px;font-weight:500;padding:4px 9px;border-radius:20px;margin:2px;letter-spacing:.01em;}
+  .tag-ok{background:var(--accent-soft);color:var(--accent);border:1px solid rgba(72,88,47,.2);}
+  .tag-warn{background:var(--warn-soft);color:var(--warn);border:1px solid rgba(171,133,68,.22);}
+  .tag-info{background:var(--accent2-soft);color:var(--accent2);border:1px solid rgba(182,124,90,.22);}
   .food-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:14px;}
   .food-row:last-child{border-bottom:none;}
   .food-name{font-weight:500;}
   .food-detail{color:var(--muted);font-size:12px;}
-  .scenario{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;}
-  .scenario-title{font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:6px;}
-  .scenario-items{font-size:14px;color:var(--muted);line-height:1.8;}
-  .scenario-badge{display:inline-block;background:var(--accent2-soft);color:var(--accent2);border:1px solid rgba(193,104,62,.25);font-size:11px;font-weight:600;padding:3px 8px;border-radius:20px;margin-bottom:6px;}
-  .check-item{display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:10px;background:var(--surface2);margin-bottom:6px;font-size:14px;cursor:pointer;transition:background .1s;user-select:none;}
+  .scenario{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:15px;margin-bottom:10px;}
+  .scenario-title{font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:9px;}
+  .scn-list{display:flex;flex-direction:column;gap:8px;}
+  .scn-row{display:flex;align-items:flex-start;gap:9px;font-size:14px;color:var(--text);line-height:1.5;}
+  .scn-row svg{width:15px;height:15px;flex-shrink:0;margin-top:2px;}
+  .scn-row.ok svg{color:var(--accent);}
+  .scn-row.no svg{color:var(--danger);}
+  .scn-row.caution svg{color:var(--warn);}
+  .scenario-badge{display:inline-block;background:var(--accent2-soft);color:var(--accent2);border:1px solid rgba(182,124,90,.2);font-size:10.5px;font-weight:600;padding:4px 9px;border-radius:20px;margin-bottom:7px;letter-spacing:.01em;}
+  .check-item{display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:9px;background:var(--surface2);margin-bottom:6px;font-size:14px;cursor:pointer;transition:background .1s;user-select:none;}
   .check-item:hover{background:var(--border);}
-  .check-box{width:19px;height:19px;border:2px solid var(--border);border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;}
+  .check-box{width:19px;height:19px;border:1.5px solid var(--border);border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+  .check-box svg{width:12px;height:12px;}
   .check-item.checked .check-box{background:var(--accent);border-color:var(--accent);color:#fff;}
   .check-item.checked .check-label{color:var(--muted);text-decoration:line-through;}
-  .progress-bar{height:7px;background:var(--surface2);border-radius:4px;overflow:hidden;margin-top:6px;}
+  .progress-bar{height:6px;background:var(--surface2);border-radius:4px;overflow:hidden;margin-top:6px;}
   .progress-fill{height:100%;border-radius:4px;background:var(--accent);transition:width .4s ease;}
-  .chat-container{display:flex;flex-direction:column;gap:10px;max-height:400px;overflow-y:auto;padding:4px 0 12px;scroll-behavior:smooth;}
-  .msg{max-width:88%;padding:11px 14px;border-radius:14px;font-size:14px;line-height:1.6;}
+  .chat-container{display:flex;flex-direction:column;gap:10px;max-height:420px;overflow-y:auto;padding:4px 0 12px;scroll-behavior:smooth;}
+  .msg{max-width:86%;padding:11px 14px;border-radius:12px;font-size:14px;line-height:1.6;}
   .msg-user{align-self:flex-end;background:var(--surface2);border:1px solid var(--border);}
-  .msg-assistant{align-self:flex-start;background:var(--accent-soft);border:1px solid rgba(94,122,70,.22);}
+  .msg-assistant{align-self:flex-start;background:var(--accent-soft);border:1px solid rgba(72,88,47,.16);}
   .msg .sender{font-size:11px;font-weight:600;color:var(--accent);letter-spacing:.04em;margin-bottom:4px;}
   .msg-user .sender{color:var(--muted);text-align:right;}
   .chat-input-row{display:flex;gap:8px;margin-top:8px;}
-  textarea,input[type=text],input[type=number],input[type=date]{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 13px;color:var(--text);font-family:var(--sans);font-size:14px;outline:none;transition:border-color .15s;width:100%;}
+  textarea,input[type=text],input[type=number],input[type=date]{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 13px;color:var(--text);font-family:var(--sans);font-size:14px;outline:none;transition:border-color .15s;width:100%;}
   textarea{resize:none;}
   textarea:focus,input:focus{border-color:var(--accent);}
-  textarea::placeholder,input::placeholder{color:var(--muted);}
-  .btn{padding:11px 18px;border:none;border-radius:10px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;}
+  textarea::placeholder,input::placeholder{color:var(--muted2);}
+  .btn{padding:10px 17px;border:none;border-radius:8px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;letter-spacing:.005em;}
   .btn-primary{background:var(--accent);color:#fff;}
-  .btn-primary:hover{background:#4f6a3a;}
+  .btn-primary:hover{background:#3b492a;box-shadow:var(--shadow-sm);}
   .btn-primary:disabled{background:var(--border);color:var(--muted);cursor:not-allowed;}
-  .btn-secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border);}
+  .btn-secondary{background:var(--surface);color:var(--text);border:1px solid var(--border);}
   .btn-secondary:hover{border-color:var(--accent);color:var(--accent);}
-  .btn-danger{background:var(--danger-soft);color:var(--danger);border:1px solid rgba(184,84,80,.28);}
-  .btn-danger:hover{background:rgba(184,84,80,.22);}
+  .btn-danger{background:var(--danger-soft);color:var(--danger);border:1px solid rgba(162,86,76,.24);}
+  .btn-danger:hover{background:rgba(162,86,76,.18);}
   .spinner{display:inline-block;width:13px;height:13px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;}
   @keyframes spin{to{transform:rotate(360deg);}}
-  select{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:9px 13px;border-radius:10px;font-family:var(--sans);font-size:14px;outline:none;cursor:pointer;}
+  select{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:9px 13px;border-radius:8px;font-family:var(--sans);font-size:14px;outline:none;cursor:pointer;}
   select:focus{border-color:var(--accent);}
-  .weight-entry{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;background:var(--surface2);border-radius:10px;margin-bottom:6px;font-size:14px;}
+  .weight-entry{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;background:var(--surface2);border-radius:9px;margin-bottom:6px;font-size:14px;}
   .weight-date{font-size:11px;color:var(--muted);}
-  .weight-val{font-size:16px;font-weight:600;color:var(--accent);}
+  .weight-val{font-size:16px;font-weight:600;color:var(--text);}
   .diff-neg{color:var(--accent);font-size:12px;font-weight:500;}
   .diff-pos{color:var(--danger);font-size:12px;font-weight:500;}
   .diff-zero{color:var(--muted);font-size:12px;}
-  .kcal-result{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:16px;margin-top:10px;}
-  .kcal-big{font-family:var(--serif);font-size:32px;font-weight:600;color:var(--accent);}
+  .kcal-result{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-top:10px;}
+  .kcal-big{font-family:var(--serif);font-size:32px;font-weight:500;color:var(--text);}
   .kcal-breakdown{font-size:13px;color:var(--muted);margin-top:6px;line-height:1.8;}
-  .kcal-verdict{font-size:14px;margin-top:9px;padding:9px 13px;border-radius:10px;}
-  .verdict-ok{background:var(--accent-soft);color:var(--accent);border:1px solid rgba(94,122,70,.25);}
-  .verdict-warn{background:var(--warn-soft);color:var(--warn);border:1px solid rgba(201,138,46,.25);}
-  .verdict-bad{background:var(--danger-soft);color:var(--danger);border:1px solid rgba(184,84,80,.25);}
-  .diary-entry{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:9px;}
+  .kcal-verdict{font-size:14px;margin-top:9px;padding:9px 13px;border-radius:8px;}
+  .verdict-ok{background:var(--accent-soft);color:var(--accent);border:1px solid rgba(72,88,47,.18);}
+  .verdict-warn{background:var(--warn-soft);color:var(--warn);border:1px solid rgba(171,133,68,.2);}
+  .verdict-bad{background:var(--danger-soft);color:var(--danger);border:1px solid rgba(162,86,76,.2);}
+  .diary-entry{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:9px;}
   .diary-date{font-size:11px;color:var(--muted);margin-bottom:5px;font-weight:500;}
   .diary-content{font-size:14px;line-height:1.6;}
   .diary-eval{font-size:13px;color:var(--accent2);margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-style:italic;}
   .input-label{font-size:11px;font-weight:600;color:var(--muted);display:block;margin-bottom:5px;letter-spacing:.03em;}
-  .error-msg{color:var(--danger);font-size:13px;padding:9px;border:1px solid rgba(184,84,80,.3);border-radius:8px;background:var(--danger-soft);margin-top:8px;}
+  .error-msg{color:var(--danger);font-size:13px;padding:9px;border:1px solid rgba(162,86,76,.25);border-radius:8px;background:var(--danger-soft);margin-top:8px;}
   .loading-dots::after{content:'';animation:dots 1.2s steps(4,end) infinite;}
   @keyframes dots{0%,100%{content:'';}25%{content:'.';}50%{content:'..';}75%{content:'...'}}
   ::-webkit-scrollbar{width:5px;}
@@ -123,38 +152,43 @@
 </style>
 </head>
 <body>
-<header>
-  <div class="logo"><svg width="20" height="20" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent2)"><ellipse cx="9" cy="9" rx="6.2" ry="3.3" transform="rotate(-35 9 9)"/><line x1="4.7" y1="13" x2="9" y2="9"/></svg> Nutr<span>IA</span></div>
+<div class="shell">
+<aside class="sidenav">
+  <div class="brand">
+    <div class="brand-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="9" cy="9" rx="6.2" ry="3.3" transform="rotate(-35 9 9)"/><line x1="4.7" y1="13" x2="9" y2="9"/></svg></div>
+    <div class="brand-text">Nutr<span>IA</span></div>
+  </div>
+  <nav class="navlist">
+    <button class="navitem active" onclick="showTab('dieta',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="6.3"/><circle cx="9" cy="9" r="2.6"/></svg><span>Dieta</span></button>
+    <button class="navitem" onclick="showTab('menus',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4" width="13" height="11" rx="1.6"/><line x1="2.5" y1="7.7" x2="15.5" y2="7.7"/><line x1="6" y1="2.3" x2="6" y2="5.3"/><line x1="12" y1="2.3" x2="12" y2="5.3"/></svg><span>Menús</span></button>
+    <button class="navitem" onclick="showTab('fora',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7.3" r="3.6"/><polygon points="5.6,9.6 12.4,9.6 9,15.8"/></svg><span>Fora de casa</span></button>
+    <button class="navitem" onclick="showTab('aliments',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="9" cy="9" rx="6.2" ry="3.3" transform="rotate(-35 9 9)"/><line x1="4.7" y1="13" x2="9" y2="9"/></svg><span>Aliments</span></button>
+    <button class="navitem" onclick="showTab('pes',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.6" y="2.6" width="12.8" height="12.8" rx="2.6"/><circle cx="9" cy="9" r="3.3"/><line x1="9" y1="9" x2="10.8" y2="6.9"/></svg><span>Pes</span></button>
+    <button class="navitem" onclick="showTab('calories',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="2" x2="9" y2="16"/><line x1="3.6" y1="5.4" x2="14.4" y2="12.6"/><line x1="14.4" y1="5.4" x2="3.6" y2="12.6"/></svg><span>Calories</span></button>
+    <button class="navitem" onclick="showTab('diari',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.2" y="2.4" width="11.6" height="13.2" rx="1.6"/><line x1="3.2" y1="6" x2="14.8" y2="6"/><line x1="6" y1="9.6" x2="12" y2="9.6"/><line x1="6" y1="12.4" x2="10" y2="12.4"/></svg><span>Diari</span></button>
+    <button class="navitem" onclick="showTab('check',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="6.3"/><polyline points="5.6,9 8,11.4 12.6,6.4"/></svg><span>Check</span></button>
+    <button class="navitem" onclick="showTab('consulta',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polygon points="9,2 10.4,7.6 16,9 10.4,10.4 9,16 7.6,10.4 2,9 7.6,7.6"/></svg><span>IA</span></button>
+  </nav>
   <div class="tagline">cura't sense complicar-te</div>
-</header>
-<div class="tabs">
-  <button class="tab active" onclick="showTab('dieta',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="6.3"/><circle cx="9" cy="9" r="2.6"/></svg>Dieta</button>
-  <button class="tab" onclick="showTab('menus',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4" width="13" height="11" rx="1.6"/><line x1="2.5" y1="7.7" x2="15.5" y2="7.7"/><line x1="6" y1="2.3" x2="6" y2="5.3"/><line x1="12" y1="2.3" x2="12" y2="5.3"/></svg>Menús</button>
-  <button class="tab" onclick="showTab('fora',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7.3" r="3.6"/><polygon points="5.6,9.6 12.4,9.6 9,15.8"/></svg>Fora de casa</button>
-  <button class="tab" onclick="showTab('aliments',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="9" cy="9" rx="6.2" ry="3.3" transform="rotate(-35 9 9)"/><line x1="4.7" y1="13" x2="9" y2="9"/></svg>Aliments</button>
-  <button class="tab" onclick="showTab('pes',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.6" y="2.6" width="12.8" height="12.8" rx="2.6"/><circle cx="9" cy="9" r="3.3"/><line x1="9" y1="9" x2="10.8" y2="6.9"/></svg>Pes</button>
-  <button class="tab" onclick="showTab('calories',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="2" x2="9" y2="16"/><line x1="3.6" y1="5.4" x2="14.4" y2="12.6"/><line x1="14.4" y1="5.4" x2="3.6" y2="12.6"/></svg>Calories</button>
-  <button class="tab" onclick="showTab('diari',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.2" y="2.4" width="11.6" height="13.2" rx="1.6"/><line x1="3.2" y1="6" x2="14.8" y2="6"/><line x1="6" y1="9.6" x2="12" y2="9.6"/><line x1="6" y1="12.4" x2="10" y2="12.4"/></svg>Diari</button>
-  <button class="tab" onclick="showTab('check',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="6.3"/><polyline points="5.6,9 8,11.4 12.6,6.4"/></svg>Check</button>
-  <button class="tab" onclick="showTab('consulta',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polygon points="9,2 10.4,7.6 16,9 10.4,10.4 9,16 7.6,10.4 2,9 7.6,7.6"/></svg>IA</button>
-</div>
+</aside>
+<div class="content-wrap">
 <main>
 
 <!-- DIETA -->
 <div class="section active" id="tab-dieta">
   <div class="grid-3" style="margin-bottom:12px">
-    <div class="stat-box"><div class="stat-num">~1600</div><div class="stat-label">kcal/dia objectiu</div></div>
-    <div class="stat-box"><div class="stat-num">-500</div><div class="stat-label">dèficit kcal/dia</div></div>
-    <div class="stat-box"><div class="stat-num">10–15</div><div class="stat-label">kg objectiu</div></div>
+    <div class="stat-box" style="border-top-color:var(--accent)"><div class="stat-num">~1600</div><div class="stat-label">kcal/dia objectiu</div></div>
+    <div class="stat-box" style="border-top-color:var(--accent2)"><div class="stat-num">-500</div><div class="stat-label">dèficit kcal/dia</div></div>
+    <div class="stat-box" style="border-top-color:var(--purple)"><div class="stat-num">10–15</div><div class="stat-label">kg objectiu</div></div>
   </div>
   <div class="card">
     <div class="card-title">Regles de base</div>
-    <div class="rule"><div class="rule-icon">🚫</div><div class="rule-text"><strong>Alcohol</strong> — preferentment zero.<br><span>Puntual en context social. No com a hàbit.</span></div></div>
-    <div class="rule"><div class="rule-icon">🚫</div><div class="rule-text"><strong>Ultraprocesats</strong> — eliminats.<br><span>Zero embotits industrials, snacks, precuinats.</span></div></div>
-    <div class="rule"><div class="rule-icon">🚫</div><div class="rule-text"><strong>Sucres afegits i refrescos</strong> — eliminats.<br><span>Inclou sucs embotellats, iogurts dolços, cereals.</span></div></div>
-    <div class="rule"><div class="rule-icon">✅</div><div class="rule-text"><strong>Base: proteïna + verdura + greix bo</strong><br><span>Atún, pollastre, peix, ous, aguacate, oli d'oliva.</span></div></div>
-    <div class="rule"><div class="rule-icon">✅</div><div class="rule-text"><strong>Fruita moderada</strong><br><span>2 peces/dia màxim. Preferir maduixes, pera, kiwi.</span></div></div>
-    <div class="rule"><div class="rule-icon">⚡</div><div class="rule-text"><strong>Pa amb criteri</strong><br><span>Pa integral o centeno, ocasional. Mig entrepà és suficient.</span></div></div>
+    <div class="rule"><div class="rule-icon no"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="5" y1="5" x2="13" y2="13"/><line x1="13" y1="5" x2="5" y2="13"/></svg></div><div class="rule-text"><strong>Alcohol</strong> — preferentment zero.<br><span>Puntual en context social. No com a hàbit.</span></div></div>
+    <div class="rule"><div class="rule-icon no"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="5" y1="5" x2="13" y2="13"/><line x1="13" y1="5" x2="5" y2="13"/></svg></div><div class="rule-text"><strong>Ultraprocesats</strong> — eliminats.<br><span>Zero embotits industrials, snacks, precuinats.</span></div></div>
+    <div class="rule"><div class="rule-icon no"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="5" y1="5" x2="13" y2="13"/><line x1="13" y1="5" x2="5" y2="13"/></svg></div><div class="rule-text"><strong>Sucres afegits i refrescos</strong> — eliminats.<br><span>Inclou sucs embotellats, iogurts dolços, cereals.</span></div></div>
+    <div class="rule"><div class="rule-icon ok"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,9.5 7.3,13 14,5.5"/></svg></div><div class="rule-text"><strong>Base: proteïna + verdura + greix bo</strong><br><span>Atún, pollastre, peix, ous, aguacate, oli d'oliva.</span></div></div>
+    <div class="rule"><div class="rule-icon ok"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,9.5 7.3,13 14,5.5"/></svg></div><div class="rule-text"><strong>Fruita moderada</strong><br><span>2 peces/dia màxim. Preferir maduixes, pera, kiwi.</span></div></div>
+    <div class="rule"><div class="rule-icon caution"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="10,2 4,10.5 8.3,10.5 7,16 14,7 9.5,7 10,2"/></svg></div><div class="rule-text"><strong>Pa amb criteri</strong><br><span>Pa integral o centeno, ocasional. Mig entrepà és suficient.</span></div></div>
   </div>
   <div class="card">
     <div class="card-title">Estructura del dia</div>
@@ -187,16 +221,39 @@
 <div class="section" id="tab-fora">
   <div class="card">
     <div class="card-title">Bar / Cafeteria</div>
-    <div class="scenario"><div class="scenario-badge">ESMORZAR</div><div class="scenario-title">Opcions bones</div><div class="scenario-items">✅ Entrepà de tonyina (pa integral si n'hi ha)<br>✅ Ou dur / truita francesa<br>✅ Cafè amb llet (sense sucre)<br>✅ Iogurt natural sense sucre</div></div>
-    <div class="scenario"><div class="scenario-badge" style="background:var(--danger-soft);color:var(--danger);border-color:rgba(184,84,80,.3)">EVITAR</div><div class="scenario-title">Trampes habituals</div><div class="scenario-items">🚫 Croissants, brioixeria, napolitanes<br>🚫 Sucs de taronja<br>🚫 Pa blanc amb mantequilla<br>🚫 Begudes carbonatades</div></div>
+    <div class="scenario"><div class="scenario-badge">ESMORZAR</div><div class="scenario-title">Opcions bones</div><div class="scn-list">
+      <div class="scn-row ok"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,9.5 7.3,13 14,5.5"/></svg><span>Entrepà de tonyina (pa integral si n'hi ha)</span></div>
+      <div class="scn-row ok"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,9.5 7.3,13 14,5.5"/></svg><span>Ou dur / truita francesa</span></div>
+      <div class="scn-row ok"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,9.5 7.3,13 14,5.5"/></svg><span>Cafè amb llet (sense sucre)</span></div>
+      <div class="scn-row ok"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,9.5 7.3,13 14,5.5"/></svg><span>Iogurt natural sense sucre</span></div>
+    </div></div>
+    <div class="scenario"><div class="scenario-badge" style="background:var(--danger-soft);color:var(--danger);border-color:rgba(162,86,76,.3)">EVITAR</div><div class="scenario-title">Trampes habituals</div><div class="scn-list">
+      <div class="scn-row no"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="5" y1="5" x2="13" y2="13"/><line x1="13" y1="5" x2="5" y2="13"/></svg><span>Croissants, brioixeria, napolitanes</span></div>
+      <div class="scn-row no"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="5" y1="5" x2="13" y2="13"/><line x1="13" y1="5" x2="5" y2="13"/></svg><span>Sucs de taronja</span></div>
+      <div class="scn-row no"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="5" y1="5" x2="13" y2="13"/><line x1="13" y1="5" x2="5" y2="13"/></svg><span>Pa blanc amb mantequilla</span></div>
+      <div class="scn-row no"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="5" y1="5" x2="13" y2="13"/><line x1="13" y1="5" x2="5" y2="13"/></svg><span>Begudes carbonatades</span></div>
+    </div></div>
   </div>
   <div class="card">
     <div class="card-title">Restaurant / Menú del dia</div>
-    <div class="scenario"><div class="scenario-badge">ESTRATÈGIA</div><div class="scenario-title">Com triar bé</div><div class="scenario-items">✅ <strong>Primer:</strong> amanida, sopa clara, verdures, espàrrecs<br>✅ <strong>Segon:</strong> peix a la planxa, pollastre, carn sense salsa<br>✅ <strong>Postres:</strong> fruita fresca, iogurt natural<br>⚡ <strong>Pa:</strong> limitar a 1 peça<br>⚡ <strong>Beguda:</strong> aigua. Si social → 1 cervesa petita màxim</div></div>
+    <div class="scenario"><div class="scenario-badge">ESTRATÈGIA</div><div class="scenario-title">Com triar bé</div><div class="scn-list">
+      <div class="scn-row ok"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,9.5 7.3,13 14,5.5"/></svg><span><strong>Primer:</strong> amanida, sopa clara, verdures, espàrrecs</span></div>
+      <div class="scn-row ok"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,9.5 7.3,13 14,5.5"/></svg><span><strong>Segon:</strong> peix a la planxa, pollastre, carn sense salsa</span></div>
+      <div class="scn-row ok"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,9.5 7.3,13 14,5.5"/></svg><span><strong>Postres:</strong> fruita fresca, iogurt natural</span></div>
+      <div class="scn-row caution"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="10,2 4,10.5 8.3,10.5 7,16 14,7 9.5,7 10,2"/></svg><span><strong>Pa:</strong> limitar a 1 peça</span></div>
+      <div class="scn-row caution"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="10,2 4,10.5 8.3,10.5 7,16 14,7 9.5,7 10,2"/></svg><span><strong>Beguda:</strong> aigua. Si social → 1 cervesa petita màxim</span></div>
+    </div></div>
   </div>
   <div class="card">
     <div class="card-title">Àpat familiar / social</div>
-    <div class="scenario"><div class="scenario-badge">TÀCTICA</div><div class="scenario-title">Sense patir-la ni fer-te notar</div><div class="scenario-items">✅ Menja proteïna i verdura primer<br>✅ Porcions petites dels plats forts<br>✅ 1 copa de vi si és inevitable<br>✅ Beu molta aigua durant el menjar<br>⚡ Un dia puntual no trenca res<br>🚫 No compensis amb dejú extrem l'endemà</div></div>
+    <div class="scenario"><div class="scenario-badge">TÀCTICA</div><div class="scenario-title">Sense patir-la ni fer-te notar</div><div class="scn-list">
+      <div class="scn-row ok"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,9.5 7.3,13 14,5.5"/></svg><span>Menja proteïna i verdura primer</span></div>
+      <div class="scn-row ok"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,9.5 7.3,13 14,5.5"/></svg><span>Porcions petites dels plats forts</span></div>
+      <div class="scn-row ok"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,9.5 7.3,13 14,5.5"/></svg><span>1 copa de vi si és inevitable</span></div>
+      <div class="scn-row ok"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,9.5 7.3,13 14,5.5"/></svg><span>Beu molta aigua durant el menjar</span></div>
+      <div class="scn-row caution"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="10,2 4,10.5 8.3,10.5 7,16 14,7 9.5,7 10,2"/></svg><span>Un dia puntual no trenca res</span></div>
+      <div class="scn-row no"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="5" y1="5" x2="13" y2="13"/><line x1="13" y1="5" x2="5" y2="13"/></svg><span>No compensis amb dejú extrem l'endemà</span></div>
+    </div></div>
   </div>
 </div>
 
@@ -240,14 +297,14 @@
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
       <div style="flex:1;min-width:120px"><label class="input-label">DATA</label><input type="date" id="weight-date"></div>
       <div style="flex:1;min-width:90px"><label class="input-label">PES (kg)</label><input type="number" id="weight-val" placeholder="82.5" step="0.1" min="40" max="250"></div>
-      <div style="display:flex;align-items:flex-end"><button class="btn btn-primary" onclick="addWeight()">AFEGIR</button></div>
+      <div style="display:flex;align-items:flex-end"><button class="btn btn-primary" onclick="addWeight()">Afegir</button></div>
     </div>
     <canvas id="weight-chart" style="width:100%;height:160px"></canvas>
   </div>
   <div class="card">
     <div class="card-title">Historial</div>
     <div id="weight-list"></div>
-    <div style="margin-top:10px"><button class="btn btn-danger" style="font-size:10px;padding:5px 10px" onclick="clearWeights()">ESBORRAR TOT</button></div>
+    <div style="margin-top:10px"><button class="btn btn-danger" style="font-size:10px;padding:5px 10px" onclick="clearWeights()">Esborrar tot</button></div>
   </div>
   <div class="card">
     <div class="card-title">Progrés</div>
@@ -263,8 +320,8 @@
     <label class="input-label">QUÈ HAS MENJAT?</label>
     <textarea id="kcal-input" rows="3" placeholder="Ex: Pit de pollastre 150g planxa + bròquil bullit + 1 cullerada oli"></textarea>
     <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn btn-primary" id="kcal-btn" onclick="calcKcal()">CALCULAR</button>
-      <button class="btn btn-secondary" onclick="addKcalToDiary()">+ AL DIARI</button>
+      <button class="btn btn-primary" id="kcal-btn" onclick="calcKcal()">Calcular</button>
+      <button class="btn btn-secondary" onclick="addKcalToDiary()">+ Al diari</button>
     </div>
     <div id="kcal-result"></div>
   </div>
@@ -298,14 +355,14 @@
       <textarea id="diary-input" rows="4" placeholder="Esmorzar: mig entrepà tonyina + cafè&#10;Dinar: pollastre planxa + bròquil + oli&#10;Sopar: 2 ous + espàrrecs"></textarea>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn btn-primary" id="diary-btn" onclick="saveDiary()">GUARDAR + VALORAR</button>
-      <button class="btn btn-secondary" onclick="saveDiaryNoEval()">GUARDAR SENSE IA</button>
+      <button class="btn btn-primary" id="diary-btn" onclick="saveDiary()">Guardar + valorar</button>
+      <button class="btn btn-secondary" onclick="saveDiaryNoEval()">Guardar sense IA</button>
     </div>
   </div>
   <div class="card">
     <div class="card-title">Entrades anteriors</div>
     <div id="diary-list"></div>
-    <div style="margin-top:10px"><button class="btn btn-danger" style="font-size:10px;padding:5px 10px" onclick="clearDiary()">ESBORRAR TOT</button></div>
+    <div style="margin-top:10px"><button class="btn btn-danger" style="font-size:10px;padding:5px 10px" onclick="clearDiary()">Esborrar tot</button></div>
   </div>
 </div>
 
@@ -316,7 +373,7 @@
     <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:10px" id="check-date-label"></div>
     <div id="checklist"></div>
     <div style="margin-top:10px;display:flex;gap:8px;align-items:center">
-      <button class="btn btn-secondary" onclick="resetChecklist()">RESET DIA</button>
+      <button class="btn btn-secondary" onclick="resetChecklist()">Reset dia</button>
       <div id="check-score" style="display:flex;align-items:center;gap:8px;flex:1"></div>
     </div>
   </div>
@@ -343,7 +400,7 @@
       <input type="text" id="cfg-app-key" placeholder="Només si has configurat APP_SHARED_SECRET al Worker">
     </div>
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-      <button class="btn btn-primary" onclick="saveAIConfig()">DESAR</button>
+      <button class="btn btn-primary" onclick="saveAIConfig()">Desar</button>
       <span id="cfg-status" style="font-family:var(--mono);font-size:11px;color:var(--muted)"></span>
     </div>
   </div>
@@ -377,6 +434,8 @@
 </div>
 
 </main>
+</div>
+</div>
 <script>
 // ── UTILS ──────────────────────────────────────────
 function today(){return new Date().toISOString().split('T')[0];}
@@ -392,7 +451,7 @@ function saveAIConfig(){
   const key=document.getElementById('cfg-app-key').value.trim();
   if(url)localStorage.setItem('ch_worker_url',url);else localStorage.removeItem('ch_worker_url');
   if(key)localStorage.setItem('ch_app_key',key);else localStorage.removeItem('ch_app_key');
-  document.getElementById('cfg-status').textContent='✓ Desat';
+  document.getElementById('cfg-status').textContent='Desat';
   setTimeout(()=>{const s=document.getElementById('cfg-status');if(s)s.textContent='';},2000);
 }
 function renderAIConfig(){
@@ -417,7 +476,7 @@ async function callAI(system,messages,maxTokens){
 // ── TABS ───────────────────────────────────────────
 function showTab(name,el){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.navitem').forEach(t=>t.classList.remove('active'));
   document.getElementById('tab-'+name).classList.add('active');
   if(el)el.classList.add('active');
   if(name==='pes')renderWeights();
@@ -477,7 +536,7 @@ function renderWeights(){
   list.innerHTML=rev.map((e,i)=>{
     const prev=rev[i+1];let dh='';
     if(prev){const df=e.v-prev.v;const s=df>0?'+':'';const c=df<0?'diff-neg':df>0?'diff-pos':'diff-zero';dh=`<span class="${c}">${s}${df.toFixed(1)}</span>`;}
-    return`<div class="weight-entry"><div><div class="weight-date">${fmt(e.d)}</div></div><div style="display:flex;align-items:center;gap:10px">${dh}<div class="weight-val">${e.v} kg</div><button class="btn btn-danger" style="font-size:9px;padding:3px 7px" onclick="delWt('${e.d}')">✕</button></div></div>`;
+    return`<div class="weight-entry"><div><div class="weight-date">${fmt(e.d)}</div></div><div style="display:flex;align-items:center;gap:10px">${dh}<div class="weight-val">${e.v} kg</div><button class="btn btn-danger" style="font-size:9px;padding:3px 7px" onclick="delWt('${e.d}')"><svg width="10" height="10" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:-1px"><line x1="5" y1="5" x2="13" y2="13"/><line x1="13" y1="5" x2="5" y2="13"/></svg></button></div></div>`;
   }).join('');
   const first=a[0].v,last=a[a.length-1].v,total=(last-first).toFixed(1);
   const sign=total>0?'+':'';const col=total<0?'var(--accent)':'var(--danger)';
@@ -499,16 +558,16 @@ function drawChart(arr){
   const ctx=canvas.getContext('2d');
   const W=canvas.offsetWidth||300,H=160;
   canvas.width=W;canvas.height=H;ctx.clearRect(0,0,W,H);
-  if(arr.length<2){ctx.fillStyle='#c7b8a3';ctx.font='12px Work Sans,sans-serif';ctx.textAlign='center';ctx.fillText('Afegeix més entrades per veure la gràfica',W/2,H/2);return;}
+  if(arr.length<2){ctx.fillStyle='#b6a992';ctx.font='12px Work Sans,sans-serif';ctx.textAlign='center';ctx.fillText('Afegeix més entrades per veure la gràfica',W/2,H/2);return;}
   const vals=arr.map(e=>e.v);const mn=Math.min(...vals)-1;const mx=Math.max(...vals)+1;
   const pad={top:14,bottom:26,left:34,right:10};const gW=W-pad.left-pad.right;const gH=H-pad.top-pad.bottom;
   const px=i=>pad.left+(i/(arr.length-1))*gW;const py=v=>pad.top+gH-((v-mn)/(mx-mn))*gH;
-  ctx.strokeStyle='#e6d5be';ctx.lineWidth=1;
-  for(let i=0;i<=4;i++){const y=pad.top+(i/4)*gH;ctx.beginPath();ctx.moveTo(pad.left,y);ctx.lineTo(W-pad.right,y);ctx.stroke();const v=mx-(i/4)*(mx-mn);ctx.fillStyle='#8c7b6b';ctx.font='9px Work Sans,sans-serif';ctx.textAlign='right';ctx.fillText(v.toFixed(1),pad.left-3,y+3);}
-  ctx.beginPath();ctx.moveTo(px(0),py(vals[0]));arr.forEach((e,i)=>{if(i>0)ctx.lineTo(px(i),py(e.v));});ctx.lineTo(px(arr.length-1),H-pad.bottom);ctx.lineTo(px(0),H-pad.bottom);ctx.closePath();ctx.fillStyle='rgba(94,122,70,.10)';ctx.fill();
-  ctx.beginPath();ctx.strokeStyle='#5e7a46';ctx.lineWidth=2;arr.forEach((e,i)=>{if(i===0)ctx.moveTo(px(i),py(e.v));else ctx.lineTo(px(i),py(e.v));});ctx.stroke();
-  arr.forEach((e,i)=>{ctx.beginPath();ctx.arc(px(i),py(e.v),4,0,Math.PI*2);ctx.fillStyle='#5e7a46';ctx.fill();ctx.strokeStyle='#fffdf8';ctx.lineWidth=2;ctx.stroke();});
-  ctx.fillStyle='#8c7b6b';ctx.font='9px Work Sans,sans-serif';ctx.textAlign='center';
+  ctx.strokeStyle='#e3dcc8';ctx.lineWidth=1;
+  for(let i=0;i<=4;i++){const y=pad.top+(i/4)*gH;ctx.beginPath();ctx.moveTo(pad.left,y);ctx.lineTo(W-pad.right,y);ctx.stroke();const v=mx-(i/4)*(mx-mn);ctx.fillStyle='#8a7d6a';ctx.font='9px Work Sans,sans-serif';ctx.textAlign='right';ctx.fillText(v.toFixed(1),pad.left-3,y+3);}
+  ctx.beginPath();ctx.moveTo(px(0),py(vals[0]));arr.forEach((e,i)=>{if(i>0)ctx.lineTo(px(i),py(e.v));});ctx.lineTo(px(arr.length-1),H-pad.bottom);ctx.lineTo(px(0),H-pad.bottom);ctx.closePath();ctx.fillStyle='rgba(72,88,47,.09)';ctx.fill();
+  ctx.beginPath();ctx.strokeStyle='#48582f';ctx.lineWidth=2;arr.forEach((e,i)=>{if(i===0)ctx.moveTo(px(i),py(e.v));else ctx.lineTo(px(i),py(e.v));});ctx.stroke();
+  arr.forEach((e,i)=>{ctx.beginPath();ctx.arc(px(i),py(e.v),4,0,Math.PI*2);ctx.fillStyle='#48582f';ctx.fill();ctx.strokeStyle='#ffffff';ctx.lineWidth=2;ctx.stroke();});
+  ctx.fillStyle='#8a7d6a';ctx.font='9px Work Sans,sans-serif';ctx.textAlign='center';
   [0,Math.floor(arr.length/2),arr.length-1].forEach(i=>{if(arr[i])ctx.fillText(fmt(arr[i].d),px(i),H-6);});
 }
 
@@ -532,13 +591,13 @@ async function calcKcal(){
     const vc=parsed.valoracio==='OK'?'verdict-ok':parsed.valoracio==='ACCEPTABLE'?'verdict-warn':'verdict-bad';
     res.innerHTML=`<div class="kcal-result"><div class="kcal-big">${parsed.total_kcal} kcal</div><div class="kcal-breakdown">${parsed.detall}<br>Proteïna: ${parsed.proteina_g}g · Greixos: ${parsed.greix_g}g · Hidrats: ${parsed.hidrats_g}g</div><div class="kcal-verdict ${vc}">${parsed.valoracio} — ${parsed.comentari}</div></div>`;
   }catch(e){res.innerHTML=e.message==='NO_CONFIG'?'<div class="error-msg">Configura el Worker IA a la pestanya IA abans de fer servir això.</div>':'<div class="error-msg">Error calculant. Torna-ho a intentar.</div>';}
-  btn.disabled=false;btn.textContent='CALCULAR';
+  btn.disabled=false;btn.textContent='Calcular';
 }
 function addKcalToDiary(){
   const v=document.getElementById('kcal-input').value;
   const ex=document.getElementById('diary-input').value;
   document.getElementById('diary-input').value=ex?ex+'\n'+v:v;
-  showTab('diari',document.querySelectorAll('.tab')[6]);
+  showTab('diari',document.querySelectorAll('.navitem')[6]);
 }
 function renderDailySummary(){
   const el=document.getElementById('daily-summary');
@@ -570,7 +629,7 @@ async function saveDiary(){
   const a=getDiary();const idx=a.findIndex(e=>e.d===d);const entry={d,content,ev};
   if(idx>=0)a[idx]=entry;else a.unshift(entry);
   saveDiaryStore(a);document.getElementById('diary-input').value='';
-  btn.disabled=false;btn.textContent='GUARDAR + VALORAR';renderDiary();
+  btn.disabled=false;btn.textContent='Guardar + valorar';renderDiary();
 }
 function saveDiaryNoEval(){
   const d=document.getElementById('diary-date').value||today();
@@ -588,7 +647,7 @@ function renderDiary(){
   el.innerHTML=a.map(e=>`<div class="diary-entry">
     <div style="display:flex;justify-content:space-between;align-items:center">
       <div class="diary-date">${fmt(e.d)}</div>
-      <button class="btn btn-danger" style="font-size:9px;padding:3px 6px" onclick="delDiary('${e.d}')">✕</button>
+      <button class="btn btn-danger" style="font-size:9px;padding:3px 6px" onclick="delDiary('${e.d}')"><svg width="10" height="10" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:-1px"><line x1="5" y1="5" x2="13" y2="13"/><line x1="13" y1="5" x2="5" y2="13"/></svg></button>
     </div>
     <div class="diary-content">${e.content.replace(/\n/g,'<br>')}</div>
     ${e.ev?`<div class="diary-eval">${e.ev.replace(/\n/g,'<br>')}</div>`:''}
@@ -603,7 +662,8 @@ function saveChecks(a){localStorage.setItem(getTodayKey(),JSON.stringify(a));}
 function renderChecklist(){
   const checks=getChecks();const pad=[...checks,...new Array(Math.max(0,checkItems.length-checks.length)).fill(false)];
   document.getElementById('check-date-label').textContent='DIA: '+fmt(today());
-  document.getElementById('checklist').innerHTML=checkItems.map((item,i)=>`<div class="check-item ${pad[i]?'checked':''}" onclick="toggleCheck(${i})"><div class="check-box">${pad[i]?'✓':''}</div><span class="check-label">${item}</span></div>`).join('');
+  const checkSvg='<svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,9.5 7.3,13 14,5.5"/></svg>';
+  document.getElementById('checklist').innerHTML=checkItems.map((item,i)=>`<div class="check-item ${pad[i]?'checked':''}" onclick="toggleCheck(${i})"><div class="check-box">${pad[i]?checkSvg:''}</div><span class="check-label">${item}</span></div>`).join('');
   const count=pad.filter(Boolean).length;const pct=Math.round(count/checkItems.length*100);
   const col=pct>=80?'var(--accent)':pct>=50?'var(--warn)':'var(--danger)';
   document.getElementById('check-score').innerHTML=`<div class="progress-bar" style="flex:1;max-width:120px"><div class="progress-fill" style="width:${pct}%;background:${col}"></div></div><span style="font-family:var(--mono);font-size:12px;color:${col}">${count}/10</span>`;
@@ -649,7 +709,7 @@ function addMsg(role,content){
   wrap.appendChild(el);container.appendChild(wrap);container.scrollTop=container.scrollHeight;return wrap;
 }
 function quickQ(q){
-  document.querySelectorAll('.tab').forEach((t,i)=>{if(i===8)t.click();});
+  document.querySelectorAll('.navitem').forEach((t,i)=>{if(i===8)t.click();});
   setTimeout(()=>{document.getElementById('chat-input').value=q;sendMessage();},50);
 }
 function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();}}
