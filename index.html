@@ -179,6 +179,7 @@
     <button class="navitem" onclick="showTab('diari',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.2" y="2.4" width="11.6" height="13.2" rx="1.6"/><line x1="3.2" y1="6" x2="14.8" y2="6"/><line x1="6" y1="9.6" x2="12" y2="9.6"/><line x1="6" y1="12.4" x2="10" y2="12.4"/></svg><span>Diari</span></button>
     <button class="navitem" onclick="showTab('check',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="6.3"/><polyline points="5.6,9 8,11.4 12.6,6.4"/></svg><span>Check</span></button>
     <button class="navitem" onclick="showTab('consulta',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polygon points="9,2 10.4,7.6 16,9 10.4,10.4 9,16 7.6,10.4 2,9 7.6,7.6"/></svg><span>IA</span></button>
+    <button class="navitem" onclick="showTab('perfil',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="6.2" r="2.7"/><path d="M3.3,15.5c0-3.3,2.5-5,5.7-5s5.7,1.7,5.7,5"/></svg><span>Perfil</span></button>
   </nav>
   <div class="tagline">cura't sense complicar-te</div>
 </aside>
@@ -188,13 +189,13 @@
 <!-- DIETA -->
 <div class="section active" id="tab-dieta">
   <div class="hero">
-    <div class="hero-greet">Hola, Chester</div>
+    <div class="hero-greet" id="hero-greet">Hola, Chester</div>
     <div class="hero-sub">El teu pla: dèficit moderat, base de proteïna i verdura, zero ultraprocessats — sense presses ni romanços.</div>
   </div>
   <div class="grid-3" style="margin-bottom:18px">
-    <div class="stat-box" style="border-top-color:var(--accent)"><div class="stat-num">~1600</div><div class="stat-label">kcal/dia objectiu</div></div>
-    <div class="stat-box" style="border-top-color:var(--accent2)"><div class="stat-num">-500</div><div class="stat-label">dèficit kcal/dia</div></div>
-    <div class="stat-box" style="border-top-color:var(--purple)"><div class="stat-num">10–15</div><div class="stat-label">kg objectiu</div></div>
+    <div class="stat-box" style="border-top-color:var(--accent)"><div class="stat-num" id="kpi-kcal">~1600</div><div class="stat-label">kcal/dia objectiu</div></div>
+    <div class="stat-box" style="border-top-color:var(--accent2)"><div class="stat-num" id="kpi-deficit">-500</div><div class="stat-label">dèficit kcal/dia</div></div>
+    <div class="stat-box" style="border-top-color:var(--purple)"><div class="stat-num" id="kpi-goal">10–15</div><div class="stat-label">kg objectiu</div></div>
   </div>
   <div class="dash-grid">
     <div class="dash-main">
@@ -439,8 +440,8 @@
     <div class="card-title">Assistent de nutrició</div>
     <div class="chat-container" id="chat-messages">
       <div class="msg msg-assistant">
-        <div class="sender">NUTRI·CHESTER</div>
-        Hola Chester. Pregunta'm el que vulguis: un plat que has menjat, com gestionar un àpat familiar, si un aliment et convé, o qualsevol dubte pràctic.<br><br>Respostes directes, sense romanços.
+        <div class="sender">NUTRI·IA</div>
+        <span id="chat-welcome">Hola. Pregunta'm el que vulguis: un plat que has menjat, com gestionar un àpat familiar, si un aliment et convé, o qualsevol dubte pràctic.<br><br>Respostes directes, sense romanços.</span>
       </div>
     </div>
     <div class="chat-input-row">
@@ -460,6 +461,44 @@
       <button class="btn btn-secondary" style="font-size:10px;padding:5px 9px" onclick="quickQ('Em veig estancat amb el pes, què faig?')">Estic estancat</button>
       <button class="btn btn-secondary" style="font-size:10px;padding:5px 9px" onclick="quickQ('Puc beure cafè amb llet sencer?')">Cafè amb llet?</button>
       <button class="btn btn-secondary" style="font-size:10px;padding:5px 9px" onclick="quickQ('La dieta keto m\'aniria bé per al meu cas?')">Keto?</button>
+    </div>
+  </div>
+</div>
+
+<!-- PERFIL -->
+<div class="section" id="tab-perfil">
+  <div class="card">
+    <div class="card-title">El teu perfil</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6">
+      Aquestes dades personalitzen el pla (KPIs de la pestanya Dieta) i el context que rep l'assistent IA. Es guarden només en aquest dispositiu/navegador — si una altra persona instal·la l'app al seu mòbil, té el seu propi perfil, sense barrejar-se amb el teu.
+    </div>
+    <div class="grid-2" style="margin-bottom:12px">
+      <div><label class="input-label">NOM</label><input type="text" id="prof-name" placeholder="Chester"></div>
+      <div><label class="input-label">EDAT</label><input type="number" id="prof-age" min="10" max="110" placeholder="55"></div>
+    </div>
+    <div style="margin-bottom:12px">
+      <label class="input-label">SEXE</label>
+      <select id="prof-sex" style="width:100%">
+        <option value="home">Home</option>
+        <option value="dona">Dona</option>
+        <option value="">Prefereixo no dir-ho</option>
+      </select>
+    </div>
+    <div class="grid-2" style="margin-bottom:12px">
+      <div><label class="input-label">OBJECTIU KCAL/DIA</label><input type="number" id="prof-kcal" min="800" max="5000" placeholder="1600"></div>
+      <div><label class="input-label">DÈFICIT KCAL/DIA</label><input type="number" id="prof-deficit" min="0" max="1500" placeholder="500"></div>
+    </div>
+    <div class="grid-2" style="margin-bottom:12px">
+      <div><label class="input-label">OBJECTIU DE PES — DES DE (KG)</label><input type="number" id="prof-goal-min" min="0" max="100" step="0.5" placeholder="10"></div>
+      <div><label class="input-label">OBJECTIU DE PES — FINS A (KG)</label><input type="number" id="prof-goal-max" min="0" max="100" step="0.5" placeholder="15"></div>
+    </div>
+    <div style="margin-bottom:14px">
+      <label class="input-label">NOTES DE SALUT PER A L'ASSISTENT IA (OPCIONAL)</label>
+      <textarea id="prof-notes" rows="3" placeholder="P. ex. operació de turmell, mobilitat reduïda temporalment, al·lèrgies..."></textarea>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-primary" onclick="saveProfileForm()">Desar perfil</button>
+      <span id="prof-status" style="font-size:12px;color:var(--muted)"></span>
     </div>
   </div>
 </div>
@@ -504,6 +543,61 @@ async function callAI(system,messages,maxTokens){
   return data.content?.map(b=>b.text||'').join('')||'';
 }
 
+// ── PERFIL (personalitza KPIs i prompts de la IA per persona/dispositiu) ──
+const DEFAULT_PROFILE={
+  name:'Chester',sex:'home',age:55,
+  kcalTarget:1600,deficit:500,weightGoalMin:10,weightGoalMax:15,
+  notes:"Necessita perdre pes per reduir càrrega sobre el turmell (operació + infecció prèvia). Mobilitat reduïda temporalment."
+};
+function getProfile(){
+  try{const p=JSON.parse(localStorage.getItem('ch_profile')||'null');return p?{...DEFAULT_PROFILE,...p}:{...DEFAULT_PROFILE};}
+  catch{return{...DEFAULT_PROFILE};}
+}
+function saveProfileForm(){
+  const num=(id,fallback)=>{const v=parseFloat(document.getElementById(id).value);return isFinite(v)?v:fallback;};
+  const p={
+    name:document.getElementById('prof-name').value.trim()||DEFAULT_PROFILE.name,
+    sex:document.getElementById('prof-sex').value,
+    age:num('prof-age',DEFAULT_PROFILE.age),
+    kcalTarget:num('prof-kcal',DEFAULT_PROFILE.kcalTarget),
+    deficit:num('prof-deficit',DEFAULT_PROFILE.deficit),
+    weightGoalMin:num('prof-goal-min',DEFAULT_PROFILE.weightGoalMin),
+    weightGoalMax:num('prof-goal-max',DEFAULT_PROFILE.weightGoalMax),
+    notes:document.getElementById('prof-notes').value.trim()
+  };
+  localStorage.setItem('ch_profile',JSON.stringify(p));
+  renderDietaHero();
+  const s=document.getElementById('prof-status');
+  if(s){s.textContent='Desat';setTimeout(()=>{if(s)s.textContent='';},2000);}
+}
+function renderProfileForm(){
+  const p=getProfile();
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.value=v;};
+  set('prof-name',p.name);set('prof-sex',p.sex);set('prof-age',p.age);
+  set('prof-kcal',p.kcalTarget);set('prof-deficit',p.deficit);
+  set('prof-goal-min',p.weightGoalMin);set('prof-goal-max',p.weightGoalMax);
+  set('prof-notes',p.notes);
+}
+function renderDietaHero(){
+  const p=getProfile();
+  const greet=document.getElementById('hero-greet');if(greet)greet.textContent='Hola, '+p.name;
+  const k1=document.getElementById('kpi-kcal');if(k1)k1.textContent='~'+p.kcalTarget;
+  const k2=document.getElementById('kpi-deficit');if(k2)k2.textContent='-'+p.deficit;
+  const k3=document.getElementById('kpi-goal');if(k3)k3.textContent=p.weightGoalMin===p.weightGoalMax?String(p.weightGoalMin):`${p.weightGoalMin}–${p.weightGoalMax}`;
+  const w=document.getElementById('chat-welcome');
+  if(w)w.innerHTML=`Hola ${p.name}. Pregunta'm el que vulguis: un plat que has menjat, com gestionar un àpat familiar, si un aliment et convé, o qualsevol dubte pràctic.<br><br>Respostes directes, sense romanços.`;
+}
+// Descripció en llenguatge natural del perfil, per injectar als prompts de la IA.
+function profileContext(){
+  const p=getProfile();
+  const sexWord=p.sex==='home'?'un home':p.sex==='dona'?'una dona':'una persona';
+  const goal=p.weightGoalMin===p.weightGoalMax?`${p.weightGoalMin} kg`:`${p.weightGoalMin}-${p.weightGoalMax} kg`;
+  let ctx=`${p.name} és ${sexWord} de ${p.age} anys que necessita perdre ${goal}.`;
+  if(p.notes)ctx+=' '+p.notes;
+  ctx+=` Objectiu: ~${p.kcalTarget} kcal/dia (dèficit ~${p.deficit} kcal/dia).`;
+  return ctx;
+}
+
 // ── TABS ───────────────────────────────────────────
 function showTab(name,el){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
@@ -516,6 +610,7 @@ function showTab(name,el){
   if(name==='calories')renderDailySummary();
   if(name==='consulta')renderAIConfig();
   if(name==='dieta')renderDietaCheckMini();
+  if(name==='perfil')renderProfileForm();
 }
 
 // ── MENUS ──────────────────────────────────────────
@@ -615,7 +710,7 @@ async function calcKcal(){
   res.innerHTML='<div style="color:var(--muted);font-size:13px;margin-top:10px"><span class="loading-dots">Calculant</span></div>';
   try{
     const raw=await callAI(
-      `Ets un expert en nutrició. L'usuari (home 55 anys, objectiu 1600 kcal/dia) descriu un àpat. Respon NOMÉS en JSON sense backticks ni text addicional: {"total_kcal":number,"proteina_g":number,"greix_g":number,"hidrats_g":number,"detall":"aliments amb kcal","valoracio":"OK|ACCEPTABLE|EXCESSIU","comentari":"1 frase directa en català"}`,
+      `Ets un expert en nutrició. ${profileContext()} L'usuari descriu un àpat. Respon NOMÉS en JSON sense backticks ni text addicional: {"total_kcal":number,"proteina_g":number,"greix_g":number,"hidrats_g":number,"detall":"aliments amb kcal","valoracio":"OK|ACCEPTABLE|EXCESSIU","comentari":"1 frase directa en català"}`,
       [{role:'user',content:`Calcula calories: ${input}`}],800
     );
     const parsed=JSON.parse(raw.replace(/```json|```/g,'').trim());
@@ -654,7 +749,7 @@ async function saveDiary(){
   let ev='';
   try{
     ev=await callAI(
-      `Ets assistent de nutrició per a Chester (home 55a, objectiu perdre pes, màxim 1600 kcal/dia, sense ultraprocesats ni sucre). Dona valoració breu (2-3 frases) en català del que ha menjat. Directe, sense romanços. Indica si és bon dia, on hi ha marge de millora, i 1 acció concreta si cal.`,
+      `Ets assistent de nutrició. ${profileContext()} Sense ultraprocesats ni sucre. Dona valoració breu (2-3 frases) en català del que ha menjat. Directe, sense romanços. Indica si és bon dia, on hi ha marge de millora, i 1 acció concreta si cal.`,
       [{role:'user',content:`Valoració del dia: ${content}`}],300
     );
   }catch(e){if(e.message==='NO_CONFIG')ev='(Sense valoració IA — configura el Worker a la pestanya IA)';}
@@ -724,10 +819,12 @@ function renderWeekLog(){
 }
 
 // ── AI CHAT ────────────────────────────────────────
-const SYS=`Ets un assistent expert en nutrició pràctica per a pèrdua de pes. Parles SEMPRE en català.
-Chester és un home de 55 anys que necessita perdre 10-15 kg per reduir càrrega sobre el turmell (operació + infecció prèvia). Mobilitat reduïda temporalment.
-Dieta base: zero ultraprocesats, zero sucres afegits, zero refrescos. Alcohol preferentment zero. Base: proteïna (tonyina, pollastre, peix, ous) + verdures + fruita moderada + oli d'oliva. Esmorzar habitual: mig entrepà de tonyina + cafè. Objectiu: ~1600 kcal/dia.
+function buildSys(){
+  return `Ets un assistent expert en nutrició pràctica per a pèrdua de pes. Parles SEMPRE en català.
+${profileContext()}
+Dieta base: zero ultraprocesats, zero sucres afegits, zero refrescos. Alcohol preferentment zero. Base: proteïna (tonyina, pollastre, peix, ous) + verdures + fruita moderada + oli d'oliva. Esmorzar habitual: mig entrepà de tonyina + cafè.
 Respon sempre: directe, concís, realista, sense motivació buida, to tranquil i honest.`;
+}
 let chatHistory=[];
 async function sendMessage(){
   const input=document.getElementById('chat-input');const msg=input.value.trim();if(!msg)return;
@@ -735,9 +832,9 @@ async function sendMessage(){
   const btn=document.getElementById('send-btn');btn.disabled=true;btn.innerHTML='<div class="spinner"></div>';
   const wrap=addMsg('assistant','<span class="loading-dots">Pensant</span>');
   try{
-    const text=await callAI(SYS,chatHistory,800);
+    const text=await callAI(buildSys(),chatHistory,800);
     chatHistory.push({role:'assistant',content:text});
-    wrap.querySelector('.msg').innerHTML=`<div class="sender">NUTRI·CHESTER</div>${text.replace(/\n/g,'<br>')}`;
+    wrap.querySelector('.msg').innerHTML=`<div class="sender">NUTRI·IA</div>${text.replace(/\n/g,'<br>')}`;
   }catch(e){
     const msg=e.message==='NO_CONFIG'?"Configura el Worker IA a la pestanya IA (secció superior) abans de xatejar.":"No s'ha pogut connectar.";
     wrap.querySelector('.msg').innerHTML=`<div class="sender">ERROR</div><div class="error-msg">${msg}</div>`;
@@ -763,6 +860,7 @@ renderChecklist();
 renderAIConfig();
 renderDailySummary();
 renderDietaCheckMini();
+renderDietaHero();
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});
 }
