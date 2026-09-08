@@ -27,7 +27,13 @@ self.addEventListener('fetch', e => {
   // caché si no hi ha connexió. Així cap redisseny futur es queda "atrapat".
   e.respondWith(
     fetch(e.request).then(res => {
-      if (res.ok) caches.open(CACHE).then(c => c.put(e.request, res.clone()));
+      // Clonar ARA, de forma síncrona — si s'espera a dins del .then() de
+      // caches.open(), el body de "res" ja pot haver-se consumit quan la
+      // pàgina el llegeix, i clone() peta amb "body is already used".
+      if (res.ok) {
+        const copy = res.clone();
+        caches.open(CACHE).then(c => c.put(e.request, copy));
+      }
       return res;
     }).catch(() => caches.match(e.request))
   );
