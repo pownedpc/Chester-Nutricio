@@ -282,10 +282,18 @@
 <div class="section" id="tab-aliments">
   <div class="card">
     <div class="card-title">Consulta un aliment</div>
-    <div style="font-size:calc(12px * var(--font-scale));color:var(--muted);margin-bottom:12px">Escriu el nom d'un aliment. La IA et diu si et convé, categoria, kcal aproximades i un comentari directe segons el teu perfil.</div>
+    <div style="font-size:calc(12px * var(--font-scale));color:var(--muted);margin-bottom:12px">Escriu el nom d'un aliment o fes-li una foto. La IA et diu si et convé, categoria, kcal aproximades i un comentari directe segons el teu perfil.</div>
     <label class="input-label">QUIN ALIMENT VOLS CONSULTAR?</label>
     <input type="text" id="food-input" placeholder="Ex: alvocat, iogurt grec, pa de pessic..." onkeydown="if(event.key==='Enter')lookupFood()">
-    <div style="margin-top:10px"><button class="btn btn-primary" id="food-btn" onclick="lookupFood()">Consultar</button></div>
+    <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <button class="btn btn-primary" id="food-btn" onclick="lookupFood()">Consultar</button>
+      <span style="font-size:calc(12px * var(--font-scale));color:var(--muted2)">o</span>
+      <button class="btn btn-secondary" onclick="document.getElementById('food-photo-input').click()">
+        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;vertical-align:-2px;margin-right:5px"><rect x="2.5" y="6" width="13" height="8.5" rx="1.5"/><line x1="6.5" y1="6" x2="7.5" y2="4"/><line x1="7.5" y1="4" x2="10.5" y2="4"/><line x1="10.5" y1="4" x2="11.5" y2="6"/><circle cx="9" cy="10.2" r="2.4"/></svg>Fes una foto
+      </button>
+      <input type="file" id="food-photo-input" accept="image/*" capture="environment" style="display:none" onchange="handleFoodPhoto(this)">
+    </div>
+    <div id="food-photo-preview"></div>
     <div id="food-result"></div>
   </div>
   <div class="card">
@@ -844,6 +852,47 @@ async function lookupFood(){
   btn.disabled=false;btn.textContent='Consultar';
 }
 function quickFood(name){document.getElementById('food-input').value=name;lookupFood();}
+// Consulta per foto: redimensiona/comprimeix al navegador (evita pujar fotos
+// de mòbil senceres, de diversos MB) i envia la imatge a la IA amb visió.
+function handleFoodPhoto(input){
+  const file=input.files&&input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    const img=new Image();
+    img.onload=()=>{
+      const maxDim=900;
+      let w=img.width,h=img.height;
+      if(w>maxDim||h>maxDim){
+        if(w>=h){h=Math.round(h*maxDim/w);w=maxDim;}else{w=Math.round(w*maxDim/h);h=maxDim;}
+      }
+      const canvas=document.createElement('canvas');
+      canvas.width=w;canvas.height=h;
+      canvas.getContext('2d').drawImage(img,0,0,w,h);
+      const dataUrl=canvas.toDataURL('image/jpeg',0.75);
+      document.getElementById('food-photo-preview').innerHTML=`<img src="${dataUrl}" style="max-width:200px;border-radius:10px;border:1px solid var(--border);margin-top:10px;display:block">`;
+      lookupFoodPhoto(dataUrl.split(',')[1]);
+    };
+    img.src=reader.result;
+  };
+  reader.readAsDataURL(file);
+  input.value='';
+}
+async function lookupFoodPhoto(base64){
+  const res=document.getElementById('food-result');
+  res.innerHTML='<div style="color:var(--muted);font-size:calc(13px * var(--font-scale));margin-top:10px"><span class="loading-dots">Analitzant la foto</span></div>';
+  try{
+    const raw=await callAI(
+      `Ets un nutricionista expert. ${profileContext()} L'usuari envia una foto d'un plat o aliment. Identifica què és i estima les kcal totals aproximades de tot el que es veu al plat (no per 100g, del conjunt sencer). Respon NOMÉS en JSON sense backticks ni text addicional: {"nom":"...","kcal_total":"~xxx kcal (estimació)","detall":"ingredients identificats i macros aproximats","comentari":"1-2 frases directes sobre si li convé segons el seu perfil, deixant clar que és una estimació visual, no exacta"}`,
+      [{role:'user',content:[
+        {type:'image',source:{type:'base64',media_type:'image/jpeg',data:base64}},
+        {type:'text',text:"Quines són les característiques i kcal aproximades d'aquest plat?"}
+      ]}],
+      700
+    );
+    const parsed=JSON.parse(raw.replace(/```json|```/g,'').trim());
+    res.innerHTML=`<div class="kcal-result"><div class="kcal-big" style="font-size:calc(22px * var(--font-scale))">${parsed.nom||'Plat'}</div><div class="kcal-breakdown">${parsed.kcal_total?parsed.kcal_total+'<br>':''}${parsed.detall||''}</div><div class="kcal-verdict verdict-warn">${parsed.comentari||''}</div></div>`;
+  }catch(e){res.innerHTML=e.message==='NO_CONFIG'?'<div class="error-msg">Configura el Worker IA a la pestanya IA abans de fer servir això.</div>':'<div class="error-msg">Error analitzant la foto. Torna-ho a intentar.</div>';}
+}
 
 // ── AI CHAT ────────────────────────────────────────
 function buildSys(){
