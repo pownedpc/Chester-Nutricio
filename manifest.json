@@ -1,6 +1,6 @@
 {
-  "name": "Nutrició · Chester",
-  "short_name": "Nutrició",
+  "name": "NutrIA",
+  "short_name": "NutrIA",
   "description": "Control de dieta, pes i diari alimentari",
   "start_url": "./index.html",
   "scope": "./",
