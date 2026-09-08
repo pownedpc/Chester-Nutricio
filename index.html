@@ -540,6 +540,7 @@ function saveProfileForm(){
   };
   localStorage.setItem('ch_profile',JSON.stringify(p));
   renderDietaHero();
+  renderDailySummary();
   generatePersonalPlan();
 }
 function renderProfileForm(){
@@ -764,15 +765,23 @@ function addKcalToDiary(){
 }
 function renderDailySummary(){
   const el=document.getElementById('daily-summary');
-  if(!dailyKcal.length){el.innerHTML='<div style="color:var(--muted);font-size:calc(13px * var(--font-scale));">Calcula àpats per veure el resum.</div>';return;}
-  const total=dailyKcal.reduce((s,e)=>s+e.kcal,0);const prot=dailyKcal.reduce((s,e)=>s+(e.prot||0),0);
-  const pct=Math.min(100,Math.round(total/1600*100));const col=total<=1600?'var(--accent)':total<=1900?'var(--warn)':'var(--danger)';
-  el.innerHTML=`<div style="margin-bottom:8px">${dailyKcal.map(e=>`<div class="food-row"><span style="font-size:calc(12px * var(--font-scale))">${e.desc.substring(0,45)}...</span><span class="food-detail">${e.kcal} kcal</span></div>`).join('')}</div>
-    <div style="font-family:var(--mono);font-size:calc(26px * var(--font-scale));font-weight:600;color:${col}">${total} kcal</div>
-    <div style="font-size:calc(12px * var(--font-scale));color:var(--muted);margin-top:3px">Proteïna total: ~${Math.round(prot)}g</div>
-    <div class="progress-bar" style="margin-top:7px;height:7px"><div class="progress-fill" style="width:${pct}%;background:${col}"></div></div>
-    <div style="font-family:var(--mono);font-size:calc(10px * var(--font-scale));color:var(--muted);margin-top:4px">${pct}% del límit (1600 kcal)</div>
-    <div style="margin-top:8px"><button class="btn btn-secondary" style="font-size:calc(10px * var(--font-scale));padding:5px 10px" onclick="dailyKcal=[];saveDailyKcal();renderDailySummary()">RESET DIA</button></div>`;
+  const target=getProfile().kcalTarget||1600;
+  const total=dailyKcal.reduce((s,e)=>s+e.kcal,0);
+  const prot=dailyKcal.reduce((s,e)=>s+(e.prot||0),0);
+  const remaining=target-total;
+  const pct=Math.min(100,Math.round(total/target*100));
+  const col=total<=target?'var(--accent)':total<=target*1.15?'var(--warn)':'var(--danger)';
+  const remainBlock=remaining>=0
+    ?`<div style="font-family:var(--serif);font-size:calc(32px * var(--font-scale));font-weight:500;color:${col}">${remaining} kcal</div><div style="font-size:calc(12px * var(--font-scale));color:var(--muted)">et queden avui (objectiu ${target} kcal)</div>`
+    :`<div style="font-family:var(--serif);font-size:calc(26px * var(--font-scale));font-weight:500;color:var(--danger)">+${Math.abs(remaining)} kcal</div><div style="font-size:calc(12px * var(--font-scale));color:var(--muted)">per sobre de l'objectiu de ${target} kcal</div>`;
+  const list=dailyKcal.length
+    ?dailyKcal.map(e=>`<div class="food-row"><span style="font-size:calc(12px * var(--font-scale))">${e.desc.substring(0,45)}...</span><span class="food-detail">${e.kcal} kcal</span></div>`).join('')
+    :`<div style="color:var(--muted);font-size:calc(13px * var(--font-scale));">Encara no has calculat cap àpat avui.</div>`;
+  el.innerHTML=`${remainBlock}
+    <div class="progress-bar" style="margin-top:9px;height:7px"><div class="progress-fill" style="width:${pct}%;background:${col}"></div></div>
+    <div style="font-size:calc(11px * var(--font-scale));color:var(--muted);margin-top:4px">${total} kcal consumides · ${pct}% de l'objectiu · Proteïna: ~${Math.round(prot)}g</div>
+    <div style="margin-top:12px">${list}</div>
+    <div style="margin-top:8px"><button class="btn btn-secondary" style="font-size:calc(11px * var(--font-scale));padding:6px 12px" onclick="dailyKcal=[];saveDailyKcal();renderDailySummary()">Reset dia</button></div>`;
 }
 
 // ── DIARY ──────────────────────────────────────────
