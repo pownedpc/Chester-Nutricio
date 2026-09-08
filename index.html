@@ -59,7 +59,8 @@
   .section{display:none;}.section.active{display:block;}
   .card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:26px 24px;margin-bottom:18px;box-shadow:var(--shadow-sm);}
   .card-title{font-family:var(--serif);font-size:17px;font-weight:500;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px;letter-spacing:-.005em;}
-  .card-title::after{content:'';flex:1;height:1px;background:var(--border);margin-left:4px;}
+  .card-title::after{content:'';flex:1;height:1px;background:var(--border);margin-left:4px;order:1;}
+  .card-title .scenario-badge{order:2;flex-shrink:0;}
   .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
   .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
   @media(max-width:600px){.grid-2,.grid-3{grid-template-columns:1fr;}}
@@ -210,21 +211,25 @@
   <div class="dash-grid">
     <div class="dash-main">
       <div class="card">
-        <div class="card-title">Regles de base</div>
+        <div class="card-title">Regles de base<span id="plan-badge" class="scenario-badge" style="display:none;margin-bottom:0">Personalitzat amb IA</span></div>
+        <div id="rules-list">
         <div class="rule"><div class="rule-icon no"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="5" y1="5" x2="13" y2="13"/><line x1="13" y1="5" x2="5" y2="13"/></svg></div><div class="rule-text"><strong>Alcohol</strong> — preferentment zero.<br><span>Puntual en context social. No com a hàbit.</span></div></div>
         <div class="rule"><div class="rule-icon no"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="5" y1="5" x2="13" y2="13"/><line x1="13" y1="5" x2="5" y2="13"/></svg></div><div class="rule-text"><strong>Ultraprocesats</strong> — eliminats.<br><span>Zero embotits industrials, snacks, precuinats.</span></div></div>
         <div class="rule"><div class="rule-icon no"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="5" y1="5" x2="13" y2="13"/><line x1="13" y1="5" x2="5" y2="13"/></svg></div><div class="rule-text"><strong>Sucres afegits i refrescos</strong> — eliminats.<br><span>Inclou sucs embotellats, iogurts dolços, cereals.</span></div></div>
         <div class="rule"><div class="rule-icon ok"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,9.5 7.3,13 14,5.5"/></svg></div><div class="rule-text"><strong>Base: proteïna + verdura + greix bo</strong><br><span>Atún, pollastre, peix, ous, aguacate, oli d'oliva.</span></div></div>
         <div class="rule"><div class="rule-icon ok"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,9.5 7.3,13 14,5.5"/></svg></div><div class="rule-text"><strong>Fruita moderada</strong><br><span>2 peces/dia màxim. Preferir maduixes, pera, kiwi.</span></div></div>
         <div class="rule"><div class="rule-icon caution"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="10,2 4,10.5 8.3,10.5 7,16 14,7 9.5,7 10,2"/></svg></div><div class="rule-text"><strong>Pa amb criteri</strong><br><span>Pa integral o centeno, ocasional. Mig entrepà és suficient.</span></div></div>
+        </div>
       </div>
       <div class="card">
         <div class="card-title">Estructura del dia</div>
+        <div id="meals-list">
         <div class="meal-block" style="border-color:var(--muted)"><div class="meal-label" style="color:var(--muted)">PRIMERA HORA · 07:00–08:00</div><div class="meal-title">Cafè o infusió</div><div class="meal-desc">Sense sucre. En dejú.</div><div class="meal-kcal" style="color:var(--muted)">~0 kcal</div></div>
         <div class="meal-block"><div class="meal-label">ESMORZAR · 10:00–11:00</div><div class="meal-title">Mig entrepà de tonyina + cafè</div><div class="meal-desc">Pa integral o centeno. Tonyina al natural escorreguda. Cafè sense sucre.</div><div class="meal-kcal">~300–350 kcal</div></div>
         <div class="meal-block" style="border-color:var(--accent2)"><div class="meal-label" style="color:var(--accent2)">DINAR · 14:30–15:30</div><div class="meal-title">Àpat principal</div><div class="meal-desc">Proteïna (150–180g) + verdura abundant + oli d'oliva.</div><div class="meal-kcal" style="color:var(--accent2)">~500–600 kcal</div></div>
         <div class="meal-block" style="border-color:var(--warn)"><div class="meal-label" style="color:var(--warn)">BERENAR · OPCIONAL</div><div class="meal-title">Fruita o nous</div><div class="meal-desc">1 peça de fruita o grapat de nous (15–20g). Si no tens gana, salta'l.</div><div class="meal-kcal" style="color:var(--warn)">~100–150 kcal</div></div>
         <div class="meal-block" style="border-color:var(--purple)"><div class="meal-label" style="color:var(--purple)">SOPAR · 20:00–21:00</div><div class="meal-title">Àpat lleuger</div><div class="meal-desc">Peix o ous + verdura cuinada. Evitar hidrats al vespre.</div><div class="meal-kcal" style="color:var(--purple)">~400–450 kcal</div></div>
+        </div>
       </div>
     </div>
     <div class="dash-side">
@@ -578,8 +583,7 @@ function saveProfileForm(){
   };
   localStorage.setItem('ch_profile',JSON.stringify(p));
   renderDietaHero();
-  const s=document.getElementById('prof-status');
-  if(s){s.textContent='Desat';setTimeout(()=>{if(s)s.textContent='';},2000);}
+  generatePersonalPlan();
 }
 function renderProfileForm(){
   const p=getProfile();
@@ -607,6 +611,62 @@ function profileContext(){
   if(p.notes)ctx+=' '+p.notes;
   ctx+=` Objectiu: ~${p.kcalTarget} kcal/dia (dèficit ~${p.deficit} kcal/dia).`;
   return ctx;
+}
+
+// ── PLA PERSONALITZAT (Regles de base + Estructura del dia via IA) ──
+const ICON_OK='<svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,9.5 7.3,13 14,5.5"/></svg>';
+const ICON_NO='<svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="5" y1="5" x2="13" y2="13"/><line x1="13" y1="5" x2="5" y2="13"/></svg>';
+const ICON_CAUTION='<svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="10,2 4,10.5 8.3,10.5 7,16 14,7 9.5,7 10,2"/></svg>';
+const MEAL_COLORS=['--muted','--accent','--accent2','--warn','--purple'];
+function getPlan(){try{return JSON.parse(localStorage.getItem('ch_plan')||'null');}catch{return null;}}
+function savePlan(p){localStorage.setItem('ch_plan',JSON.stringify(p));}
+function renderPlan(){
+  const plan=getPlan();
+  const badge=document.getElementById('plan-badge');
+  if(!plan){if(badge)badge.style.display='none';return;}
+  if(badge)badge.style.display='inline-block';
+  const rulesEl=document.getElementById('rules-list');
+  if(rulesEl&&Array.isArray(plan.rules)&&plan.rules.length){
+    rulesEl.innerHTML=plan.rules.map(r=>{
+      const cls=r.type==='ok'?'ok':r.type==='caution'?'caution':'no';
+      const icon=cls==='ok'?ICON_OK:cls==='caution'?ICON_CAUTION:ICON_NO;
+      return `<div class="rule"><div class="rule-icon ${cls}">${icon}</div><div class="rule-text"><strong>${r.title||''}</strong><br><span>${r.desc||''}</span></div></div>`;
+    }).join('');
+  }
+  const mealsEl=document.getElementById('meals-list');
+  if(mealsEl&&Array.isArray(plan.meals)&&plan.meals.length){
+    mealsEl.innerHTML=plan.meals.map((m,i)=>{
+      const cv=`var(${MEAL_COLORS[i%MEAL_COLORS.length]})`;
+      return `<div class="meal-block" style="border-color:${cv}"><div class="meal-label" style="color:${cv}">${(m.label||'').toUpperCase()}${m.time?' · '+m.time:''}</div><div class="meal-title">${m.title||''}</div><div class="meal-desc">${m.desc||''}</div><div class="meal-kcal" style="color:${cv}">${m.kcal||''}</div></div>`;
+    }).join('');
+  }
+}
+// Es crida en desar el perfil: regenera Regles de base + Estructura del dia
+// amb la IA, adaptats a les notes de salut i objectius de la persona. Si no
+// hi ha Worker configurat o falla, es queda silenciosament amb el pla previ
+// (o el pla per defecte si encara no s'havia generat cap).
+async function generatePersonalPlan(){
+  const s=document.getElementById('prof-status');
+  const cfg=getAIConfig();
+  if(!cfg.url){if(s){s.textContent='Desat (sense pla IA: configura el Worker a la pestanya IA)';setTimeout(()=>{if(s)s.textContent='';},4000);}return;}
+  if(s)s.textContent='Desat — generant pla personalitzat…';
+  try{
+    const raw=await callAI(
+      `Ets un nutricionista expert. Genera un pla de dieta personalitzat en JSON pur (sense backticks, sense text addicional), seguint EXACTAMENT aquest format:
+{"rules":[{"type":"no|ok|caution","title":"...","desc":"..."}],"meals":[{"label":"...","time":"07:00–08:00","title":"...","desc":"...","kcal":"~300 kcal"}]}
+Principis que s'han de complir sempre: zero ultraprocessats, zero sucres afegits ni refrescos, alcohol preferentment zero, base de proteïna+verdura+greix bo, hidrats amb criteri. Genera entre 5 i 7 elements a "rules" (barreja tipus no/ok/caution) i entre 4 i 6 elements a "meals" amb horaris realistes repartits al llarg del dia, coherents amb l'objectiu de kcal/dia. Adapta contingut, to i horaris al perfil concret — edat, sexe, objectiu, i especialment les notes de salut si n'hi ha. Escriu en català, frases curtes i concretes com un nutricionista real, mai genèric ni buit.`,
+      [{role:'user',content:`Perfil: ${profileContext()}`}],
+      1400
+    );
+    const parsed=JSON.parse(raw.replace(/```json|```/g,'').trim());
+    if(!Array.isArray(parsed.rules)||!Array.isArray(parsed.meals))throw new Error('format invàlid');
+    savePlan(parsed);
+    renderPlan();
+    if(s)s.textContent='Pla actualitzat';
+  }catch(e){
+    if(s)s.textContent="Desat (no s'ha pogut generar el pla personalitzat, es manté l'anterior)";
+  }
+  setTimeout(()=>{if(s)s.textContent='';},4000);
 }
 
 // ── TABS ───────────────────────────────────────────
@@ -882,6 +942,7 @@ renderAIConfig();
 renderDailySummary();
 renderDietaCheckMini();
 renderDietaHero();
+renderPlan();
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});
 }
