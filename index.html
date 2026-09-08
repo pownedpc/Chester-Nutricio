@@ -656,7 +656,7 @@ async function generatePersonalPlan(){
 {"rules":[{"type":"no|ok|caution","title":"...","desc":"..."}],"meals":[{"label":"...","time":"07:00–08:00","title":"...","desc":"...","kcal":"~300 kcal"}]}
 Principis que s'han de complir sempre: zero ultraprocessats, zero sucres afegits ni refrescos, alcohol preferentment zero, base de proteïna+verdura+greix bo, hidrats amb criteri. Genera entre 5 i 7 elements a "rules" (barreja tipus no/ok/caution) i entre 4 i 6 elements a "meals" amb horaris realistes repartits al llarg del dia, coherents amb l'objectiu de kcal/dia. Adapta contingut, to i horaris al perfil concret — edat, sexe, objectiu, i especialment les notes de salut si n'hi ha. Escriu en català, frases curtes i concretes com un nutricionista real, mai genèric ni buit.`,
       [{role:'user',content:`Perfil: ${profileContext()}`}],
-      1400
+      1000
     );
     const parsed=JSON.parse(raw.replace(/```json|```/g,'').trim());
     if(!Array.isArray(parsed.rules)||!Array.isArray(parsed.meals))throw new Error('format invàlid');
