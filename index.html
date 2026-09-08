@@ -22,6 +22,7 @@
     --sans:'Work Sans',sans-serif;--serif:'Fraunces',serif;--mono:var(--sans);
     --shadow-sm:0 1px 2px rgba(36,31,26,.05);
     --shadow-md:0 6px 22px rgba(36,31,26,.08);
+    --font-scale:1;
   }
   *{box-sizing:border-box;margin:0;padding:0;}
   body{font-family:var(--sans);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;}
@@ -30,15 +31,21 @@
   .brand{display:flex;align-items:center;gap:10px;padding:0 8px;margin-bottom:28px;}
   .brand-icon{width:34px;height:34px;border-radius:10px;background:var(--accent2-soft);display:flex;align-items:center;justify-content:center;color:var(--accent2);flex-shrink:0;}
   .brand-icon svg{width:19px;height:19px;}
-  .brand-text{font-family:var(--serif);font-size:19px;font-weight:500;color:var(--text);letter-spacing:-.01em;}
+  .brand-text{font-family:var(--serif);font-size:calc(19px * var(--font-scale));font-weight:500;color:var(--text);letter-spacing:-.01em;}
   .brand-text span{color:var(--accent);}
   .navlist{display:flex;flex-direction:column;gap:1px;flex:1;}
-  .navitem{display:flex;align-items:center;gap:11px;padding:9px 12px;border:none;background:none;border-left:2.5px solid transparent;border-radius:0 8px 8px 0;color:var(--muted);font-family:var(--sans);font-size:13.5px;font-weight:500;text-align:left;cursor:pointer;transition:all .15s;width:100%;}
+  .navitem{display:flex;align-items:center;gap:11px;padding:9px 12px;border:none;background:none;border-left:2.5px solid transparent;border-radius:0 8px 8px 0;color:var(--muted);font-family:var(--sans);font-size:calc(13.5px * var(--font-scale));font-weight:500;text-align:left;cursor:pointer;transition:all .15s;width:100%;}
   .navitem svg{width:17px;height:17px;flex-shrink:0;color:var(--muted);transition:color .15s;}
   .navitem:hover{background:var(--surface2);color:var(--text);}
   .navitem.active{background:var(--accent-soft);color:var(--accent);border-left-color:var(--accent);font-weight:600;}
   .navitem.active svg{color:var(--accent);}
-  .sidenav .tagline{font-size:11px;color:var(--muted2);font-style:italic;padding:14px 12px 2px;margin-top:6px;border-top:1px solid var(--border);}
+  .sidenav .tagline{font-size:calc(11px * var(--font-scale));color:var(--muted2);font-style:italic;padding:14px 12px 2px;margin-top:6px;border-top:1px solid var(--border);}
+  .font-ctrl{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;margin-top:6px;border-top:1px solid var(--border);}
+  .font-ctrl-label{font-size:11px;color:var(--muted2);}
+  .font-ctrl-btns{display:flex;align-items:center;gap:4px;}
+  .font-ctrl-btns button{width:25px;height:25px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:11px;font-weight:700;font-family:var(--sans);cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;padding:0;}
+  .font-ctrl-btns button:hover{border-color:var(--accent);color:var(--accent);}
+  #fs-pct{font-size:10px;color:var(--muted2);min-width:30px;text-align:center;}
   .content-wrap{flex:1;min-width:0;}
   main{max-width:960px;margin:0 auto;padding:38px 42px 60px;}
   .topbar-mobile{display:none;}
@@ -46,7 +53,7 @@
   @media(max-width:860px){
     .shell{flex-direction:column;}
     .topbar-mobile{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 14px;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:150;}
-    .topbar-mobile .brand-mini{display:flex;align-items:center;gap:8px;font-family:var(--serif);font-size:17px;font-weight:500;color:var(--text);}
+    .topbar-mobile .brand-mini{display:flex;align-items:center;gap:8px;font-family:var(--serif);font-size:calc(17px * var(--font-scale));font-weight:500;color:var(--text);}
     .topbar-mobile .brand-mini span{color:var(--accent);}
     .icon-btn{background:none;border:none;cursor:pointer;color:var(--text);padding:6px;display:flex;border-radius:8px;flex-shrink:0;}
     .icon-btn:hover{background:var(--surface2);}
@@ -58,32 +65,32 @@
   }
   .section{display:none;}.section.active{display:block;}
   .card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:26px 24px;margin-bottom:18px;box-shadow:var(--shadow-sm);}
-  .card-title{font-family:var(--serif);font-size:17px;font-weight:500;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px;letter-spacing:-.005em;}
+  .card-title{font-family:var(--serif);font-size:calc(17px * var(--font-scale));font-weight:500;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px;letter-spacing:-.005em;}
   .card-title::after{content:'';flex:1;height:1px;background:var(--border);margin-left:4px;order:1;}
   .card-title .scenario-badge{order:2;flex-shrink:0;}
   .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
   .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
   @media(max-width:600px){.grid-2,.grid-3{grid-template-columns:1fr;}}
   .hero{margin-bottom:20px;}
-  .hero-greet{font-family:var(--serif);font-size:25px;font-weight:500;color:var(--text);letter-spacing:-.01em;margin-bottom:5px;}
-  .hero-sub{font-size:14px;color:var(--muted);max-width:56ch;line-height:1.5;}
+  .hero-greet{font-family:var(--serif);font-size:calc(25px * var(--font-scale));font-weight:500;color:var(--text);letter-spacing:-.01em;margin-bottom:5px;}
+  .hero-sub{font-size:calc(14px * var(--font-scale));color:var(--muted);max-width:56ch;line-height:1.5;}
   .dash-grid{display:grid;grid-template-columns:1.7fr 1fr;gap:18px;align-items:start;}
   .dash-main .card:last-child,.dash-side .card:last-child{margin-bottom:0;}
   @media(max-width:980px){.dash-grid{grid-template-columns:1fr;}}
-  .check-mini-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;}
+  .check-mini-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:calc(13px * var(--font-scale));}
   .check-mini-row:last-child{border-bottom:none;}
   .check-mini-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;background:var(--border);}
   .check-mini-row.done .check-mini-dot{background:var(--accent);}
   .check-mini-row.done span{color:var(--muted);text-decoration:line-through;}
   .stat-box{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:16px;padding:20px 18px;box-shadow:var(--shadow-sm);text-align:center;}
-  .stat-num{font-family:var(--serif);font-size:28px;font-weight:500;color:var(--text);letter-spacing:-.01em;}
-  .stat-label{font-size:11.5px;color:var(--muted);margin-top:4px;letter-spacing:.01em;}
+  .stat-num{font-family:var(--serif);font-size:calc(28px * var(--font-scale));font-weight:500;color:var(--text);letter-spacing:-.01em;}
+  .stat-label{font-size:calc(11.5px * var(--font-scale));color:var(--muted);margin-top:4px;letter-spacing:.01em;}
   .meal-block{border-left:2.5px solid var(--accent);padding:12px 15px;margin-bottom:10px;background:var(--surface2);border-radius:0 8px 8px 0;}
-  .meal-label{font-size:11px;font-weight:600;color:var(--accent);letter-spacing:.06em;margin-bottom:3px;}
-  .meal-title{font-size:14px;font-weight:500;margin-bottom:2px;}
-  .meal-desc{font-size:13px;color:var(--muted);line-height:1.5;}
-  .meal-kcal{font-size:12px;font-weight:500;color:var(--accent2);margin-top:5px;}
-  .rule{display:flex;align-items:flex-start;gap:13px;padding:12px 0;border-bottom:1px solid var(--border);font-size:14px;}
+  .meal-label{font-size:calc(11px * var(--font-scale));font-weight:600;color:var(--accent);letter-spacing:.06em;margin-bottom:3px;}
+  .meal-title{font-size:calc(14px * var(--font-scale));font-weight:500;margin-bottom:2px;}
+  .meal-desc{font-size:calc(13px * var(--font-scale));color:var(--muted);line-height:1.5;}
+  .meal-kcal{font-size:calc(12px * var(--font-scale));font-weight:500;color:var(--accent2);margin-top:5px;}
+  .rule{display:flex;align-items:flex-start;gap:13px;padding:12px 0;border-bottom:1px solid var(--border);font-size:calc(14px * var(--font-scale));}
   .rule:last-child{border-bottom:none;}
   .rule-icon{width:26px;height:26px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;}
   .rule-icon svg{width:14px;height:14px;}
@@ -92,25 +99,25 @@
   .rule-icon.caution{background:var(--warn-soft);color:var(--warn);}
   .rule-text{line-height:1.5;padding-top:2px;}
   .rule-text strong{color:var(--text);font-weight:600;}
-  .rule-text span{color:var(--muted);font-size:12px;}
-  .tag{display:inline-block;font-size:10.5px;font-weight:500;padding:4px 9px;border-radius:20px;margin:2px;letter-spacing:.01em;}
+  .rule-text span{color:var(--muted);font-size:calc(12px * var(--font-scale));}
+  .tag{display:inline-block;font-size:calc(10.5px * var(--font-scale));font-weight:500;padding:4px 9px;border-radius:20px;margin:2px;letter-spacing:.01em;}
   .tag-ok{background:var(--accent-soft);color:var(--accent);border:1px solid rgba(63,95,54,.2);}
   .tag-warn{background:var(--warn-soft);color:var(--warn);border:1px solid rgba(171,133,68,.22);}
   .tag-info{background:var(--accent2-soft);color:var(--accent2);border:1px solid rgba(184,107,62,.22);}
-  .food-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:14px;}
+  .food-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:calc(14px * var(--font-scale));}
   .food-row:last-child{border-bottom:none;}
   .food-name{font-weight:500;}
-  .food-detail{color:var(--muted);font-size:12px;}
+  .food-detail{color:var(--muted);font-size:calc(12px * var(--font-scale));}
   .scenario{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:10px;}
-  .scenario-title{font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:9px;}
+  .scenario-title{font-size:calc(12px * var(--font-scale));font-weight:600;color:var(--accent2);margin-bottom:9px;}
   .scn-list{display:flex;flex-direction:column;gap:8px;}
-  .scn-row{display:flex;align-items:flex-start;gap:9px;font-size:14px;color:var(--text);line-height:1.5;}
+  .scn-row{display:flex;align-items:flex-start;gap:9px;font-size:calc(14px * var(--font-scale));color:var(--text);line-height:1.5;}
   .scn-row svg{width:15px;height:15px;flex-shrink:0;margin-top:2px;}
   .scn-row.ok svg{color:var(--accent);}
   .scn-row.no svg{color:var(--danger);}
   .scn-row.caution svg{color:var(--warn);}
-  .scenario-badge{display:inline-block;background:var(--accent2-soft);color:var(--accent2);border:1px solid rgba(184,107,62,.2);font-size:10.5px;font-weight:600;padding:4px 9px;border-radius:20px;margin-bottom:7px;letter-spacing:.01em;}
-  .check-item{display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:14px;background:var(--surface2);margin-bottom:6px;font-size:14px;cursor:pointer;transition:background .1s;user-select:none;}
+  .scenario-badge{display:inline-block;background:var(--accent2-soft);color:var(--accent2);border:1px solid rgba(184,107,62,.2);font-size:calc(10.5px * var(--font-scale));font-weight:600;padding:4px 9px;border-radius:20px;margin-bottom:7px;letter-spacing:.01em;}
+  .check-item{display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:14px;background:var(--surface2);margin-bottom:6px;font-size:calc(14px * var(--font-scale));cursor:pointer;transition:background .1s;user-select:none;}
   .check-item:hover{background:var(--border);}
   .check-box{width:19px;height:19px;border:1.5px solid var(--border);border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
   .check-box svg{width:12px;height:12px;}
@@ -119,17 +126,17 @@
   .progress-bar{height:6px;background:var(--surface2);border-radius:4px;overflow:hidden;margin-top:6px;}
   .progress-fill{height:100%;border-radius:4px;background:var(--accent);transition:width .4s ease;}
   .chat-container{display:flex;flex-direction:column;gap:10px;max-height:420px;overflow-y:auto;padding:4px 0 12px;scroll-behavior:smooth;}
-  .msg{max-width:86%;padding:11px 14px;border-radius:12px;font-size:14px;line-height:1.6;}
+  .msg{max-width:86%;padding:11px 14px;border-radius:12px;font-size:calc(14px * var(--font-scale));line-height:1.6;}
   .msg-user{align-self:flex-end;background:var(--surface2);border:1px solid var(--border);}
   .msg-assistant{align-self:flex-start;background:var(--accent-soft);border:1px solid rgba(63,95,54,.16);}
-  .msg .sender{font-size:11px;font-weight:600;color:var(--accent);letter-spacing:.04em;margin-bottom:4px;}
+  .msg .sender{font-size:calc(11px * var(--font-scale));font-weight:600;color:var(--accent);letter-spacing:.04em;margin-bottom:4px;}
   .msg-user .sender{color:var(--muted);text-align:right;}
   .chat-input-row{display:flex;gap:8px;margin-top:8px;}
-  textarea,input[type=text],input[type=number],input[type=date]{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 13px;color:var(--text);font-family:var(--sans);font-size:14px;outline:none;transition:border-color .15s;width:100%;}
+  textarea,input[type=text],input[type=number],input[type=date]{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 13px;color:var(--text);font-family:var(--sans);font-size:calc(14px * var(--font-scale));outline:none;transition:border-color .15s;width:100%;}
   textarea{resize:none;}
   textarea:focus,input:focus{border-color:var(--accent);}
   textarea::placeholder,input::placeholder{color:var(--muted2);}
-  .btn{padding:10px 18px;border:none;border-radius:10px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;letter-spacing:.005em;}
+  .btn{padding:10px 18px;border:none;border-radius:10px;font-family:var(--sans);font-size:calc(13px * var(--font-scale));font-weight:600;cursor:pointer;transition:all .15s;letter-spacing:.005em;}
   .btn-primary{background:var(--accent);color:#fff;}
   .btn-primary:hover{background:var(--accent-dark);box-shadow:var(--shadow-sm);}
   .btn-primary:disabled{background:var(--border);color:var(--muted);cursor:not-allowed;}
@@ -139,27 +146,27 @@
   .btn-danger:hover{background:rgba(162,86,76,.18);}
   .spinner{display:inline-block;width:13px;height:13px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;}
   @keyframes spin{to{transform:rotate(360deg);}}
-  select{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:9px 13px;border-radius:8px;font-family:var(--sans);font-size:14px;outline:none;cursor:pointer;}
+  select{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:9px 13px;border-radius:8px;font-family:var(--sans);font-size:calc(14px * var(--font-scale));outline:none;cursor:pointer;}
   select:focus{border-color:var(--accent);}
-  .weight-entry{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;background:var(--surface2);border-radius:12px;margin-bottom:6px;font-size:14px;}
-  .weight-date{font-size:11px;color:var(--muted);}
-  .weight-val{font-size:16px;font-weight:600;color:var(--text);}
-  .diff-neg{color:var(--accent);font-size:12px;font-weight:500;}
-  .diff-pos{color:var(--danger);font-size:12px;font-weight:500;}
-  .diff-zero{color:var(--muted);font-size:12px;}
+  .weight-entry{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;background:var(--surface2);border-radius:12px;margin-bottom:6px;font-size:calc(14px * var(--font-scale));}
+  .weight-date{font-size:calc(11px * var(--font-scale));color:var(--muted);}
+  .weight-val{font-size:calc(16px * var(--font-scale));font-weight:600;color:var(--text);}
+  .diff-neg{color:var(--accent);font-size:calc(12px * var(--font-scale));font-weight:500;}
+  .diff-pos{color:var(--danger);font-size:calc(12px * var(--font-scale));font-weight:500;}
+  .diff-zero{color:var(--muted);font-size:calc(12px * var(--font-scale));}
   .kcal-result{background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:18px;margin-top:10px;}
-  .kcal-big{font-family:var(--serif);font-size:32px;font-weight:500;color:var(--text);}
-  .kcal-breakdown{font-size:13px;color:var(--muted);margin-top:6px;line-height:1.8;}
-  .kcal-verdict{font-size:14px;margin-top:9px;padding:9px 13px;border-radius:8px;}
+  .kcal-big{font-family:var(--serif);font-size:calc(32px * var(--font-scale));font-weight:500;color:var(--text);}
+  .kcal-breakdown{font-size:calc(13px * var(--font-scale));color:var(--muted);margin-top:6px;line-height:1.8;}
+  .kcal-verdict{font-size:calc(14px * var(--font-scale));margin-top:9px;padding:9px 13px;border-radius:8px;}
   .verdict-ok{background:var(--accent-soft);color:var(--accent);border:1px solid rgba(63,95,54,.18);}
   .verdict-warn{background:var(--warn-soft);color:var(--warn);border:1px solid rgba(171,133,68,.2);}
   .verdict-bad{background:var(--danger-soft);color:var(--danger);border:1px solid rgba(162,86,76,.2);}
   .diary-entry{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:9px;}
-  .diary-date{font-size:11px;color:var(--muted);margin-bottom:5px;font-weight:500;}
-  .diary-content{font-size:14px;line-height:1.6;}
-  .diary-eval{font-size:13px;color:var(--accent2);margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-style:italic;}
-  .input-label{font-size:11px;font-weight:600;color:var(--muted);display:block;margin-bottom:5px;letter-spacing:.03em;}
-  .error-msg{color:var(--danger);font-size:13px;padding:9px;border:1px solid rgba(162,86,76,.25);border-radius:8px;background:var(--danger-soft);margin-top:8px;}
+  .diary-date{font-size:calc(11px * var(--font-scale));color:var(--muted);margin-bottom:5px;font-weight:500;}
+  .diary-content{font-size:calc(14px * var(--font-scale));line-height:1.6;}
+  .diary-eval{font-size:calc(13px * var(--font-scale));color:var(--accent2);margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-style:italic;}
+  .input-label{font-size:calc(11px * var(--font-scale));font-weight:600;color:var(--muted);display:block;margin-bottom:5px;letter-spacing:.03em;}
+  .error-msg{color:var(--danger);font-size:calc(13px * var(--font-scale));padding:9px;border:1px solid rgba(162,86,76,.25);border-radius:8px;background:var(--danger-soft);margin-top:8px;}
   .loading-dots::after{content:'';animation:dots 1.2s steps(4,end) infinite;}
   @keyframes dots{0%,100%{content:'';}25%{content:'.';}50%{content:'..';}75%{content:'...'}}
   ::-webkit-scrollbar{width:5px;}
@@ -190,6 +197,14 @@
     <button class="navitem" data-tab="consulta" onclick="showTab('consulta',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polygon points="9,2 10.4,7.6 16,9 10.4,10.4 9,16 7.6,10.4 2,9 7.6,7.6"/></svg><span>IA</span></button>
     <button class="navitem" data-tab="perfil" onclick="showTab('perfil',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="6.2" r="2.7"/><path d="M3.3,15.5c0-3.3,2.5-5,5.7-5s5.7,1.7,5.7,5"/></svg><span>Perfil</span></button>
   </nav>
+  <div class="font-ctrl">
+    <span class="font-ctrl-label">Mida del text</span>
+    <div class="font-ctrl-btns">
+      <button onclick="changeFontScale(-0.1)" aria-label="Redueix la mida del text">A−</button>
+      <span id="fs-pct">100%</span>
+      <button onclick="changeFontScale(0.1)" aria-label="Augmenta la mida del text">A+</button>
+    </div>
+  </div>
   <div class="tagline">cura't sense complicar-te</div>
 </aside>
 <div class="content-wrap">
@@ -233,12 +248,12 @@
     <div class="dash-side">
       <div class="card">
         <div class="card-title">Pròxim pas</div>
-        <div style="font-size:14px;color:var(--muted);line-height:1.6">Si tens un dubte concret sobre un àpat o un aliment, pregunta-ho directament a l'assistent — respon curt i directe, sense romanços.</div>
+        <div style="font-size:calc(14px * var(--font-scale));color:var(--muted);line-height:1.6">Si tens un dubte concret sobre un àpat o un aliment, pregunta-ho directament a l'assistent — respon curt i directe, sense romanços.</div>
         <button class="btn btn-secondary" style="margin-top:14px;width:100%" onclick="goTab('consulta')">Preguntar a la IA</button>
       </div>
       <div class="card">
         <div class="card-title">Consulta un aliment</div>
-        <div style="font-size:14px;color:var(--muted);line-height:1.6">Vols saber si un aliment concret et convé? La IA et diu categoria, kcal i si el pots menjar tranquil.</div>
+        <div style="font-size:calc(14px * var(--font-scale));color:var(--muted);line-height:1.6">Vols saber si un aliment concret et convé? La IA et diu categoria, kcal i si el pots menjar tranquil.</div>
         <button class="btn btn-secondary" style="margin-top:14px;width:100%" onclick="goTab('aliments')">Consultar un aliment</button>
       </div>
     </div>
@@ -267,7 +282,7 @@
 <div class="section" id="tab-aliments">
   <div class="card">
     <div class="card-title">Consulta un aliment</div>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:12px">Escriu el nom d'un aliment. La IA et diu si et convé, categoria, kcal aproximades i un comentari directe segons el teu perfil.</div>
+    <div style="font-size:calc(12px * var(--font-scale));color:var(--muted);margin-bottom:12px">Escriu el nom d'un aliment. La IA et diu si et convé, categoria, kcal aproximades i un comentari directe segons el teu perfil.</div>
     <label class="input-label">QUIN ALIMENT VOLS CONSULTAR?</label>
     <input type="text" id="food-input" placeholder="Ex: alvocat, iogurt grec, pa de pessic..." onkeydown="if(event.key==='Enter')lookupFood()">
     <div style="margin-top:10px"><button class="btn btn-primary" id="food-btn" onclick="lookupFood()">Consultar</button></div>
@@ -276,13 +291,13 @@
   <div class="card">
     <div class="card-title">Exemples ràpids</div>
     <div style="display:flex;flex-wrap:wrap;gap:6px">
-      <button class="btn btn-secondary" style="font-size:12px;padding:7px 12px" onclick="quickFood('Tonyina al natural')">Tonyina al natural</button>
-      <button class="btn btn-secondary" style="font-size:12px;padding:7px 12px" onclick="quickFood('Alvocat')">Alvocat</button>
-      <button class="btn btn-secondary" style="font-size:12px;padding:7px 12px" onclick="quickFood('Pa integral')">Pa integral</button>
-      <button class="btn btn-secondary" style="font-size:12px;padding:7px 12px" onclick="quickFood('Iogurt grec natural')">Iogurt grec natural</button>
-      <button class="btn btn-secondary" style="font-size:12px;padding:7px 12px" onclick="quickFood('Llegums')">Llegums</button>
-      <button class="btn btn-secondary" style="font-size:12px;padding:7px 12px" onclick="quickFood('Fruita seca')">Fruita seca</button>
-      <button class="btn btn-secondary" style="font-size:12px;padding:7px 12px" onclick="quickFood('Formatge curat')">Formatge curat</button>
+      <button class="btn btn-secondary" style="font-size:calc(12px * var(--font-scale));padding:7px 12px" onclick="quickFood('Tonyina al natural')">Tonyina al natural</button>
+      <button class="btn btn-secondary" style="font-size:calc(12px * var(--font-scale));padding:7px 12px" onclick="quickFood('Alvocat')">Alvocat</button>
+      <button class="btn btn-secondary" style="font-size:calc(12px * var(--font-scale));padding:7px 12px" onclick="quickFood('Pa integral')">Pa integral</button>
+      <button class="btn btn-secondary" style="font-size:calc(12px * var(--font-scale));padding:7px 12px" onclick="quickFood('Iogurt grec natural')">Iogurt grec natural</button>
+      <button class="btn btn-secondary" style="font-size:calc(12px * var(--font-scale));padding:7px 12px" onclick="quickFood('Llegums')">Llegums</button>
+      <button class="btn btn-secondary" style="font-size:calc(12px * var(--font-scale));padding:7px 12px" onclick="quickFood('Fruita seca')">Fruita seca</button>
+      <button class="btn btn-secondary" style="font-size:calc(12px * var(--font-scale));padding:7px 12px" onclick="quickFood('Formatge curat')">Formatge curat</button>
     </div>
   </div>
 </div>
@@ -301,7 +316,7 @@
   <div class="card">
     <div class="card-title">Historial</div>
     <div id="weight-list"></div>
-    <div style="margin-top:10px"><button class="btn btn-danger" style="font-size:10px;padding:5px 10px" onclick="clearWeights()">Esborrar tot</button></div>
+    <div style="margin-top:10px"><button class="btn btn-danger" style="font-size:calc(10px * var(--font-scale));padding:5px 10px" onclick="clearWeights()">Esborrar tot</button></div>
   </div>
   <div class="card">
     <div class="card-title">Progrés</div>
@@ -313,7 +328,7 @@
 <div class="section" id="tab-calories">
   <div class="card">
     <div class="card-title">Calculadora de calories</div>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:12px;font-family:var(--mono);">Descriu un àpat. La IA calcula les kcal estimades.</div>
+    <div style="font-size:calc(12px * var(--font-scale));color:var(--muted);margin-bottom:12px;font-family:var(--mono);">Descriu un àpat. La IA calcula les kcal estimades.</div>
     <label class="input-label">QUÈ HAS MENJAT?</label>
     <textarea id="kcal-input" rows="3" placeholder="Ex: Pit de pollastre 150g planxa + bròquil bullit + 1 cullerada oli"></textarea>
     <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
@@ -324,7 +339,7 @@
   </div>
   <div class="card">
     <div class="card-title">Resum del dia</div>
-    <div id="daily-summary"><div style="color:var(--muted);font-size:13px;">Calcula àpats per veure el resum.</div></div>
+    <div id="daily-summary"><div style="color:var(--muted);font-size:calc(13px * var(--font-scale));">Calcula àpats per veure el resum.</div></div>
   </div>
   <div class="card">
     <div class="card-title">Referència ràpida</div>
@@ -345,7 +360,7 @@
 <div class="section" id="tab-diari">
   <div class="card">
     <div class="card-title">Diari de menjar</div>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:12px;font-family:var(--mono);">Apunta el que has menjat avui. La IA farà una valoració breu.</div>
+    <div style="font-size:calc(12px * var(--font-scale));color:var(--muted);margin-bottom:12px;font-family:var(--mono);">Apunta el que has menjat avui. La IA farà una valoració breu.</div>
     <div style="margin-bottom:8px"><label class="input-label">DATA</label><input type="date" id="diary-date" style="width:auto"></div>
     <div style="margin-bottom:10px">
       <label class="input-label">QUÈ HAS MENJAT AVUI?</label>
@@ -359,7 +374,7 @@
   <div class="card">
     <div class="card-title">Entrades anteriors</div>
     <div id="diary-list"></div>
-    <div style="margin-top:10px"><button class="btn btn-danger" style="font-size:10px;padding:5px 10px" onclick="clearDiary()">Esborrar tot</button></div>
+    <div style="margin-top:10px"><button class="btn btn-danger" style="font-size:calc(10px * var(--font-scale));padding:5px 10px" onclick="clearDiary()">Esborrar tot</button></div>
   </div>
 </div>
 
@@ -367,7 +382,7 @@
 <div class="section" id="tab-consulta">
   <div class="card">
     <div class="card-title">Configuració connexió IA</div>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.6">
+    <div style="font-size:calc(12px * var(--font-scale));color:var(--muted);margin-bottom:10px;line-height:1.6">
       La app parla amb un Worker propi (no directament amb Anthropic) perquè la API key mai surti del servidor.
       Vegeu <code>worker/README.md</code> al repo per desplegar-lo. Aquestes dades es guarden només al teu navegador.
     </div>
@@ -381,7 +396,7 @@
     </div>
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
       <button class="btn btn-primary" onclick="saveAIConfig()">Desar</button>
-      <span id="cfg-status" style="font-family:var(--mono);font-size:11px;color:var(--muted)"></span>
+      <span id="cfg-status" style="font-family:var(--mono);font-size:calc(11px * var(--font-scale));color:var(--muted)"></span>
     </div>
   </div>
   <div class="card">
@@ -396,19 +411,19 @@
       <textarea id="chat-input" placeholder="Ex: He menjat arròs al migdia. Compenso al sopar?" rows="2" onkeydown="handleKey(event)"></textarea>
       <button class="btn btn-primary" id="send-btn" onclick="sendMessage()">▶</button>
     </div>
-    <div style="font-size:10px;color:var(--muted);margin-top:5px;font-family:var(--mono);">Enter per enviar · Shift+Enter nova línia</div>
+    <div style="font-size:calc(10px * var(--font-scale));color:var(--muted);margin-top:5px;font-family:var(--mono);">Enter per enviar · Shift+Enter nova línia</div>
   </div>
   <div class="card">
     <div class="card-title">Preguntes ràpides</div>
     <div style="display:flex;flex-wrap:wrap;gap:6px">
-      <button class="btn btn-secondary" style="font-size:10px;padding:5px 9px" onclick="quickQ('Puc menjar formatge?')">Formatge?</button>
-      <button class="btn btn-secondary" style="font-size:10px;padding:5px 9px" onclick="quickQ('Quina fruita és millor per aprimar?')">Millor fruita?</button>
-      <button class="btn btn-secondary" style="font-size:10px;padding:5px 9px" onclick="quickQ('Tinc gana a les 11h, què menjo?')">Gana mitja mañana</button>
-      <button class="btn btn-secondary" style="font-size:10px;padding:5px 9px" onclick="quickQ('He sopat fort fora de casa, què faig demà?')">He sopat fort</button>
-      <button class="btn btn-secondary" style="font-size:10px;padding:5px 9px" onclick="quickQ('Quanta proteïna haig de menjar al dia?')">Quanta proteïna?</button>
-      <button class="btn btn-secondary" style="font-size:10px;padding:5px 9px" onclick="quickQ('Em veig estancat amb el pes, què faig?')">Estic estancat</button>
-      <button class="btn btn-secondary" style="font-size:10px;padding:5px 9px" onclick="quickQ('Puc beure cafè amb llet sencer?')">Cafè amb llet?</button>
-      <button class="btn btn-secondary" style="font-size:10px;padding:5px 9px" onclick="quickQ('La dieta keto m\'aniria bé per al meu cas?')">Keto?</button>
+      <button class="btn btn-secondary" style="font-size:calc(10px * var(--font-scale));padding:5px 9px" onclick="quickQ('Puc menjar formatge?')">Formatge?</button>
+      <button class="btn btn-secondary" style="font-size:calc(10px * var(--font-scale));padding:5px 9px" onclick="quickQ('Quina fruita és millor per aprimar?')">Millor fruita?</button>
+      <button class="btn btn-secondary" style="font-size:calc(10px * var(--font-scale));padding:5px 9px" onclick="quickQ('Tinc gana a les 11h, què menjo?')">Gana mitja mañana</button>
+      <button class="btn btn-secondary" style="font-size:calc(10px * var(--font-scale));padding:5px 9px" onclick="quickQ('He sopat fort fora de casa, què faig demà?')">He sopat fort</button>
+      <button class="btn btn-secondary" style="font-size:calc(10px * var(--font-scale));padding:5px 9px" onclick="quickQ('Quanta proteïna haig de menjar al dia?')">Quanta proteïna?</button>
+      <button class="btn btn-secondary" style="font-size:calc(10px * var(--font-scale));padding:5px 9px" onclick="quickQ('Em veig estancat amb el pes, què faig?')">Estic estancat</button>
+      <button class="btn btn-secondary" style="font-size:calc(10px * var(--font-scale));padding:5px 9px" onclick="quickQ('Puc beure cafè amb llet sencer?')">Cafè amb llet?</button>
+      <button class="btn btn-secondary" style="font-size:calc(10px * var(--font-scale));padding:5px 9px" onclick="quickQ('La dieta keto m\'aniria bé per al meu cas?')">Keto?</button>
     </div>
   </div>
 </div>
@@ -417,7 +432,7 @@
 <div class="section" id="tab-perfil">
   <div class="card">
     <div class="card-title">El teu perfil</div>
-    <div style="font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6">
+    <div style="font-size:calc(13px * var(--font-scale));color:var(--muted);margin-bottom:16px;line-height:1.6">
       Aquestes dades personalitzen el pla (KPIs de la pestanya Dieta) i el context que rep l'assistent IA. Es guarden només en aquest dispositiu/navegador — si una altra persona instal·la l'app al seu mòbil, té el seu propi perfil, sense barrejar-se amb el teu.
     </div>
     <div class="grid-2" style="margin-bottom:12px">
@@ -446,7 +461,7 @@
     </div>
     <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
       <button class="btn btn-primary" onclick="saveProfileForm()">Desar perfil</button>
-      <span id="prof-status" style="font-size:12px;color:var(--muted)"></span>
+      <span id="prof-status" style="font-size:calc(12px * var(--font-scale));color:var(--muted)"></span>
     </div>
   </div>
 </div>
@@ -458,6 +473,16 @@
 // ── UTILS ──────────────────────────────────────────
 function today(){return new Date().toISOString().split('T')[0];}
 function fmt(d){if(!d)return'';const[y,m,day]=d.split('-');return`${day}/${m}/${y}`;}
+
+// ── MIDA DEL TEXT (accessibilitat, per dispositiu) ──
+function getFontScale(){const v=parseFloat(localStorage.getItem('ch_font_scale'));return isFinite(v)?v:1;}
+function applyFontScale(v){
+  v=Math.round(Math.min(1.4,Math.max(0.85,v))*100)/100;
+  document.documentElement.style.setProperty('--font-scale',v);
+  localStorage.setItem('ch_font_scale',v);
+  const pct=document.getElementById('fs-pct');if(pct)pct.textContent=Math.round(v*100)+'%';
+}
+function changeFontScale(delta){applyFontScale(getFontScale()+delta);}
 
 // ── CONFIG IA (Worker proxy) ────────────────────────
 const AI_MODEL='claude-sonnet-5';
@@ -641,7 +666,7 @@ function showDay(day){
     <div class="meal-block" style="border-color:var(--accent2)"><div class="meal-label" style="color:var(--accent2)">DINAR</div><div class="meal-title">${m.d}</div></div>
     <div class="meal-block" style="border-color:var(--warn)"><div class="meal-label" style="color:var(--warn)">BERENAR</div><div class="meal-title">${m.b}</div></div>
     <div class="meal-block" style="border-color:var(--purple)"><div class="meal-label" style="color:var(--purple)">SOPAR</div><div class="meal-title">${m.s}</div></div>
-    <div style="font-family:var(--mono);font-size:11px;color:var(--accent);padding-top:8px">TOTAL: ${m.k} kcal</div>`;
+    <div style="font-family:var(--mono);font-size:calc(11px * var(--font-scale));color:var(--accent);padding-top:8px">TOTAL: ${m.k} kcal</div>`;
 }
 showDay('dl');
 
@@ -666,28 +691,28 @@ function renderWeights(){
   const list=document.getElementById('weight-list');
   const stats=document.getElementById('weight-stats');
   if(!a.length){
-    list.innerHTML='<div style="color:var(--muted);font-size:13px;">Encara no hi ha entrades.</div>';
-    stats.innerHTML='<div style="color:var(--muted);font-size:13px;">Afegeix entrades per veure el progrés.</div>';
+    list.innerHTML='<div style="color:var(--muted);font-size:calc(13px * var(--font-scale));">Encara no hi ha entrades.</div>';
+    stats.innerHTML='<div style="color:var(--muted);font-size:calc(13px * var(--font-scale));">Afegeix entrades per veure el progrés.</div>';
     drawChart([]);return;
   }
   const rev=[...a].reverse();
   list.innerHTML=rev.map((e,i)=>{
     const prev=rev[i+1];let dh='';
     if(prev){const df=e.v-prev.v;const s=df>0?'+':'';const c=df<0?'diff-neg':df>0?'diff-pos':'diff-zero';dh=`<span class="${c}">${s}${df.toFixed(1)}</span>`;}
-    return`<div class="weight-entry"><div><div class="weight-date">${fmt(e.d)}</div></div><div style="display:flex;align-items:center;gap:10px">${dh}<div class="weight-val">${e.v} kg</div><button class="btn btn-danger" style="font-size:9px;padding:3px 7px" onclick="delWt('${e.d}')"><svg width="10" height="10" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:-1px"><line x1="5" y1="5" x2="13" y2="13"/><line x1="13" y1="5" x2="5" y2="13"/></svg></button></div></div>`;
+    return`<div class="weight-entry"><div><div class="weight-date">${fmt(e.d)}</div></div><div style="display:flex;align-items:center;gap:10px">${dh}<div class="weight-val">${e.v} kg</div><button class="btn btn-danger" style="font-size:calc(9px * var(--font-scale));padding:3px 7px" onclick="delWt('${e.d}')"><svg width="10" height="10" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:-1px"><line x1="5" y1="5" x2="13" y2="13"/><line x1="13" y1="5" x2="5" y2="13"/></svg></button></div></div>`;
   }).join('');
   const first=a[0].v,last=a[a.length-1].v,total=(last-first).toFixed(1);
   const sign=total>0?'+':'';const col=total<0?'var(--accent)':'var(--danger)';
   const lost=Math.max(0,first-last);const pct=Math.min(100,Math.round(lost/12.5*100));
   stats.innerHTML=`
     <div class="grid-3" style="margin-bottom:10px">
-      <div class="stat-box"><div class="stat-num" style="font-size:20px">${first}</div><div class="stat-label">pes inicial (kg)</div></div>
-      <div class="stat-box"><div class="stat-num" style="font-size:20px;color:${col}">${sign}${total}</div><div class="stat-label">canvi total (kg)</div></div>
-      <div class="stat-box"><div class="stat-num" style="font-size:20px">${last}</div><div class="stat-label">pes actual (kg)</div></div>
+      <div class="stat-box"><div class="stat-num" style="font-size:calc(20px * var(--font-scale))">${first}</div><div class="stat-label">pes inicial (kg)</div></div>
+      <div class="stat-box"><div class="stat-num" style="font-size:calc(20px * var(--font-scale));color:${col}">${sign}${total}</div><div class="stat-label">canvi total (kg)</div></div>
+      <div class="stat-box"><div class="stat-num" style="font-size:calc(20px * var(--font-scale))">${last}</div><div class="stat-label">pes actual (kg)</div></div>
     </div>
-    <div style="font-size:11px;color:var(--muted);font-family:var(--mono);margin-bottom:5px">PROGRÉS OBJECTIU (12.5 kg)</div>
+    <div style="font-size:calc(11px * var(--font-scale));color:var(--muted);font-family:var(--mono);margin-bottom:5px">PROGRÉS OBJECTIU (12.5 kg)</div>
     <div class="progress-bar" style="height:8px"><div class="progress-fill" style="width:${pct}%;background:${pct>=80?'var(--accent)':pct>=40?'var(--warn)':'var(--accent2)'}"></div></div>
-    <div style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:4px">${pct}% · ${lost.toFixed(1)} kg perduts</div>`;
+    <div style="font-family:var(--mono);font-size:calc(11px * var(--font-scale));color:var(--muted);margin-top:4px">${pct}% · ${lost.toFixed(1)} kg perduts</div>`;
   drawChart(a);
 }
 
@@ -718,7 +743,7 @@ async function calcKcal(){
   const input=document.getElementById('kcal-input').value.trim();if(!input)return;
   const btn=document.getElementById('kcal-btn');const res=document.getElementById('kcal-result');
   btn.disabled=true;btn.innerHTML='<div class="spinner"></div>';
-  res.innerHTML='<div style="color:var(--muted);font-size:13px;margin-top:10px"><span class="loading-dots">Calculant</span></div>';
+  res.innerHTML='<div style="color:var(--muted);font-size:calc(13px * var(--font-scale));margin-top:10px"><span class="loading-dots">Calculant</span></div>';
   try{
     const raw=await callAI(
       `Ets un expert en nutrició. ${profileContext()} L'usuari descriu un àpat. Respon NOMÉS en JSON sense backticks ni text addicional: {"total_kcal":number,"proteina_g":number,"greix_g":number,"hidrats_g":number,"detall":"aliments amb kcal","valoracio":"OK|ACCEPTABLE|EXCESSIU","comentari":"1 frase directa en català"}`,
@@ -739,15 +764,15 @@ function addKcalToDiary(){
 }
 function renderDailySummary(){
   const el=document.getElementById('daily-summary');
-  if(!dailyKcal.length){el.innerHTML='<div style="color:var(--muted);font-size:13px;">Calcula àpats per veure el resum.</div>';return;}
+  if(!dailyKcal.length){el.innerHTML='<div style="color:var(--muted);font-size:calc(13px * var(--font-scale));">Calcula àpats per veure el resum.</div>';return;}
   const total=dailyKcal.reduce((s,e)=>s+e.kcal,0);const prot=dailyKcal.reduce((s,e)=>s+(e.prot||0),0);
   const pct=Math.min(100,Math.round(total/1600*100));const col=total<=1600?'var(--accent)':total<=1900?'var(--warn)':'var(--danger)';
-  el.innerHTML=`<div style="margin-bottom:8px">${dailyKcal.map(e=>`<div class="food-row"><span style="font-size:12px">${e.desc.substring(0,45)}...</span><span class="food-detail">${e.kcal} kcal</span></div>`).join('')}</div>
-    <div style="font-family:var(--mono);font-size:26px;font-weight:600;color:${col}">${total} kcal</div>
-    <div style="font-size:12px;color:var(--muted);margin-top:3px">Proteïna total: ~${Math.round(prot)}g</div>
+  el.innerHTML=`<div style="margin-bottom:8px">${dailyKcal.map(e=>`<div class="food-row"><span style="font-size:calc(12px * var(--font-scale))">${e.desc.substring(0,45)}...</span><span class="food-detail">${e.kcal} kcal</span></div>`).join('')}</div>
+    <div style="font-family:var(--mono);font-size:calc(26px * var(--font-scale));font-weight:600;color:${col}">${total} kcal</div>
+    <div style="font-size:calc(12px * var(--font-scale));color:var(--muted);margin-top:3px">Proteïna total: ~${Math.round(prot)}g</div>
     <div class="progress-bar" style="margin-top:7px;height:7px"><div class="progress-fill" style="width:${pct}%;background:${col}"></div></div>
-    <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:4px">${pct}% del límit (1600 kcal)</div>
-    <div style="margin-top:8px"><button class="btn btn-secondary" style="font-size:10px;padding:5px 10px" onclick="dailyKcal=[];saveDailyKcal();renderDailySummary()">RESET DIA</button></div>`;
+    <div style="font-family:var(--mono);font-size:calc(10px * var(--font-scale));color:var(--muted);margin-top:4px">${pct}% del límit (1600 kcal)</div>
+    <div style="margin-top:8px"><button class="btn btn-secondary" style="font-size:calc(10px * var(--font-scale));padding:5px 10px" onclick="dailyKcal=[];saveDailyKcal();renderDailySummary()">RESET DIA</button></div>`;
 }
 
 // ── DIARY ──────────────────────────────────────────
@@ -781,11 +806,11 @@ function clearDiary(){if(confirm('Esborrar tot el diari?')){localStorage.removeI
 function renderDiary(){
   document.getElementById('diary-date').value=today();
   const a=getDiary();const el=document.getElementById('diary-list');
-  if(!a.length){el.innerHTML='<div style="color:var(--muted);font-size:13px;">Encara no hi ha entrades.</div>';return;}
+  if(!a.length){el.innerHTML='<div style="color:var(--muted);font-size:calc(13px * var(--font-scale));">Encara no hi ha entrades.</div>';return;}
   el.innerHTML=a.map(e=>`<div class="diary-entry">
     <div style="display:flex;justify-content:space-between;align-items:center">
       <div class="diary-date">${fmt(e.d)}</div>
-      <button class="btn btn-danger" style="font-size:9px;padding:3px 6px" onclick="delDiary('${e.d}')"><svg width="10" height="10" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:-1px"><line x1="5" y1="5" x2="13" y2="13"/><line x1="13" y1="5" x2="5" y2="13"/></svg></button>
+      <button class="btn btn-danger" style="font-size:calc(9px * var(--font-scale));padding:3px 6px" onclick="delDiary('${e.d}')"><svg width="10" height="10" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:-1px"><line x1="5" y1="5" x2="13" y2="13"/><line x1="13" y1="5" x2="5" y2="13"/></svg></button>
     </div>
     <div class="diary-content">${e.content.replace(/\n/g,'<br>')}</div>
     ${e.ev?`<div class="diary-eval">${e.ev.replace(/\n/g,'<br>')}</div>`:''}
@@ -797,7 +822,7 @@ async function lookupFood(){
   const input=document.getElementById('food-input').value.trim();if(!input)return;
   const btn=document.getElementById('food-btn');const res=document.getElementById('food-result');
   btn.disabled=true;btn.innerHTML='<div class="spinner"></div>';
-  res.innerHTML='<div style="color:var(--muted);font-size:13px;margin-top:10px"><span class="loading-dots">Consultant</span></div>';
+  res.innerHTML='<div style="color:var(--muted);font-size:calc(13px * var(--font-scale));margin-top:10px"><span class="loading-dots">Consultant</span></div>';
   try{
     const raw=await callAI(
       `Ets un nutricionista expert. ${profileContext()} L'usuari vol saber si un aliment concret li convé. Respon NOMÉS en JSON sense backticks ni text addicional: {"nom":"...","categoria":"...","recomanacio":"OK|MODERAT|EVITAR","kcal_100g":"~xxx kcal/100g","detall":"macros o característiques principals en poques paraules","comentari":"1-2 frases directes sobre si li convé segons el seu perfil i objectiu"}`,
@@ -805,7 +830,7 @@ async function lookupFood(){
     );
     const parsed=JSON.parse(raw.replace(/```json|```/g,'').trim());
     const vc=parsed.recomanacio==='OK'?'verdict-ok':parsed.recomanacio==='MODERAT'?'verdict-warn':'verdict-bad';
-    res.innerHTML=`<div class="kcal-result"><div class="kcal-big" style="font-size:22px">${parsed.nom||input}</div><div class="kcal-breakdown">${parsed.categoria?'Categoria: '+parsed.categoria+'<br>':''}${parsed.kcal_100g?parsed.kcal_100g+'<br>':''}${parsed.detall||''}</div><div class="kcal-verdict ${vc}">${parsed.recomanacio||''} — ${parsed.comentari||''}</div></div>`;
+    res.innerHTML=`<div class="kcal-result"><div class="kcal-big" style="font-size:calc(22px * var(--font-scale))">${parsed.nom||input}</div><div class="kcal-breakdown">${parsed.categoria?'Categoria: '+parsed.categoria+'<br>':''}${parsed.kcal_100g?parsed.kcal_100g+'<br>':''}${parsed.detall||''}</div><div class="kcal-verdict ${vc}">${parsed.recomanacio||''} — ${parsed.comentari||''}</div></div>`;
   }catch(e){res.innerHTML=e.message==='NO_CONFIG'?'<div class="error-msg">Configura el Worker IA a la pestanya IA abans de fer servir això.</div>':'<div class="error-msg">Error consultant. Torna-ho a intentar.</div>';}
   btn.disabled=false;btn.textContent='Consultar';
 }
@@ -847,6 +872,7 @@ function quickQ(q){
 function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();}}
 
 // ── INIT ───────────────────────────────────────────
+applyFontScale(getFontScale());
 document.getElementById('diary-date').value=today();
 document.getElementById('weight-date').value=today();
 renderAIConfig();
