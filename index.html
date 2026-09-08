@@ -41,16 +41,20 @@
   .sidenav .tagline{font-size:11px;color:var(--muted2);font-style:italic;padding:14px 12px 2px;margin-top:6px;border-top:1px solid var(--border);}
   .content-wrap{flex:1;min-width:0;}
   main{max-width:960px;margin:0 auto;padding:38px 42px 60px;}
+  .topbar-mobile{display:none;}
+  .drawer-backdrop{display:none;}
   @media(max-width:860px){
     .shell{flex-direction:column;}
-    .sidenav{width:100%;height:auto;position:sticky;top:0;flex-direction:row;align-items:center;padding:9px 12px;overflow-x:auto;border-right:none;border-bottom:1px solid var(--border);z-index:100;gap:2px;}
-    .brand{margin-bottom:0;margin-right:4px;padding:0 4px;flex-shrink:0;}
-    .brand-text{font-size:16px;}
-    .navlist{flex-direction:row;flex:1;overflow-x:auto;gap:2px;}
-    .navitem{width:auto;flex-shrink:0;white-space:nowrap;padding:8px 10px;border-left:none;border-bottom:2.5px solid transparent;border-radius:8px 8px 0 0;}
-    .navitem.active{border-left-color:transparent;border-bottom-color:var(--accent);}
-    .sidenav .tagline{display:none;}
-    main{padding:20px 16px 40px;}
+    .topbar-mobile{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 14px;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:150;}
+    .topbar-mobile .brand-mini{display:flex;align-items:center;gap:8px;font-family:var(--serif);font-size:17px;font-weight:500;color:var(--text);}
+    .topbar-mobile .brand-mini span{color:var(--accent);}
+    .icon-btn{background:none;border:none;cursor:pointer;color:var(--text);padding:6px;display:flex;border-radius:8px;flex-shrink:0;}
+    .icon-btn:hover{background:var(--surface2);}
+    .icon-btn svg{width:21px;height:21px;}
+    .drawer-backdrop.open{display:block;position:fixed;inset:0;background:rgba(36,31,26,.4);z-index:190;}
+    .sidenav{position:fixed;top:0;left:0;bottom:0;width:250px;max-width:82vw;height:100vh;transform:translateX(-100%);transition:transform .22s ease;z-index:200;box-shadow:var(--shadow-md);}
+    .sidenav.open{transform:translateX(0);}
+    main{padding:18px 16px 40px;}
   }
   .section{display:none;}.section.active{display:block;}
   .card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:26px 24px;margin-bottom:18px;box-shadow:var(--shadow-sm);}
@@ -163,23 +167,29 @@
 </style>
 </head>
 <body>
+<div class="topbar-mobile">
+  <button class="icon-btn" onclick="toggleDrawer()" aria-label="Obrir menú"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="2.5" y1="5" x2="15.5" y2="5"/><line x1="2.5" y1="9" x2="15.5" y2="9"/><line x1="2.5" y1="13" x2="15.5" y2="13"/></svg></button>
+  <div class="brand-mini">Nutr<span>IA</span></div>
+  <button class="icon-btn" onclick="goTab('perfil')" aria-label="Perfil"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="6.2" r="2.7"/><path d="M3.3,15.5c0-3.3,2.5-5,5.7-5s5.7,1.7,5.7,5"/></svg></button>
+</div>
+<div class="drawer-backdrop" id="drawer-backdrop" onclick="closeDrawer()"></div>
 <div class="shell">
-<aside class="sidenav">
+<aside class="sidenav" id="sidenav">
   <div class="brand">
     <div class="brand-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="9" cy="9" rx="6.2" ry="3.3" transform="rotate(-35 9 9)"/><line x1="4.7" y1="13" x2="9" y2="9"/></svg></div>
     <div class="brand-text">Nutr<span>IA</span></div>
   </div>
   <nav class="navlist">
-    <button class="navitem active" onclick="showTab('dieta',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="6.3"/><circle cx="9" cy="9" r="2.6"/></svg><span>Dieta</span></button>
-    <button class="navitem" onclick="showTab('menus',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4" width="13" height="11" rx="1.6"/><line x1="2.5" y1="7.7" x2="15.5" y2="7.7"/><line x1="6" y1="2.3" x2="6" y2="5.3"/><line x1="12" y1="2.3" x2="12" y2="5.3"/></svg><span>Menús</span></button>
-    <button class="navitem" onclick="showTab('fora',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7.3" r="3.6"/><polygon points="5.6,9.6 12.4,9.6 9,15.8"/></svg><span>Fora de casa</span></button>
-    <button class="navitem" onclick="showTab('aliments',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="9" cy="9" rx="6.2" ry="3.3" transform="rotate(-35 9 9)"/><line x1="4.7" y1="13" x2="9" y2="9"/></svg><span>Aliments</span></button>
-    <button class="navitem" onclick="showTab('pes',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.6" y="2.6" width="12.8" height="12.8" rx="2.6"/><circle cx="9" cy="9" r="3.3"/><line x1="9" y1="9" x2="10.8" y2="6.9"/></svg><span>Pes</span></button>
-    <button class="navitem" onclick="showTab('calories',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polygon points="9,2 11,6.2 9.6,7.7 12.2,10.3 9,16 5.8,10.3 8.4,7.7 7,6.2"/></svg><span>Calories</span></button>
-    <button class="navitem" onclick="showTab('diari',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.2" y="2.4" width="11.6" height="13.2" rx="1.6"/><line x1="3.2" y1="6" x2="14.8" y2="6"/><line x1="6" y1="9.6" x2="12" y2="9.6"/><line x1="6" y1="12.4" x2="10" y2="12.4"/></svg><span>Diari</span></button>
-    <button class="navitem" onclick="showTab('check',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="6.3"/><polyline points="5.6,9 8,11.4 12.6,6.4"/></svg><span>Check</span></button>
-    <button class="navitem" onclick="showTab('consulta',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polygon points="9,2 10.4,7.6 16,9 10.4,10.4 9,16 7.6,10.4 2,9 7.6,7.6"/></svg><span>IA</span></button>
-    <button class="navitem" onclick="showTab('perfil',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="6.2" r="2.7"/><path d="M3.3,15.5c0-3.3,2.5-5,5.7-5s5.7,1.7,5.7,5"/></svg><span>Perfil</span></button>
+    <button class="navitem active" data-tab="dieta" onclick="showTab('dieta',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="6.3"/><circle cx="9" cy="9" r="2.6"/></svg><span>Dieta</span></button>
+    <button class="navitem" data-tab="menus" onclick="showTab('menus',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4" width="13" height="11" rx="1.6"/><line x1="2.5" y1="7.7" x2="15.5" y2="7.7"/><line x1="6" y1="2.3" x2="6" y2="5.3"/><line x1="12" y1="2.3" x2="12" y2="5.3"/></svg><span>Menús</span></button>
+    <button class="navitem" data-tab="fora" onclick="showTab('fora',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7.3" r="3.6"/><polygon points="5.6,9.6 12.4,9.6 9,15.8"/></svg><span>Fora de casa</span></button>
+    <button class="navitem" data-tab="aliments" onclick="showTab('aliments',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="9" cy="9" rx="6.2" ry="3.3" transform="rotate(-35 9 9)"/><line x1="4.7" y1="13" x2="9" y2="9"/></svg><span>Aliments</span></button>
+    <button class="navitem" data-tab="pes" onclick="showTab('pes',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.6" y="2.6" width="12.8" height="12.8" rx="2.6"/><circle cx="9" cy="9" r="3.3"/><line x1="9" y1="9" x2="10.8" y2="6.9"/></svg><span>Pes</span></button>
+    <button class="navitem" data-tab="calories" onclick="showTab('calories',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polygon points="9,2 11,6.2 9.6,7.7 12.2,10.3 9,16 5.8,10.3 8.4,7.7 7,6.2"/></svg><span>Calories</span></button>
+    <button class="navitem" data-tab="diari" onclick="showTab('diari',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.2" y="2.4" width="11.6" height="13.2" rx="1.6"/><line x1="3.2" y1="6" x2="14.8" y2="6"/><line x1="6" y1="9.6" x2="12" y2="9.6"/><line x1="6" y1="12.4" x2="10" y2="12.4"/></svg><span>Diari</span></button>
+    <button class="navitem" data-tab="check" onclick="showTab('check',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="6.3"/><polyline points="5.6,9 8,11.4 12.6,6.4"/></svg><span>Check</span></button>
+    <button class="navitem" data-tab="consulta" onclick="showTab('consulta',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polygon points="9,2 10.4,7.6 16,9 10.4,10.4 9,16 7.6,10.4 2,9 7.6,7.6"/></svg><span>IA</span></button>
+    <button class="navitem" data-tab="perfil" onclick="showTab('perfil',this)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="6.2" r="2.7"/><path d="M3.3,15.5c0-3.3,2.5-5,5.7-5s5.7,1.7,5.7,5"/></svg><span>Perfil</span></button>
   </nav>
   <div class="tagline">cura't sense complicar-te</div>
 </aside>
@@ -220,12 +230,12 @@
       <div class="card">
         <div class="card-title">Check d'avui</div>
         <div id="dieta-check-mini"></div>
-        <button class="btn btn-secondary" style="margin-top:14px;width:100%" onclick="showTab('check',document.querySelectorAll('.navitem')[7])">Anar al check diari</button>
+        <button class="btn btn-secondary" style="margin-top:14px;width:100%" onclick="goTab('check')">Anar al check diari</button>
       </div>
       <div class="card">
         <div class="card-title">Pròxim pas</div>
         <div style="font-size:14px;color:var(--muted);line-height:1.6">Si tens un dubte concret sobre un àpat o un aliment, pregunta-ho directament a l'assistent — respon curt i directe, sense romanços.</div>
-        <button class="btn btn-secondary" style="margin-top:14px;width:100%" onclick="showTab('consulta',document.querySelectorAll('.navitem')[8])">Preguntar a la IA</button>
+        <button class="btn btn-secondary" style="margin-top:14px;width:100%" onclick="goTab('consulta')">Preguntar a la IA</button>
       </div>
     </div>
   </div>
@@ -611,7 +621,17 @@ function showTab(name,el){
   if(name==='consulta')renderAIConfig();
   if(name==='dieta')renderDietaCheckMini();
   if(name==='perfil')renderProfileForm();
+  closeDrawer();
 }
+// Navega per nom de pestanya sense dependre de l'índex del botó (robust
+// davant reordenacions). Usat pels enllaços ràpids i el botó de perfil mòbil.
+function goTab(name){
+  const el=document.querySelector(`.navitem[data-tab="${name}"]`);
+  showTab(name,el);
+}
+function openDrawer(){document.getElementById('sidenav').classList.add('open');document.getElementById('drawer-backdrop').classList.add('open');}
+function closeDrawer(){const s=document.getElementById('sidenav');if(s)s.classList.remove('open');const b=document.getElementById('drawer-backdrop');if(b)b.classList.remove('open');}
+function toggleDrawer(){const s=document.getElementById('sidenav');if(s&&s.classList.contains('open'))closeDrawer();else openDrawer();}
 
 // ── MENUS ──────────────────────────────────────────
 const menus={
@@ -724,7 +744,7 @@ function addKcalToDiary(){
   const v=document.getElementById('kcal-input').value;
   const ex=document.getElementById('diary-input').value;
   document.getElementById('diary-input').value=ex?ex+'\n'+v:v;
-  showTab('diari',document.querySelectorAll('.navitem')[6]);
+  goTab('diari');
 }
 function renderDailySummary(){
   const el=document.getElementById('daily-summary');
@@ -848,7 +868,7 @@ function addMsg(role,content){
   wrap.appendChild(el);container.appendChild(wrap);container.scrollTop=container.scrollHeight;return wrap;
 }
 function quickQ(q){
-  document.querySelectorAll('.navitem').forEach((t,i)=>{if(i===8)t.click();});
+  goTab('consulta');
   setTimeout(()=>{document.getElementById('chat-input').value=q;sendMessage();},50);
 }
 function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();}}
