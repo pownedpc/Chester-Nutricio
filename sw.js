@@ -1,6 +1,10 @@
-// Service worker mínim: cachea l'aplicació (no les crides a la IA) perquè
-// carregui a l'instant i funcioni sense connexió per consultar dades ja desades.
-const CACHE = 'chester-nutricio-v1';
+// Service worker mínim: cachea l'aplicació (no les crides a la IA) com a
+// còpia de seguretat offline, però SEMPRE prioritza la xarxa perquè els
+// canvis que es publiquin es vegin a l'instant. La versió anterior servia
+// primer la caché si existia, cosa que deixava l'app "congelada" en la
+// primera versió instal·lada — per això es bumpeja el nom de la caché aquí,
+// perquè els navegadors amb la versió vella la descartin en actualitzar-se.
+const CACHE = 'chester-nutricio-v2';
 const SHELL = ['./', './index.html', './manifest.json', './icons/icon-192.png', './icons/icon-512.png'];
 
 self.addEventListener('install', e => {
@@ -19,13 +23,12 @@ self.addEventListener('fetch', e => {
   const url = new URL(e.request.url);
   // Mai cachejar crides al Worker d'IA (dades sempre fresques, i cross-origin).
   if (e.request.method !== 'GET' || url.origin !== location.origin) return;
+  // Network-first: sempre intenta la xarxa (versió fresca) i només cau a la
+  // caché si no hi ha connexió. Així cap redisseny futur es queda "atrapat".
   e.respondWith(
-    caches.match(e.request).then(cached => {
-      const network = fetch(e.request).then(res => {
-        if (res.ok) caches.open(CACHE).then(c => c.put(e.request, res.clone()));
-        return res;
-      }).catch(() => cached);
-      return cached || network;
-    })
+    fetch(e.request).then(res => {
+      if (res.ok) caches.open(CACHE).then(c => c.put(e.request, res.clone()));
+      return res;
+    }).catch(() => caches.match(e.request))
   );
 });
