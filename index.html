@@ -319,6 +319,25 @@
 <!-- CONSULTA IA -->
 <div class="section" id="tab-consulta">
   <div class="card">
+    <div class="card-title">Configuració connexió IA</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.6">
+      La app parla amb un Worker propi (no directament amb Anthropic) perquè la API key mai surti del servidor.
+      Vegeu <code>worker/README.md</code> al repo per desplegar-lo. Aquestes dades es guarden només al teu navegador.
+    </div>
+    <div style="margin-bottom:8px">
+      <label class="input-label">URL DEL WORKER</label>
+      <input type="text" id="cfg-worker-url" placeholder="https://chester-nutricio-proxy.el-teu-subdomini.workers.dev">
+    </div>
+    <div style="margin-bottom:10px">
+      <label class="input-label">CLAU APP (OPCIONAL)</label>
+      <input type="text" id="cfg-app-key" placeholder="Només si has configurat APP_SHARED_SECRET al Worker">
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <button class="btn btn-primary" onclick="saveAIConfig()">DESAR</button>
+      <span id="cfg-status" style="font-family:var(--mono);font-size:11px;color:var(--muted)"></span>
+    </div>
+  </div>
+  <div class="card">
     <div class="card-title">Assistent de nutrició</div>
     <div class="chat-container" id="chat-messages">
       <div class="msg msg-assistant">
@@ -353,6 +372,38 @@
 function today(){return new Date().toISOString().split('T')[0];}
 function fmt(d){if(!d)return'';const[y,m,day]=d.split('-');return`${day}/${m}/${y}`;}
 
+// ── CONFIG IA (Worker proxy) ────────────────────────
+const AI_MODEL='claude-sonnet-5';
+function getAIConfig(){
+  return{url:(localStorage.getItem('ch_worker_url')||'').trim(),key:(localStorage.getItem('ch_app_key')||'').trim()};
+}
+function saveAIConfig(){
+  const url=document.getElementById('cfg-worker-url').value.trim();
+  const key=document.getElementById('cfg-app-key').value.trim();
+  if(url)localStorage.setItem('ch_worker_url',url);else localStorage.removeItem('ch_worker_url');
+  if(key)localStorage.setItem('ch_app_key',key);else localStorage.removeItem('ch_app_key');
+  document.getElementById('cfg-status').textContent='✓ Desat';
+  setTimeout(()=>{const s=document.getElementById('cfg-status');if(s)s.textContent='';},2000);
+}
+function renderAIConfig(){
+  const c=getAIConfig();
+  const u=document.getElementById('cfg-worker-url'),k=document.getElementById('cfg-app-key');
+  if(u)u.value=c.url;if(k)k.value=c.key;
+}
+// Crida centralitzada al Worker. Llença error si no està configurat o si falla.
+async function callAI(system,messages,maxTokens){
+  const cfg=getAIConfig();
+  if(!cfg.url)throw new Error('NO_CONFIG');
+  const headers={'Content-Type':'application/json'};
+  if(cfg.key)headers['X-App-Key']=cfg.key;
+  const r=await fetch(cfg.url,{method:'POST',headers,body:JSON.stringify({
+    model:AI_MODEL,max_tokens:maxTokens||600,system,messages
+  })});
+  if(!r.ok)throw new Error('HTTP_'+r.status);
+  const data=await r.json();
+  return data.content?.map(b=>b.text||'').join('')||'';
+}
+
 // ── TABS ───────────────────────────────────────────
 function showTab(name,el){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
@@ -362,6 +413,8 @@ function showTab(name,el){
   if(name==='pes')renderWeights();
   if(name==='check')renderChecklist();
   if(name==='diari')renderDiary();
+  if(name==='calories')renderDailySummary();
+  if(name==='consulta')renderAIConfig();
 }
 
 // ── MENUS ──────────────────────────────────────────
@@ -450,24 +503,25 @@ function drawChart(arr){
 }
 
 // ── CALORIES ───────────────────────────────────────
-let dailyKcal=[];
+function kcalKey(){return'ch_kcal_'+today();}
+function loadDailyKcal(){try{return JSON.parse(localStorage.getItem(kcalKey())||'[]');}catch{return[];}}
+function saveDailyKcal(){localStorage.setItem(kcalKey(),JSON.stringify(dailyKcal));}
+let dailyKcal=loadDailyKcal();
 async function calcKcal(){
   const input=document.getElementById('kcal-input').value.trim();if(!input)return;
   const btn=document.getElementById('kcal-btn');const res=document.getElementById('kcal-result');
   btn.disabled=true;btn.innerHTML='<div class="spinner"></div>';
   res.innerHTML='<div style="color:var(--muted);font-size:13px;margin-top:10px"><span class="loading-dots">Calculant</span></div>';
   try{
-    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':'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','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({
-      model:'claude-sonnet-4-20250514',max_tokens:800,
-      system:`Ets un expert en nutrició. L'usuari (home 55 anys, objectiu 1600 kcal/dia) descriu un àpat. Respon NOMÉS en JSON sense backticks ni text addicional: {"total_kcal":number,"proteina_g":number,"greix_g":number,"hidrats_g":number,"detall":"aliments amb kcal","valoracio":"OK|ACCEPTABLE|EXCESSIU","comentari":"1 frase directa en català"}`,
-      messages:[{role:'user',content:`Calcula calories: ${input}`}]
-    })});
-    const data=await r.json();const raw=data.content?.map(b=>b.text||'').join('')||'';
+    const raw=await callAI(
+      `Ets un expert en nutrició. L'usuari (home 55 anys, objectiu 1600 kcal/dia) descriu un àpat. Respon NOMÉS en JSON sense backticks ni text addicional: {"total_kcal":number,"proteina_g":number,"greix_g":number,"hidrats_g":number,"detall":"aliments amb kcal","valoracio":"OK|ACCEPTABLE|EXCESSIU","comentari":"1 frase directa en català"}`,
+      [{role:'user',content:`Calcula calories: ${input}`}],800
+    );
     const parsed=JSON.parse(raw.replace(/```json|```/g,'').trim());
-    dailyKcal.push({desc:input,kcal:parsed.total_kcal,prot:parsed.proteina_g});renderDailySummary();
+    dailyKcal.push({desc:input,kcal:parsed.total_kcal,prot:parsed.proteina_g});saveDailyKcal();renderDailySummary();
     const vc=parsed.valoracio==='OK'?'verdict-ok':parsed.valoracio==='ACCEPTABLE'?'verdict-warn':'verdict-bad';
     res.innerHTML=`<div class="kcal-result"><div class="kcal-big">${parsed.total_kcal} kcal</div><div class="kcal-breakdown">${parsed.detall}<br>Proteïna: ${parsed.proteina_g}g · Greixos: ${parsed.greix_g}g · Hidrats: ${parsed.hidrats_g}g</div><div class="kcal-verdict ${vc}">${parsed.valoracio} — ${parsed.comentari}</div></div>`;
-  }catch{res.innerHTML='<div class="error-msg">Error calculant. Torna-ho a intentar.</div>';}
+  }catch(e){res.innerHTML=e.message==='NO_CONFIG'?'<div class="error-msg">Configura el Worker IA a la pestanya IA abans de fer servir això.</div>':'<div class="error-msg">Error calculant. Torna-ho a intentar.</div>';}
   btn.disabled=false;btn.textContent='CALCULAR';
 }
 function addKcalToDiary(){
@@ -486,7 +540,7 @@ function renderDailySummary(){
     <div style="font-size:12px;color:var(--muted);margin-top:3px">Proteïna total: ~${Math.round(prot)}g</div>
     <div class="progress-bar" style="margin-top:7px;height:7px"><div class="progress-fill" style="width:${pct}%;background:${col}"></div></div>
     <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:4px">${pct}% del límit (1600 kcal)</div>
-    <div style="margin-top:8px"><button class="btn btn-secondary" style="font-size:10px;padding:5px 10px" onclick="dailyKcal=[];renderDailySummary()">RESET DIA</button></div>`;
+    <div style="margin-top:8px"><button class="btn btn-secondary" style="font-size:10px;padding:5px 10px" onclick="dailyKcal=[];saveDailyKcal();renderDailySummary()">RESET DIA</button></div>`;
 }
 
 // ── DIARY ──────────────────────────────────────────
@@ -498,13 +552,11 @@ async function saveDiary(){
   const btn=document.getElementById('diary-btn');btn.disabled=true;btn.innerHTML='<div class="spinner"></div>';
   let ev='';
   try{
-    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':'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','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({
-      model:'claude-sonnet-4-20250514',max_tokens:300,
-      system:`Ets assistent de nutrició per a Chester (home 55a, objectiu perdre pes, màxim 1600 kcal/dia, sense ultraprocesats ni sucre). Dona valoració breu (2-3 frases) en català del que ha menjat. Directe, sense romanços. Indica si és bon dia, on hi ha marge de millora, i 1 acció concreta si cal.`,
-      messages:[{role:'user',content:`Valoració del dia: ${content}`}]
-    })});
-    const data=await r.json();ev=data.content?.map(b=>b.text||'').join('')||'';
-  }catch{}
+    ev=await callAI(
+      `Ets assistent de nutrició per a Chester (home 55a, objectiu perdre pes, màxim 1600 kcal/dia, sense ultraprocesats ni sucre). Dona valoració breu (2-3 frases) en català del que ha menjat. Directe, sense romanços. Indica si és bon dia, on hi ha marge de millora, i 1 acció concreta si cal.`,
+      [{role:'user',content:`Valoració del dia: ${content}`}],300
+    );
+  }catch(e){if(e.message==='NO_CONFIG')ev='(Sense valoració IA — configura el Worker a la pestanya IA)';}
   const a=getDiary();const idx=a.findIndex(e=>e.d===d);const entry={d,content,ev};
   if(idx>=0)a[idx]=entry;else a.unshift(entry);
   saveDiaryStore(a);document.getElementById('diary-input').value='';
@@ -571,11 +623,13 @@ async function sendMessage(){
   const btn=document.getElementById('send-btn');btn.disabled=true;btn.innerHTML='<div class="spinner"></div>';
   const wrap=addMsg('assistant','<span class="loading-dots">Pensant</span>');
   try{
-    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':'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','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:SYS,messages:chatHistory})});
-    const data=await r.json();const text=data.content?.map(b=>b.text||'').join('')||'Error.';
+    const text=await callAI(SYS,chatHistory,800);
     chatHistory.push({role:'assistant',content:text});
     wrap.querySelector('.msg').innerHTML=`<div class="sender">NUTRI·CHESTER</div>${text.replace(/\n/g,'<br>')}`;
-  }catch{wrap.querySelector('.msg').innerHTML=`<div class="sender">ERROR</div><div class="error-msg">No s'ha pogut connectar.</div>`;}
+  }catch(e){
+    const msg=e.message==='NO_CONFIG'?"Configura el Worker IA a la pestanya IA (secció superior) abans de xatejar.":"No s'ha pogut connectar.";
+    wrap.querySelector('.msg').innerHTML=`<div class="sender">ERROR</div><div class="error-msg">${msg}</div>`;
+  }
   btn.disabled=false;btn.textContent='▶';
 }
 function addMsg(role,content){
@@ -594,6 +648,8 @@ function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMe
 document.getElementById('diary-date').value=today();
 document.getElementById('weight-date').value=today();
 renderChecklist();
+renderAIConfig();
+renderDailySummary();
 </script>
 </body>
 </html>
